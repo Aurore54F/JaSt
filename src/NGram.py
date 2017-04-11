@@ -7,7 +7,7 @@ import DicoOfTokensSlimIt
 import DicoOfTokensEsprima
 
 
-def tokenToNumber(tokensFile):
+def tokenToNumber(tokensFile, parser):
 	'''
 		Convert a given token in its corresponding number (as indicated in the tokens dictionary).
 	'''
@@ -15,10 +15,16 @@ def tokenToNumber(tokensFile):
 	tokens = open(tokensFile,'r');
 	numbers = [];
 	
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimIt.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	else:
+		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
+		
 	for line in tokens:
 		keyword = line.split('\n');
-		numbers = numbers + [DicoOfTokensEsprima.tokensDico[keyword[0]]]; #Esprima
-		#numbers = numbers + [DicoOfTokensSlimIt.tokensDico[keyword[0]]]; #SlimIt
+		numbers = numbers + [dico[keyword[0]]];
 	
 	return numbers;
 

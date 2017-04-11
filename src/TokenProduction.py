@@ -6,6 +6,7 @@
 from slimit.lexer import Lexer
 
 import subprocess # to call Shell commands
+import os
 
 
 def buildToken(parser,inputFile,outputFile):
@@ -55,7 +56,8 @@ def buildToken(parser,inputFile,outputFile):
 		tFile.write(s);
 		tFile.close();
 		
-		subprocess.call("node " + tempFile + " > " + outputFile, shell = True); # Esprima
+		subprocess.call("node " + tempFile + " > " + outputFile, shell = True); # Produce the list of tokens using esprima
+		os.remove(tempFile);
 		
 	else:
 		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");

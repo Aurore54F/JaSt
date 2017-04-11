@@ -45,26 +45,32 @@ def prettyPrintNGramsDico(dico):
  
  
 
-def testProg():
+def testProg(parser):
 	'''
 		Test the display of each set of n-gram (for a given JS file) with their number of occurrences.
 	'''
-	#TokenProduction.buildToken(javaScriptFile, tokensFile); # Commented for Esprima
-	#matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile), n); #slimIt
-	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFileEsprima), n); #esprima
+	TokenProduction.buildToken(parser, javaScriptFile, tokensFile);
+	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
 	prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
+	
 	return matrixNGrams;
 	
 	
-def allPossibleNGrams(n):
+def allPossibleNGrams(parser, n):
 	'''
 		Produce all the possible combinations of n-grams using the values stored in DicoOfTokens.py.
 	'''
 	l = [];
-	#for key in DicoOfTokensSlimIt.tokensDico: # slimIt
-	for key in DicoOfTokensEsprima.tokensDico: # esprima
-		#l = l + [str(DicoOfTokensSlimIt.tokensDico[key])]; # slimIt _ All the number associated with a token
-		l = l + [str(DicoOfTokensEsprima.tokensDico[key])]; # esprima _ All the number associated with a token
+	
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimIt.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	else:
+		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
+	
+	for key in dico:
+		l = l + [str(dico[key])]; # All the number associated with a token
 	
 	nb = 0;
 	for i in product(l, repeat=n): # Cartesian product
@@ -74,7 +80,7 @@ def allPossibleNGrams(n):
 
 
 #slimIt
-def mainProg():
+def mainProg(parser):
 	'''
 	Main program, entry point.
 	'''
@@ -97,8 +103,8 @@ def mainProg():
 			#print(os.path.join(directoryJS, javaScriptFile));
 			tokensFilePart2 = str(i);
 			tokensFile = directoryTokens + tokensFilePart1 + tokensFilePart2 + tokensFilePart3;
-			TokenProduction.buildToken(directoryJS + '/' + javaScriptFile, tokensFile);
-			matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile), n);
+			TokenProduction.buildToken(parser, directoryJS + '/' + javaScriptFile, tokensFile);
+			matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
 			prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 			
 			
