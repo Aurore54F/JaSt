@@ -5,7 +5,7 @@
 
 from slimit.lexer import Lexer
 
-
+# SlimIt
 def buildToken(inputFile,outputFile):
 	'''
 		Given an input JavaScript file, write the list of tokens used in an output file.

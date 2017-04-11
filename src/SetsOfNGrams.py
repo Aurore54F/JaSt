@@ -5,7 +5,8 @@
 
 import TokenProduction
 import NGram
-import DicoOfTokens
+import DicoOfTokensSlimIt
+import DicoOfTokensEsprima
 
 import os
 import shutil
@@ -14,6 +15,7 @@ from itertools import product
 
 javaScriptFile = '/home/aurore/Documents/Code/JS-samples/Test.bin';
 tokensFile = '/home/aurore/Documents/Code/Tokens.txt';
+tokensFileEsprima = '/home/aurore/Documents/Malware/malware_js/samples/GotTokens.txt';
 n = 4;
 
 
@@ -47,9 +49,11 @@ def testProg():
 	'''
 		Test the display of each set of n-gram (for a given JS file) with their number of occurrences.
 	'''
-	TokenProduction.buildToken(javaScriptFile, tokensFile);
-	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile), n);
+	#TokenProduction.buildToken(javaScriptFile, tokensFile); # Commented for Esprima
+	#matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile), n); #slimIt
+	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFileEsprima), n); #esprima
 	prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
+	return matrixNGrams;
 	
 	
 def allPossibleNGrams(n):
@@ -57,8 +61,10 @@ def allPossibleNGrams(n):
 		Produce all the possible combinations of n-grams using the values stored in DicoOfTokens.py.
 	'''
 	l = [];
-	for key in DicoOfTokens.tokensDico:
-		l = l + [str(DicoOfTokens.tokensDico[key])]; # All the number associated with a token
+	#for key in DicoOfTokensSlimIt.tokensDico: # slimIt
+	for key in DicoOfTokensEsprima.tokensDico: # esprima
+		#l = l + [str(DicoOfTokensSlimIt.tokensDico[key])]; # slimIt _ All the number associated with a token
+		l = l + [str(DicoOfTokensEsprima.tokensDico[key])]; # esprima _ All the number associated with a token
 	
 	nb = 0;
 	for i in product(l, repeat=n): # Cartesian product
@@ -67,7 +73,7 @@ def allPossibleNGrams(n):
 	print('Theorie: ' + str(pow(len(l),n)) + '\nReality: ' + str(nb));
 
 
-
+#slimIt
 def mainProg():
 	'''
 	Main program, entry point.

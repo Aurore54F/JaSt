@@ -3,7 +3,8 @@
 	Producing n-grams from tokens.
 '''
 
-import DicoOfTokens
+import DicoOfTokensSlimIt
+import DicoOfTokensEsprima
 
 
 def tokenToNumber(tokensFile):
@@ -16,7 +17,8 @@ def tokenToNumber(tokensFile):
 	
 	for line in tokens:
 		keyword = line.split('\n');
-		numbers = numbers + [DicoOfTokens.tokensDico[keyword[0]]];
+		numbers = numbers + [DicoOfTokensEsprima.tokensDico[keyword[0]]]; #Esprima
+		#numbers = numbers + [DicoOfTokensSlimIt.tokensDico[keyword[0]]]; #SlimIt
 	
 	return numbers;
 
