@@ -61,8 +61,5 @@ def buildToken(parser,inputFile,outputFile):
 		
 	else:
 		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
-	
-	
-	
 
 	

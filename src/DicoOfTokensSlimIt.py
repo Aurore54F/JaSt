@@ -4,6 +4,7 @@
 	Configuration file storing the mapping between every slimIt token and their corresponding integer. 
 '''
 
+
 tokensDico = { 
 	'CONTINUE' : 15, 
 	'STRNEQ' : 78, 

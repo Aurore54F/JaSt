@@ -3,6 +3,7 @@
 	Producing n-grams from tokens.
 '''
 
+
 import DicoOfTokensSlimIt
 import DicoOfTokensEsprima
 
@@ -62,6 +63,4 @@ def nGramCsv(numbersList, n):
 			csvFile.write('\n');
 			
 		csvFile.close();
-
-
 

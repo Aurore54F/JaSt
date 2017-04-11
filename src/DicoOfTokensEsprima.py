@@ -4,6 +4,7 @@
 	Configuration file storing the mapping between every esprima token and their corresponding integer. 
 '''
 
+
 tokensDico = { 
 	'Boolean' : 0,
 	'<end>' : 1,
