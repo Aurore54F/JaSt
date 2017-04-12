@@ -85,6 +85,18 @@ def allPossibleNGrams(parser, n):
 	print('Theorie: ' + str(pow(len(l),n)) + '\nReality: ' + str(nb));
 
 
+def nGramToInt(nMax, nGram):
+	'''
+		Convert an n-gram into an int.
+	'''
+	return sum(nMax**i*j for i,j in enumerate(nGram));
+
+def intToNGram(nMax, i, n):
+	'''
+		Convert an int into an n-gram.
+	'''
+	return tuple([int(i/(nMax**j) % nMax) for j in range(n)]);
+	
 
 def mainProg(parser):
 	'''
