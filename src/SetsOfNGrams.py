@@ -13,11 +13,16 @@ import os
 import shutil
 from itertools import product
 
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.plotly as py
 
-javaScriptFile = '/home/aurore/Documents/Code/JS-samples/Test.bin';
+
+javaScriptFile = '/home/aurore/Documents/Code/JS-samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin';
 tokensFile = '/home/aurore/Documents/Code/Tokens.txt';
-tokensFileEsprima = '/home/aurore/Documents/Malware/malware_js/samples/GotTokens.txt';
 n = 4;
+
+BINS = 512
 
 
 def countSetsOfNGrams(matrixAllNGrams):
@@ -54,7 +59,7 @@ def testProg(parser):
 	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
 	prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 	
-	return matrixNGrams;
+	return countSetsOfNGrams(matrixNGrams);
 	
 	
 def allPossibleNGrams(parser, n):
@@ -80,7 +85,7 @@ def allPossibleNGrams(parser, n):
 	print('Theorie: ' + str(pow(len(l),n)) + '\nReality: ' + str(nb));
 
 
-#slimIt
+
 def mainProg(parser):
 	'''
 	Main program, entry point.
@@ -114,3 +119,32 @@ def mainProg(parser):
 			
 		# else:
 			# print('No JS files to be analysed in this directory ' + directory);
+
+
+def histogram(data, bins):
+	'''
+		Histogram presenting the number of occurrences of every n-gram for a given malware.
+	'''
+	dico = testProg('esprima');
+	#plt.bar(list(dico.keys()),dico.values());
+	plt.bar(range(len(dico)), dico.values(), align = 'center');
+	plt.xticks(range(len(dico)),dico.keys());
+	#plt.show();
+	#fig = plt.figure();
+	plt.savefig('Histo.png');
+	#plt.close();
+	#fig.savefig('Histo2.pdf');
+	'''
+		hist, bins = np.histogram(data, bins = bins);
+		width = 0,7 * (bins[1] - bins[0]);
+		height =  [1,2,5,4];
+		center = (bins[:-1] - bins[1:])/2;
+		#plt.bar(hist, align = 'center', width = height, height = height);
+		plt.bar(hist, align = 'center', width = height, height = height);
+		plt.show();
+	'''
+	
+	
+	
+	
+
