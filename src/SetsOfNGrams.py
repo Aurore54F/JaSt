@@ -46,7 +46,7 @@ def prettyPrintNGramsDico(dico):
 	'''
 	print('================================');
 	for nGrams in dico:
-		print(nGrams + '\t : ' + str(dico[nGrams]) + '\n');
+		print(str(nGrams) + '\t : ' + str(dico[nGrams]) + '\n');
 	print('================================');
  
  
@@ -59,7 +59,7 @@ def testProg(parser):
 	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
 	prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 	
-	return countSetsOfNGrams(matrixNGrams);
+	#return countSetsOfNGrams(matrixNGrams);
 	
 	
 def allPossibleNGrams(parser, n):
@@ -95,25 +95,36 @@ def mainProg(parser):
 	directoryTokens = '/home/aurore/Documents/Code/Token-samples/';
 	tokensFilePart1 = 'Tokens';
 	tokensFilePart3 = '.txt';
+	directoryHistograms = '/home/aurore/Documents/Code/Histograms/';
+	tokensFilePart1 = 'Tokens';
+	tokensFilePart3 = '.txt';
 	n = 4;
 	i = 1;
 	
+	# Directory to store the tokens files
 	if os.path.exists(directoryTokens):
 		shutil.rmtree(directoryTokens);
 	os.makedirs(directoryTokens);
-		
-	#dataForHisto = open('DataForHistogramm','w');
 	
+	# Directory to store the histograms files
+	if os.path.exists(directoryHistograms):
+		shutil.rmtree(directoryHistograms);
+	os.makedirs(directoryHistograms);
+		
+		
 	for javaScriptFile in os.listdir(directoryJS):
 		if javaScriptFile.endswith(".bin"): # TODO other condition or exclusively JS files to be analysed
 			#print(os.path.join(directoryJS, javaScriptFile));
 			tokensFilePart2 = str(i);
-			tokensFile = directoryTokens + tokensFilePart1 + tokensFilePart2 + tokensFilePart3;
-			TokenProduction.buildToken(parser, directoryJS + '/' + javaScriptFile, tokensFile);
-			matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
-			prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
+			tokensFile = directoryTokens + tokensFilePart1 + tokensFilePart2 + tokensFilePart3; # Incremental name for each token file
+			TokenProduction.buildToken(parser, directoryJS + '/' + javaScriptFile, tokensFile); # Tokens production
+			matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n); # Matrix containing every n-gram for a given JS file
+			#prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
+			dicoForHisto = countSetsOfNGrams(matrixNGrams); # Data for the histogram (i.e. n-gram with occurrence)
 			
-			
+			plt.bar(range(len(dicoForHisto)), dicoForHisto.values(), align = 'center');
+			plt.xticks(range(len(dicoForHisto)),dicoForHisto.keys());
+			plt.savefig('Histo.png');
 			
 			i = i + 1;
 			
@@ -121,14 +132,14 @@ def mainProg(parser):
 			# print('No JS files to be analysed in this directory ' + directory);
 
 
-def histogram(data, bins):
+def histogram(dicoForHisto):
 	'''
 		Histogram presenting the number of occurrences of every n-gram for a given malware.
 	'''
-	dico = testProg('esprima');
+	#dico = testProg('esprima');
 	#plt.bar(list(dico.keys()),dico.values());
-	plt.bar(range(len(dico)), dico.values(), align = 'center');
-	plt.xticks(range(len(dico)),dico.keys());
+	plt.bar(range(len(dicoForHisto)), dicoForHisto.values(), align = 'center');
+	plt.xticks(range(len(dicoForHisto)),dicoForHisto.keys());
 	#plt.show();
 	#fig = plt.figure();
 	plt.savefig('Histo.png');

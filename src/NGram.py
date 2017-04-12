@@ -39,11 +39,13 @@ def nGramList(numbersList, n):
 	else:
 		matrixAllNGrams = [[] for i in range(len(numbersList) - (n - 1))];
 		for j in range(len(numbersList) - (n - 1)): # Loop on all the n-grams
-			matrixAllNGrams[j] = str(numbersList[j]);
-			for i in range(n - 1): # Loop on the components of a given n-gram
-				#matrixAllNGrams[j] = matrixAllNGrams[j] + [numbersList[j + i]];
-				matrixAllNGrams[j] = matrixAllNGrams[j] + ',' + str(numbersList[j + i + 1]); # String and not list, as list cannot be used as key in a dictionary
-				# (tuples could, but they are immutable, so my function would not work for them)
+			#matrixAllNGrams[j] = str(numbersList[j]);
+			for i in range(n): # Loop on the components of a given n-gram
+				matrixAllNGrams[j] = matrixAllNGrams[j] + [numbersList[j + i]];
+				# matrixAllNGrams[j] = matrixAllNGrams[j] + ',' + str(numbersList[j + i + 1]);
+				
+			matrixAllNGrams[j] = tuple(matrixAllNGrams[j]); # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
+			 #a new string is created). I needed an immutable type since it will be used as key in a dictionary.
 
 		return matrixAllNGrams;
 
