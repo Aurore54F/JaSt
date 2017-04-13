@@ -114,6 +114,8 @@ def mainProg(parser):
 	n = 4;
 	i = 1;
 	
+	matrixAllNGramsProba = [[] for j in range(10)]; # TODO hardcoded
+	
 	# Directory to store the tokens files
 	if os.path.exists(directoryTokens):
 		shutil.rmtree(directoryTokens);
@@ -163,21 +165,31 @@ def mainProg(parser):
 				plt.show();
 			'''
 			
-			
+			# Histogram with the probability of apparition of each n-gram present in a given malware file
 			plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center');
 			plt.xticks(range(len(orderedDico)),(orderedDico.keys()),rotation=90);
 			#plt.show();
-			#plt.title('Probability of every n-gram for malware' + javaScriptFile);
+			plt.title(javaScriptFile);
 			#plt.xlabel('N-grams for the malware');
 			#plt.ylabel('Probability');
-			plt.tight_layout();
+			plt.tight_layout(); # Otherwise the xlabel does not fit in the figure
 			plt.savefig(directoryHistograms + histoFilePart1 + tokensFilePart2 + histoFilePart3);
-			plt.clf();
+			plt.clf(); # Otherwise all figures are written one on the other
+			
+			
+			vectNGramsProba = np.zeros(10000); # TODO hardcoded
+			for key in dicoForHisto:
+				vectNGramsProba[nGramToInt(10,key)] = dicoForHisto[key]; # TODO hardcoded
+			
+			matrixAllNGramsProba[i] = vectNGramsProba;
 			
 			i = i + 1;
 			
 		# else:
 			# print('No JS files to be analysed in this directory ' + directory);
+
+		
+	return matrixAllNGramsProba;
 
 
 def histogram():
