@@ -12,13 +12,14 @@ import DicoOfTokensEsprima
 import os
 import shutil
 from itertools import product
+import collections
 
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.plotly as py
 
 
-javaScriptFile = '/home/aurore/Documents/Code/JS-samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin';
+javaScriptFile = '/home/aurore/Documents/Code/JS-samples/0689067c8130efa6396c35af4ae374aa6d736977.bin';
 tokensFile = '/home/aurore/Documents/Code/Tokens.txt';
 n = 4;
 
@@ -59,7 +60,7 @@ def testProg(parser):
 	matrixNGrams = NGram.nGramList(NGram.tokenToNumber(tokensFile, parser), n);
 	prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 	
-	#return countSetsOfNGrams(matrixNGrams);
+	return countSetsOfNGrams(matrixNGrams);
 	
 	
 def allPossibleNGrams(parser, n):
@@ -108,8 +109,8 @@ def mainProg(parser):
 	tokensFilePart1 = 'Tokens';
 	tokensFilePart3 = '.txt';
 	directoryHistograms = '/home/aurore/Documents/Code/Histograms/';
-	tokensFilePart1 = 'Tokens';
-	tokensFilePart3 = '.txt';
+	histoFilePart1 = 'Histogram';
+	histoFilePart3 = '.png';
 	n = 4;
 	i = 1;
 	
@@ -134,9 +135,44 @@ def mainProg(parser):
 			#prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 			dicoForHisto = countSetsOfNGrams(matrixNGrams); # Data for the histogram (i.e. n-gram with occurrence)
 			
-			plt.bar(range(len(dicoForHisto)), dicoForHisto.values(), align = 'center');
-			plt.xticks(range(len(dicoForHisto)),dicoForHisto.keys());
-			plt.savefig('Histo.png');
+			orderedDico = collections.OrderedDict(sorted(dicoForHisto.items()));
+
+			#print(nGramToInt(10,key));
+			#print(dicoForHisto[key]);
+			#for i in data:
+				#print(i);
+			#plt.hist(data, bins = 512);
+			
+			
+			'''
+				min_bin = 0
+				max_bin = 10000
+				
+				data = np.zeros(max_bin);
+				for key in dicoForHisto:
+					data[nGramToInt(10,key)] = dicoForHisto[key];
+
+				bins = np.arange(min_bin, max_bin)
+				width = 0.7 * (bins[1] - bins[0]);
+				#center = (bins[:-1] + bins[1:]) / 2;
+
+				val, weight = zip(*[(k,v) for k,v in enumerate(data)]);
+				#plt.hist(val, weights = weight);
+
+				plt.bar(bins, data, align='center', width=width);
+				plt.show();
+			'''
+			
+			
+			plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center');
+			plt.xticks(range(len(orderedDico)),(orderedDico.keys()),rotation=90);
+			#plt.show();
+			#plt.title('Probability of every n-gram for malware' + javaScriptFile);
+			#plt.xlabel('N-grams for the malware');
+			#plt.ylabel('Probability');
+			plt.tight_layout();
+			plt.savefig(directoryHistograms + histoFilePart1 + tokensFilePart2 + histoFilePart3);
+			plt.clf();
 			
 			i = i + 1;
 			
@@ -144,28 +180,57 @@ def mainProg(parser):
 			# print('No JS files to be analysed in this directory ' + directory);
 
 
-def histogram(dicoForHisto):
+def histogram():
 	'''
 		Histogram presenting the number of occurrences of every n-gram for a given malware.
 	'''
-	#dico = testProg('esprima');
-	#plt.bar(list(dico.keys()),dico.values());
-	plt.bar(range(len(dicoForHisto)), dicoForHisto.values(), align = 'center');
-	plt.xticks(range(len(dicoForHisto)),dicoForHisto.keys());
+
+	#plt.bar(range(len(dicoForHisto)), dicoForHisto.values(), align = 'center');
+	#plt.xticks(range(len(dicoForHisto)),dicoForHisto.keys());
+	#plt.savefig('Histo.png');
+
+	#data = [1,2,3,4,5,6,7,8,9,4,5,3];
+	#hist, bins = np.histogram(data, bins=20);
+	#print(hist);
+	#print(bins);
+	#width = 0.7 * (bins[1] - bins[0]);
+	#center = (bins[:-1] + bins[1:]) / 2;
+	#plt.bar(center, hist, align='center', width=width);
 	#plt.show();
-	#fig = plt.figure();
-	plt.savefig('Histo.png');
-	#plt.close();
-	#fig.savefig('Histo2.pdf');
+	
+	#plt.hist(np.array([1,2,3,4,5,6,7,8,9,4,5,3]), bins = 20);
+	
+	
+	data = np.zeros(100);
+	for i in range(45):
+		data[2*i + 5] = 37;
 	'''
-		hist, bins = np.histogram(data, bins = bins);
-		width = 0,7 * (bins[1] - bins[0]);
-		height =  [1,2,5,4];
-		center = (bins[:-1] - bins[1:])/2;
-		#plt.bar(hist, align = 'center', width = height, height = height);
-		plt.bar(hist, align = 'center', width = height, height = height);
+		val, weight = zip(*[(k,v) for k,v in enumerate(data)]);
+		plt.hist(val, weights = weight);
 		plt.show();
 	'''
+	
+	
+	
+	min_bin = 0
+	max_bin = 100
+
+	bins = np.arange(min_bin, max_bin)
+	#vals = np.zeros(max_bin - min_bin + 1)
+
+	#for k,v in enumerate(data):
+		#vals[k - min_bin] = v
+
+	width = 0.7 * (bins[1] - bins[0]);
+	#center = (bins[:-1] + bins[1:]) / 2;
+
+	plt.bar(bins, data, align='center', width=width);
+	plt.show();
+	
+	
+	#plt.hist([3,5,3,4,8,6,8,8,8,6,5,3], bins = 20);
+	#plt.show();
+
 	
 	
 	
