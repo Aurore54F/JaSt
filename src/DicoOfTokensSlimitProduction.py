@@ -1,8 +1,8 @@
 
 '''
-	Creation of the tokens dictionary.
+	Creation of SlimIt tokens dictionary.
 	The general structure is inspired from the one used by PJScan:
-	<https://sourceforge.net/p/pjscan/code/HEAD/tree/trunk/pjscan/src/tokens.cpp#l22>
+	<https://sourceforge.net/p/pjscan/code/HEAD/tree/trunk/pjscan/src/tokens.cpp#l22>.
 '''
 
 
@@ -11,19 +11,17 @@ lextokens = {'BOR': 1, 'LBRACKET': 1, 'WITH': 1, 'MINUS': 1, 'RPAREN': 1, 'PLUS'
 # List of tokens available here <https://github.com/rspivak/slimit/blob/master/src/slimit/lextab.py>, augmented with some future reserved words.
 
 
-def tokenDico():
+def buildTokensDicoSlimit():
 	'''
 		Construction of a dictionary containing every slimIt token mapped to an integer.
-		The dictionary is also stored in a configuration file (DicoOfTokens.py).
+		The dictionary is also stored in a configuration file (DicoOfTokensSlimit.py).
 	'''
 	
 	i = 0;
 	dico = {};
 	
 	for token in sorted(lextokens):
-	#for j in range(0, len(lextokens)):
 		dico[token] = i;
-		#dico[list(lextokens)[j]] = i;
 		i = i + 1;
 	j = len(lextokens);
 	'''
@@ -39,9 +37,8 @@ def tokenDico():
 		dico['ERR'] = j + 9;
 	'''
 	
-	
-	dicoFile = open('DicoOfTokens.py','w');
-	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the mapping between every slimIt token and their corresponding integer \n'''\n\ntokensDico = { \n");
+	dicoFile = open('DicoOfTokensSlimit.py','w');
+	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the mapping between every slimIt token and their corresponding integer.\n'''\n\n\ntokensDico = { \n");
 	for token in dico:
 		dicoFile.write("\t'" + token + "'" + ' : ' + str(dico[token]) + ', \n');
 	dicoFile.write('}');
@@ -50,9 +47,9 @@ def tokenDico():
 	return dico;
 
 
-def prettyPrintTokenDico(dico):
+def prettyPrintTokensDico(dico):
 	'''
-		Print a human-readable content of the tokens dictionary
+		Print a human-readable content of the tokens dictionary.
 	'''
 	for token in dico:
 		print(token + '\t : ' + str(dico[token]) + '\n');
