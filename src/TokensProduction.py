@@ -19,6 +19,7 @@ def tokensUsedEsprima(inputFile):
 	tFile = open(tempFile,'r');
 	s = "var esprima = require('esprima');\nesprima.tokenize('";
 	for line in tFile:
+		line = line.replace("'",'"');
 		s += line;
 	s += "', {}, function (node) {\n\tconsole.log(node.type);\n});"
 	#return s;
