@@ -43,7 +43,7 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	
 
 
-def matrixOfProbaToCsv():
+def matrixOfProbaToCsv(matrix, outputFile):
 	'''
 		
 	'''
@@ -77,5 +77,6 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 		#print(os.path.join(javaScriptFile));
 		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
 		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+		#jsTitle = javaScriptFile.split('/');
 		Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
 		i += 1;
