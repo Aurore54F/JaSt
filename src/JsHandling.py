@@ -42,7 +42,7 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	dicoOfOccurrences = NGrams.countSetsOfNGrams(matrixNGrams);
 	orderedDico = collections.OrderedDict(sorted(dicoOfOccurrences.items()))
 	
-	Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile);
+	#Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile);
 	
 	return orderedDico;
 	
@@ -53,9 +53,12 @@ def matrixOfProbaToCsv(matrix, filePath):
 		Given a matrix, write its content in a CSV file.
 	'''
 	csvFile = open(filePath,'w');
+
 	for j in range(len(matrix)): # Number of lines, i.e. of experiments
+		csvFile.write('Experiment ' + str(j) + '\t');
 		for el in matrix[j]:
-			csvFile.write(str(el) + '\t\t\t\t\t\t');
+			#csvFile.write(str(el) + '\t\t\t\t\t\t');
+			csvFile.write(str(el) + '\t');
 		csvFile.write('\n');
 			
 	csvFile.close();
@@ -89,8 +92,10 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 	
 	
 	nbTokens = len(dico);	
-	matrixAllNGramsProba = [[] for j in range(12)]; # TODO hardcoded
-	
+	matrixAllNGramsProba = [[] for j in range(12)]; # TODO hardcoded = nb samples + 1
+	vectNGramsProba = np.zeros(nbTokens**n);
+
+	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3
 		
 	for javaScriptFile in glob.glob(jsDir + '/*.bin'):
 		vectNGramsProba = np.zeros(nbTokens**n);
@@ -103,7 +108,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 		for key in dicoForHisto:
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
 	
-		matrixAllNGramsProba[i-1] = vectNGramsProba;
+		matrixAllNGramsProba[i] = vectNGramsProba;
 		i += 1;
 			
 	return matrixAllNGramsProba;
