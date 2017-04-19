@@ -13,6 +13,7 @@ import collections # to order a dictionary
 import shutil
 import glob # Unix style pathname pattern expansion
 import os
+import numpy as np
 
 
 def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin', n = 4):
@@ -43,20 +44,18 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	
 
 
-def matrixOfProbaToCsv(matrix, outputFile):
+def matrixOfProbaToCsv(matrix, filePath):
 	'''
-		
+		Given a matrix, write its content in a CSV file.
 	'''
-		
-	matrixAllNGramsProba = [[] for j in range(10)]; # TODO hardcoded	
-	vectNGramsProba = np.zeros(10000); # TODO hardcoded
-	for key in dicoForHisto:
-		vectNGramsProba[nGramToInt(10,key)] = dicoForHisto[key]; # TODO hardcoded
+	csvFile = open(filePath,'w');
+	for j in range(len(matrix)): # Number of lines, i.e. of experiments
+		for el in matrix[j]:
+			csvFile.write(str(el) + '\t\t\t\t\t\t');
+		csvFile.write('\n');
 			
-		matrixAllNGramsProba[i] = vectNGramsProba;
-			
-	return matrixAllNGramsProba;
-	
+	csvFile.close();
+	print('end');
 	
 
 def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
@@ -68,15 +67,37 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 	if os.path.exists(histoDir):
 		shutil.rmtree(histoDir);
 	os.makedirs(histoDir);
+	
+	
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimit.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	else:
+		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
+		return;
 
 	histoFilePart1 = 'Histogram';
 	histoFilePart3 = '.png';
 	i = 1;
+	
+	
+	nbTokens = len(dico);	
+	matrixAllNGramsProba = [[] for j in range(12)]; # TODO hardcoded
+	
 		
 	for javaScriptFile in glob.glob(jsDir + '/*.bin'):
+		vectNGramsProba = np.zeros(nbTokens**n);
 		#print(os.path.join(javaScriptFile));
 		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
 		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
 		#jsTitle = javaScriptFile.split('/');
 		Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
+		
+		for key in dicoForHisto:
+			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
+	
+		matrixAllNGramsProba[i-1] = vectNGramsProba;
 		i += 1;
+			
+	return matrixAllNGramsProba;
