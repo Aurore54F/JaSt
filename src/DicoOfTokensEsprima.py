@@ -2,6 +2,7 @@
  
 '''
 	Configuration file storing the mapping between every esprima token and their corresponding integer. 
+	Complete list: <https://github.com/jquery/esprima/blob/master/src/token.ts>.
 '''
 
 

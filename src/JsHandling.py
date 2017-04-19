@@ -5,6 +5,7 @@
 
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
+import DicoOfAstEsprima
 import TokensProduction
 import NGrams
 import Histogram
@@ -27,9 +28,12 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	elif parser.lower() == 'esprima':
 		dico = DicoOfTokensEsprima.tokensDico;
 		tokensList = TokensProduction.tokensUsedEsprima(jsFile);
+	elif parser.lower() == 'esprimaast':
+		dico = DicoOfAstEsprima.astDico;
+		tokensList = TokensProduction.astUsedEsprima(jsFile);
 		
 	else:
-		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
 		
 	numbersList = TokensProduction.tokensToNumbers(dico, tokensList);	
@@ -38,7 +42,7 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	dicoOfOccurrences = NGrams.countSetsOfNGrams(matrixNGrams);
 	orderedDico = collections.OrderedDict(sorted(dicoOfOccurrences.items()))
 	
-	#Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile);
+	Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile);
 	
 	return orderedDico;
 	
@@ -73,8 +77,10 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 		dico = DicoOfTokensSlimit.tokensDico;
 	elif parser.lower() == 'esprima':
 		dico = DicoOfTokensEsprima.tokensDico;
+	elif parser.lower() == 'esprimaast':
+		dico = DicoOfAstEsprima.astDico;
 	else:
-		print("Error on the parser's name. Indicate 'slimIt' or 'esprima'.");
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
 
 	histoFilePart1 = 'Histogram';

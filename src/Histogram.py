@@ -19,7 +19,7 @@ def histoFromDico(orderedDico, figPath, title = '', xlabel = '', ylabel = ''):
 	#plt.ylabel(ylabel);
 	plt.tight_layout(); # Otherwise the xlabel does not fit in the figure
 	#plt.show();
-	#fig = plt.gcf(); # uncomment for slimit
-	#fig.set_size_inches(25, 10); # uncomment for slimit
+	fig = plt.gcf(); # uncomment for slimit and esprimaAst
+	fig.set_size_inches(25, 10); # uncomment for slimit and esprimaAst
 	plt.savefig(figPath, dpi = 100);
 	plt.clf(); # Otherwise all figures are written one on the other

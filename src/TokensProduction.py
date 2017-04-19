@@ -9,6 +9,37 @@ import subprocess # to call Shell commands
 import os
 
 
+def astUsedEsprima(inputFile):
+	'''
+		Given an input JavaScript file, create a list containing the esprima syntactic elements used.
+	'''
+	tempFile = 'Tempo.txt';
+	subprocess.call("slimit --mangle < " + inputFile + " > " + tempFile, shell = True); # Minify the input file
+	
+	tFile = open(tempFile,'r');
+	s = "var esprima = require('esprima');\nesprima.parse('";
+	for line in tFile:
+		line = line.replace("'",'"');
+		s += line;
+	s += "', {}, function (node) {\n\tconsole.log(node.type);\n});"
+	#return s;
+	tFile.close();
+	tFile = open(tempFile,'w');
+	
+	tFile.write(s);
+	tFile.close();
+	
+	#subprocess.call("node " + tempFile + " > " + outputFile, shell = True); # Produce the list of tokens using esprima
+	
+	result = subprocess.run(['node' , tempFile ], stdout = subprocess.PIPE).stdout.decode('utf-8');
+	os.remove(tempFile);
+	
+	tokenPart = str(result).split('\n'); # Keyword as used in JS
+	del(tokenPart[len(tokenPart) - 1]);
+		
+	return tokenPart;
+	
+	
 def tokensUsedEsprima(inputFile):
 	'''
 		Given an input JavaScript file, create a list containing the esprima tokens used.
