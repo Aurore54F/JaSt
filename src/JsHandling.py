@@ -114,7 +114,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 		csvFile = open(fileDir + parser + '.txt','w');
 		for j,k in enumerate(vectNGramsProba):
 			csvFile.write('\t' + str(j));
-		csvFile.write('\n');
+		csvFile.write('\t\n');
 		
 	for javaScriptFile in glob.glob(jsDir + '/*.bin'):
 		vectNGramsProba = np.zeros(nbTokens**n);
@@ -130,12 +130,10 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
 		
 		if exportedFile == True:
-			print('Line' + str(i));
 			csvFile.write('Experiment' + str(i) + '\t');
-			print('LineBis' + str(i));
 			for el in vectNGramsProba:
 				csvFile.write(str(el) + '\t');
-			print('After el');
+			print('End line' + str(i));
 			csvFile.write('\n');
 
 		matrixAllNGramsProba[i] = vectNGramsProba;
