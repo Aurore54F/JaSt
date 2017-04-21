@@ -48,17 +48,28 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	
 
 
-def matrixOfProbaToCsv(matrix, filePath):
+def matrixOfProbaToDoc(matrix, filePath, storage = 'txt'):
 	'''
 		Given a matrix, write its content in a CSV file.
 	'''
 	csvFile = open(filePath,'w');
-
+	if storage.lower() == 'csv':
+		formatt = ',';
+	elif storage.lower() == 'txt':
+		formatt = '\t';
+	else:
+		print("Error on the file format. Indicate csv' or 'txt'.");
+		return;
+	
 	for j in range(len(matrix)): # Number of lines, i.e. of experiments
-		csvFile.write('Experiment ' + str(j) + '\t');
+		print('Line' + str(j));
+		if storage.lower() == 'txt':
+			csvFile.write('Experiment' + str(j) + formatt);
+		print('LineBis' + str(j));
 		for el in matrix[j]:
 			#csvFile.write(str(el) + '\t\t\t\t\t\t');
-			csvFile.write(str(el) + '\t');
+			csvFile.write(str(el) + formatt);
+		print('After el');
 		csvFile.write('\n');
 			
 	csvFile.close();
@@ -103,7 +114,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
 		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
 		#jsTitle = javaScriptFile.split('/');
-		Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
+		#Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
 		
 		for key in dicoForHisto:
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];

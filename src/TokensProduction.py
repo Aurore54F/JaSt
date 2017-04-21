@@ -23,6 +23,7 @@ def astUsedEsprima(inputFile):
 		s += line;
 	s += "', {}, function (node) {\n\tconsole.log(node.type);\n});"
 	#return s;
+	# TODO: s = "var esprima = require('esprima');\nvar x = javascript_read_from_file(); esprima.parse(x, {}, function (node) {\n\tconsole.log(node.type);\n});"
 	tFile.close();
 	tFile = open(tempFile,'w');
 	
