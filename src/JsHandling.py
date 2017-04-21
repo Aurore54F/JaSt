@@ -114,7 +114,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', histoDir = '/
 		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
 		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
 		#jsTitle = javaScriptFile.split('/');
-		#Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
+		Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
 		
 		for key in dicoForHisto:
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
