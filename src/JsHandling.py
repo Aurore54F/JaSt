@@ -125,7 +125,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 			expFile.write(formatt + str(j));
 		expFile.write(formatt + '\n');
 		
-	for javaScriptFile in glob.glob(jsDir + '/*.bin'):
+	for javaScriptFile in sorted(glob.glob(jsDir + '/*.bin')):
 		vectNGramsProba = np.zeros(nbTokens**n);
 		#print(os.path.join(javaScriptFile));
 		if histo == True:
@@ -139,7 +139,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
 		
 		if exportedFile == True:
-			expFile.write('Experiment' + str(i) + formatt);
+			expFile.write(javaScriptFile + formatt);
 			for el in range(len(vectNGramsProba)-1):
 				expFile.write(str(vectNGramsProba[el]) + formatt);
 			expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1]));
