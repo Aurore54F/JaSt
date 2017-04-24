@@ -48,7 +48,7 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0
 	
 
 
-def matrixOfProbaToDoc(matrix, filePath, storage = 'txt'):
+def matrixOfProbaToDoc(matrix, filePath, storage = 'csv'):
 	'''
 		Given a matrix, write its content in a CSV file.
 	'''
@@ -62,22 +62,21 @@ def matrixOfProbaToDoc(matrix, filePath, storage = 'txt'):
 		return;
 	
 	for j in range(len(matrix)): # Number of lines, i.e. of experiments
-		print('Line' + str(j));
 		if storage.lower() == 'txt':
 			csvFile.write('Experiment' + str(j) + formatt);
-		print('LineBis' + str(j));
-		for el in matrix[j]:
+		for el in range(len(matrix[j]) - 1):
 			#csvFile.write(str(el) + '\t\t\t\t\t\t');
-			csvFile.write(str(el) + formatt);
-		print('After el');
+			csvFile.write(str(matrix[j][el]) + formatt);
+		csvFile.write(str(matrix[j][len(matrix[j])-1]));
+		print('After line ' + str(j));
 		csvFile.write('\n');
 			
 	csvFile.close();
 	print('end');
 	
 
-def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile = True, fileDir = '/home/aurore/Documents/Code/MatrixFiles/', histo = True,
-	histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
+	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
 	'''
 		Main program, entry point.
 	'''
@@ -86,10 +85,10 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 		# Directory to store the histograms files
 		if not os.path.exists(histoDir):
 			os.makedirs(histoDir);
-			#shutil.rmtree(histoDir);
 		histoFilePart1 = 'Histo' + parser;
 		histoFilePart3 = '.png';
 	
+	# Dictionary used, according to the chosen parser
 	if parser.lower() == 'slimit':
 		dico = DicoOfTokensSlimit.tokensDico;
 	elif parser.lower() == 'esprima':
@@ -101,20 +100,30 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 		return;
 
 	i = 1;
-	
-	nbTokens = len(dico);	
-	matrixAllNGramsProba = [[] for j in range(12)]; # TODO hardcoded = nb samples + 1
+	nbTokens = len(dico); # Number of tokens
+	nbSamples = len(glob.glob(jsDir + '/*.bin')); # Number of JS file samples
+	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS files
 	vectNGramsProba = np.zeros(nbTokens**n);
-	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3
+	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3 and Weka
 	
 	if exportedFile == True:
 		# Directory to store the matrix files
 		if not os.path.exists(fileDir):
 			os.makedirs(fileDir);
-		csvFile = open(fileDir + parser + '.txt','w');
+		if classifier.lower() == 'weka':
+			formatt = ',';
+			extension = '.csv';
+		elif classifier.lower() == 'xcluster':
+			formatt = '\t';
+			extension = '.txt';
+		else:
+			print("Error on the classifier name. Please indicate either 'Weka' or 'Xcluster'.");
+			return;
+		expFile = open(fileDir + parser + extension,'w');
+		expFile.write('Outlook');
 		for j,k in enumerate(vectNGramsProba):
-			csvFile.write('\t' + str(j));
-		csvFile.write('\t\n');
+			expFile.write(formatt + str(j));
+		expFile.write(formatt + '\n');
 		
 	for javaScriptFile in glob.glob(jsDir + '/*.bin'):
 		vectNGramsProba = np.zeros(nbTokens**n);
@@ -130,17 +139,18 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 			vectNGramsProba[NGrams.nGramToInt(nbTokens,key)] = dicoForHisto[key];
 		
 		if exportedFile == True:
-			csvFile.write('Experiment' + str(i) + '\t');
-			for el in vectNGramsProba:
-				csvFile.write(str(el) + '\t');
+			expFile.write('Experiment' + str(i) + formatt);
+			for el in range(len(vectNGramsProba)-1):
+				expFile.write(str(vectNGramsProba[el]) + formatt);
+			expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1]));
 			print('End line' + str(i));
-			csvFile.write('\n');
+			expFile.write('\n');
 
 		matrixAllNGramsProba[i] = vectNGramsProba;
 		i += 1;
 		
 	if exportedFile == True:	
-		csvFile.close();
+		expFile.close();
 	print('end');
 		
 	return matrixAllNGramsProba;
