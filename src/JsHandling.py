@@ -123,7 +123,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 		expFile.write('Outlook');
 		for j,k in enumerate(vectNGramsProba):
 			expFile.write(formatt + str(j));
-		expFile.write(formatt + '\n');
+		expFile.write('\n');
 		
 	for javaScriptFile in sorted(glob.glob(jsDir + '/*.bin')):
 		vectNGramsProba = np.zeros(nbTokens**n);
