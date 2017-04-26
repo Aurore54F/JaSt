@@ -17,7 +17,7 @@ import os
 import numpy as np
 
 
-def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin', n = 4):
+def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples1/JS-Samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin', n = 4):
 	'''
 		Production of a dictionary containing the number of occurrences (probability) of each n-gram (default: 4-gram) from a given JS file.
 	'''
@@ -75,7 +75,7 @@ def matrixOfProbaToDoc(matrix, filePath, storage = 'csv'):
 	print('end');
 	
 
-def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
+def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
 	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
 	'''
 		Main program, entry point.
@@ -101,7 +101,8 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 
 	i = 1;
 	nbTokens = len(dico); # Number of tokens
-	nbSamples = len(glob.glob(jsDir + '/*.bin')); # Number of JS file samples
+	l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin'); # Extension in .bin or .js
+	nbSamples = len(l); # Number of JS file samples
 	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS files
 	vectNGramsProba = np.zeros(nbTokens**n);
 	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3 and Weka
@@ -125,7 +126,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples', exportedFile 
 			expFile.write(formatt + str(j));
 		expFile.write('\n');
 		
-	for javaScriptFile in sorted(glob.glob(jsDir + '/*.bin')):
+	for javaScriptFile in sorted(l):
 		vectNGramsProba = np.zeros(nbTokens**n);
 		#print(os.path.join(javaScriptFile));
 		if histo == True:
