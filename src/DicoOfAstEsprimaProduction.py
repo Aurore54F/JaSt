@@ -27,7 +27,10 @@ def buildAstDicoEsprima():
 		dico[el] = i;
 		i = i + 1;
 	
+	j = len(astList);
 	orderedDico = collections.OrderedDict(sorted(dico.items()));
+	orderedDico['LineComment'] = j ; # single-line comment (// towards the end-of-line)
+	orderedDico['BlockComment'] = j + 1 ; # multi-line comment (enclosed by /* and */)
 	
 	dicoFile = open('DicoOfAstEsprima.py','w');
 	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the mapping between every Esprima syntax element and their corresponding integer.\n'''\n\n\nastDico = { \n");

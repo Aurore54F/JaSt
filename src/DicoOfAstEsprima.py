@@ -73,4 +73,6 @@ astDico = {
 	'WhileStatement' : 64, 
 	'WithStatement' : 65, 
 	'YieldExpression' : 66, 
+	'LineComment' : 67, 
+	'BlockComment' : 68, 
 }

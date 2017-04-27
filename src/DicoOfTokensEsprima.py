@@ -16,6 +16,8 @@ tokensDico = {
 	'Punctuator' : 6,
 	'String': 7,
 	'RegularExpression' : 8,
-	'Template' : 9
+	'Template' : 9,
+	'LineComment' : 10,
+	'BlockComment' : 11
 
 }

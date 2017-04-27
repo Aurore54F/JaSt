@@ -48,7 +48,7 @@ def astUsedEsprima(inputFile):
 	syntaxPart = str(result).split('\n'); # Keyword as used in JS
 	del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
 		
-	return syntaxPart;
+	return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
 	
 	
 def tokensUsedEsprima(inputFile):
