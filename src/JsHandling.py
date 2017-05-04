@@ -16,6 +16,9 @@ import glob # Unix style pathname pattern expansion
 import os
 import numpy as np
 
+simplifiedDico = {}
+cpt = 0
+
 
 def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples1/JS-Samples/0a2a6e27c7e455b4023b8a29022ade1399080b30.bin', n = 4):
 	'''
@@ -40,11 +43,13 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples1/
 	matrixNGrams = NGrams.nGramsList(numbersList, n);
 	#prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 	dicoOfOccurrences = NGrams.countSetsOfNGrams(matrixNGrams);
-	orderedDico = collections.OrderedDict(sorted(dicoOfOccurrences.items()))
+	
+	if dicoOfOccurrences is not None:
+		orderedDico = collections.OrderedDict(sorted(dicoOfOccurrences.items()));
 	
 	#Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile);
 	
-	return orderedDico;
+		return orderedDico;
 	
 
 
@@ -73,6 +78,131 @@ def matrixOfProbaToDoc(matrix, filePath, storage = 'csv'):
 			
 	csvFile.close();
 	print('end');
+	
+
+def simplifyMatrix(dicoOfOccurrences, threshold = 0):
+	'''
+		Given a dictionary containing the probability of occurrences of some n-grams, store the probability which are over a given threshold in a global dictionary.
+		Format: key = n-gram and value = [nb, probaSAmple1, probaSample2,...].
+		#Coud not work.
+		Given a dictionary containing the probability of occurrences of some n-grams, associate each n-gram, provided its probability is not null, to an integer.
+		Format: key = n-gram and value = nb, where nb corresponds to the position of the n-gram in the matrix of probabilities, see main program.
+	'''	
+	global cpt;
+	global simplifiedDico;
+	
+	if dicoOfOccurrences is not None:
+		for key in dicoOfOccurrences:
+			if dicoOfOccurrences[key] > threshold:
+				if key not in simplifiedDico:
+					#simplifiedDico[key] = [cpt,dicoOfOccurrences[key]];
+					simplifiedDico[key] = cpt;
+				#else:
+					#simplifiedDico[key].append(dicoOfOccurrences[key]);
+					cpt = cpt + 1;
+		#return simplifiedDico;
+	
+
+def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
+	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+	'''
+		Main program, entry point.
+	'''
+	global simplifiedDico;
+	simplifiedDico = {};
+	global cpt;
+	cpt = 0;
+	
+	if histo == True:
+		# Directory to store the histograms files
+		if not os.path.exists(histoDir):
+			os.makedirs(histoDir);
+		histoFilePart1 = 'Histo' + parser;
+		histoFilePart3 = '.png';
+	
+	# Dictionary used, according to the chosen parser
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimit.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	elif parser.lower() == 'esprimaast':
+		dico = DicoOfAstEsprima.astDico;
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+
+	i = 1;
+	nbTokens = len(dico); # Number of tokens
+	l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin'); # Extension in .bin or .js
+	nbSamples = len(l); # Number of JS file samples
+	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS files
+	
+	print(simplifiedDico);
+	where = 0;
+	for javaScriptFile in sorted(l):
+		where = where + 1;
+		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+		#print(simplifiedDico);
+		simplifyMatrix(dicoForHisto);
+		#print(simplifiedDico);
+		print(where);
+		print(javaScriptFile);
+	vectNGramsProba = np.zeros(len(simplifiedDico));
+	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3 and Weka
+	print(collections.OrderedDict(sorted(simplifiedDico.items())));
+	
+	if exportedFile == True:
+		# Directory to store the matrix files
+		if not os.path.exists(fileDir):
+			os.makedirs(fileDir);
+		if classifier.lower() == 'weka':
+			formatt = ',';
+			extension = '.csv';
+		elif classifier.lower() == 'xcluster':
+			formatt = '\t';
+			extension = '.txt';
+		else:
+			print("Error on the classifier name. Please indicate either 'Weka' or 'Xcluster'.");
+			return;
+		expFile = open(fileDir + parser + extension,'w');
+		expFile.write('Outlook');
+		for j,k in enumerate(vectNGramsProba):
+			expFile.write(formatt + str(j));
+		expFile.write('\n');
+		
+	for javaScriptFile in sorted(l):
+		vectNGramsProba = np.zeros(len(simplifiedDico));
+		#print(os.path.join(javaScriptFile));
+		if histo == True:
+			figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
+		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+		
+		if histo == True:
+			Histogram.histoFromDico(dicoForHisto, figPath, title = javaScriptFile);
+
+		if dicoForHisto is not None:
+			for key in dicoForHisto:
+				vectNGramsProba[simplifiedDico[key]] = dicoForHisto[key];
+		
+			if exportedFile == True:
+				expFile.write(javaScriptFile + formatt);
+				for el in range(len(vectNGramsProba)-1):
+					expFile.write(str(vectNGramsProba[el]) + formatt);
+				expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1]));
+				print('End line' + str(i));
+				expFile.write('\n');
+
+			matrixAllNGramsProba[i] = vectNGramsProba;
+			i += 1;
+		
+	if exportedFile == True:	
+		expFile.close();
+	print('end');
+		
+	return matrixAllNGramsProba;
+	
+	
+	
 	
 
 def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',

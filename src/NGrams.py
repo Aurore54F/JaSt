@@ -10,19 +10,20 @@ def nGramsList(numbersList, n = 4):
 	'''
 		Given a list of numbers, produce every possible n-gram (configurable) and store them in a matrix.
 	'''
-	if (n < 1 or n >= (len(numbersList))):
-		print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)');
-		return;
-		
-	else:
-		matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))];
-		for j in range(len(numbersList) - (n - 1)): # Loop on all the n-grams
-			matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)]; # Loop on the components of a given n-gram
-				
-			matrixAllNGrams[j] = tuple(matrixAllNGrams[j]); # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
-			 #a new string is created). I needed an immutable type since it will be used as key in a dictionary.
+	if numbersList is not None:
+		if (n < 1 or n >= (len(numbersList))):
+			print('Errorrrr: to display a list of n-grams, n > 0 and n < len(list-of-numbers)');
+			#return;
+			
+		else:
+			matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))];
+			for j in range(len(numbersList) - (n - 1)): # Loop on all the n-grams
+				matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)]; # Loop on the components of a given n-gram
+					
+				matrixAllNGrams[j] = tuple(matrixAllNGrams[j]); # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
+				 #a new string is created). I needed an immutable type since it will be used as key in a dictionary.
 
-		return matrixAllNGrams;
+			return matrixAllNGrams;
 
 
 def nGramsCsv(numbersList, n = 4, filePath = 'nGram.csv'):
@@ -49,14 +50,17 @@ def countSetsOfNGrams(matrixAllNGrams):
 		Given a matrix containing every possible n-gram (for a JavaScript given file), count and store the occurrences of each set of n-gram in a dictionary.
 	'''
 	dicoOfNGrams = {};
-	setsNGrams = len(matrixAllNGrams); # Number of lines of the matrix, i.e. of sets of n-grams
-	for j in range(setsNGrams):
-		if matrixAllNGrams[j] in dicoOfNGrams:
-			dicoOfNGrams[matrixAllNGrams[j]] = dicoOfNGrams[matrixAllNGrams[j]] + 1/setsNGrams; # Normalization to enable future comparisons
-		else:
-			dicoOfNGrams[matrixAllNGrams[j]] = 1/setsNGrams;
-			
-	return dicoOfNGrams;
+	if matrixAllNGrams is not None:
+		setsNGrams = len(matrixAllNGrams); # Number of lines of the matrix, i.e. of sets of n-grams
+		for j in range(setsNGrams):
+			if matrixAllNGrams[j] in dicoOfNGrams:
+				dicoOfNGrams[matrixAllNGrams[j]] = dicoOfNGrams[matrixAllNGrams[j]] + 1/setsNGrams; # Normalization to enable future comparisons
+			else:
+				dicoOfNGrams[matrixAllNGrams[j]] = 1/setsNGrams;
+				
+		return dicoOfNGrams;
+	else:
+		print('Matrix of type NoneType');
 	
 
 def prettyPrintNGramsDico(dico):
