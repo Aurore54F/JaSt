@@ -201,6 +201,96 @@ def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-S
 		
 	return matrixAllNGramsProba;
 	
+
+
+def mainForClassification(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', fileDir = '/home/aurore/Documents/Code/MatrixFiles/', n = 4):
+	'''
+		Main program, entry point.
+	'''
+	global simplifiedDico;
+	simplifiedDico = {};
+	global cpt;
+	cpt = 0;
+	
+	# Dictionary used, according to the chosen parser
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimit.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	elif parser.lower() == 'esprimaast':
+		dico = DicoOfAstEsprima.astDico;
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+
+	i = 1;
+	nbTokens = len(dico); # Number of tokens
+	benignSamples = glob.glob(jsDir + '/*.js');
+	maliciousSamples = glob.glob(jsDir + '/*.bin');
+	nbSamplesM = len(maliciousSamples); # Number of malicious JS file samples
+	nbSamplesB = len(benignSamples); # Number of benign JS file samples
+	matrixAllNGramsProba = [[] for j in range(nbSamplesM + nbSamplesB + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS files
+	
+	where = 0;
+	for javaScriptFile in sorted(maliciousSamples + benignSamples):
+		where = where + 1;
+		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+		simplifyMatrix(dicoForHisto);
+	vectNGramsProba = np.zeros(len(simplifiedDico) + 1);
+	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured Weka
+	#print(collections.OrderedDict(sorted(simplifiedDico.items())));
+	
+	# Directory to store the matrix files
+	if not os.path.exists(fileDir):
+		os.makedirs(fileDir);
+	
+	expFile = open(fileDir + parser + '.csv','w');
+	expFile.write('Outlook');
+	for j,k in enumerate(vectNGramsProba):
+		expFile.write(',' + str(j));
+	expFile.write('\n');
+		
+	for javaScriptFile in sorted(maliciousSamples):
+		vectNGramsProba = np.zeros(len(simplifiedDico));
+		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+
+		if dicoForHisto is not None:
+			for key in dicoForHisto:
+				vectNGramsProba[simplifiedDico[key]] = dicoForHisto[key];
+
+			expFile.write(javaScriptFile + ',');
+			for el in range(len(vectNGramsProba)):
+				expFile.write(str(vectNGramsProba[el]) + ',');
+			expFile.write('Malicious');
+			print('End line' + str(i));
+			expFile.write('\n');
+
+			matrixAllNGramsProba[i] = vectNGramsProba;
+			i += 1;
+			
+	for javaScriptFile in sorted(benignSamples):
+		vectNGramsProba = np.zeros(len(simplifiedDico));
+		dicoForHisto = jsToProbaOfTokens(parser, javaScriptFile, n) # Data for the histogram (i.e. n-gram with occurrence);
+
+		if dicoForHisto is not None:
+			for key in dicoForHisto:
+				vectNGramsProba[simplifiedDico[key]] = dicoForHisto[key];
+
+			expFile.write(javaScriptFile + ',');
+			for el in range(len(vectNGramsProba)):
+				expFile.write(str(vectNGramsProba[el]) + ',');
+			expFile.write('Benign');
+			print('End line' + str(i));
+			expFile.write('\n');
+
+			matrixAllNGramsProba[i] = vectNGramsProba;
+			i += 1;
+		
+	expFile.close();
+	print('end');
+		
+	#return matrixAllNGramsProba;
+	
 	
 	
 	
