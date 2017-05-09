@@ -39,7 +39,9 @@ def jsToProbaOfTokens(parser, jsFile = '/home/aurore/Documents/Code/JS-samples1/
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
 		
-	numbersList = TokensProduction.tokensToNumbers(dico, tokensList);	
+	numbersList = TokensProduction.tokensToNumbers(dico, tokensList);
+	if numbersList == []:
+		print('Empty');
 	matrixNGrams = NGrams.nGramsList(numbersList, n);
 	#prettyPrintNGramsDico(countSetsOfNGrams(matrixNGrams));
 	dicoOfOccurrences = NGrams.countSetsOfNGrams(matrixNGrams);
