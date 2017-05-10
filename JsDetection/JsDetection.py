@@ -42,7 +42,7 @@ def isJs(jsDir, parser = 'esprimaAst'):
 		except subprocess.CalledProcessError as e:
 			if  e.returncode == 1:
 				#subprocess.run('mv ' + givenFile + ' NotJs');
-				#print('Return: ' + str(e.output) + '\n');
+				print('Return: ' + str(e.output) + '\n');
 				if str(e.output) == "b''":
 					print('The file ' + givenFile + ' is not considered as JavaScript.');
 					notJs += [givenFile];
