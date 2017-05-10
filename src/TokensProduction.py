@@ -14,68 +14,28 @@ def astUsedEsprima(inputFile):
 		Given an input JavaScript file, create a list containing the esprima syntactic elements used.
 	'''
 	
-	'''
-		tempFile = 'Tempo.txt';
-		subprocess.call("slimit --mangle < " + inputFile + " > " + tempFile, shell = True); # Minify the input file
-		
-		tFile = open(tempFile,'r');
-		s = "var esprima = require('esprima');\nesprima.parse('";
-		for line in tFile:
-			line = line.replace("'",'"');
-			s += line;
-		s += "', {}, function (node) {\n\tconsole.log(node.type);\n});"
-		#return s;
-		
-		# TODO: s = "var esprima = require('esprima');\nvar x = javascript_read_from_file(); esprima.parse(x, {}, function (node) {\n\tconsole.log(node.type);\n});"
-		
-		# var fs = require("fs");
-		# var text = fs.readFileSync('/home/aurore/Documents/Code/JS-samples/PbEspAst/0a953c0d44d172394bd1985edf44d52718a2f2a1.bin').toString('utf-8')
-		
-		tFile.close();
-		tFile = open(tempFile,'w');
-		
-		tFile.write(s);
-		tFile.close();
-		
-		#subprocess.call("node " + tempFile + " > " + outputFile, shell = True); # Produce the list of tokens using esprima
-		
-		result = subprocess.run(['node' , tempFile ], stdout = subprocess.PIPE).stdout.decode('utf-8');
-		os.remove(tempFile);
-	'''
+	try:
+		result = subprocess.check_output('node JsEsprima/parser.js ' + inputFile + ' 2> /dev/null', shell = True);
+		# result is a string containing the returned objects of the JS script, separated by '\n'
+		syntaxPart = str(result).split("b'")[1].split('\\n'); # Keyword as used in JS
+		del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
+		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
+	except subprocess.CalledProcessError as e:
+		if  e.returncode == 1:
+			print('Error with the file ' + inputFile + '.');
 	
-	result = subprocess.run(['node' , 'JsEsprima/parser.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
-	# result is a string containing the returned objects of the JS script, separated by '\n'
-	syntaxPart = str(result).split('\n'); # Keyword as used in JS
-	del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
-		
-	return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
+	'''
+		result = subprocess.run(['node' , 'JsEsprima/parser.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+		# result is a string containing the returneinptttd objects of the JS script, separated by '\n'
+		syntaxPart = str(result).split('\n'); # Keyword as used in JS
+		del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
+		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
+	'''
 	
 	
 def tokensUsedEsprima(inputFile):
 	'''
 		Given an input JavaScript file, create a list containing the esprima tokens used.
-	'''
-	
-	'''
-		tempFile = 'Tempo.txt';
-		subprocess.call("slimit --mangle < " + inputFile + " > " + tempFile, shell = True); # Minify the input file
-		
-		tFile = open(tempFile,'r');
-		s = "var esprima = require('esprima');\nesprima.tokenize('";
-		for line in tFile:
-			line = line.replace("'",'"');
-			s += line;
-		s += "', {}, function (node) {\n\tconsole.log(node.type);\n});"
-		#return s;
-		tFile.close();
-		tFile = open(tempFile,'w');
-		
-		tFile.write(s);
-		tFile.close();
-		
-		#subprocess.call("node " + tempFile + " > " + outputFile, shell = True); # Produce the list of tokens using esprima
-		result = subprocess.run(['node' , tempFile ], stdout = subprocess.PIPE).stdout.decode('utf-8');
-		os.remove(tempFile);
 	'''
 	
 	result = subprocess.run(['node' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
@@ -98,8 +58,6 @@ def tokensUsedSlimit(inputFile):
 	for line in inF:
 		s += str(line); # Store the content of the JS file in a string
 	inF.close();
-	
-	#result = subprocess.run(["slimit --mangle < ", inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
 	
 	lexer = Lexer();
 	lexer.input(s);
