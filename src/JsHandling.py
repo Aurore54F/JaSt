@@ -109,11 +109,22 @@ def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-S
 	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
 	'''
 		Main program, entry point.
+		
+		This function ....
+		
+		@param parser: string with name of the parser to use
+		@param jsDir...
+		@return: ...
 	'''
 	global simplifiedDico;
 	simplifiedDico = {};
 	global cpt;
 	cpt = 0;
+	
+	global notJs;
+	global structureError;
+	notJs = [];
+	structureError = [];
 	
 	if histo == True:
 		# Directory to store the histograms files
@@ -201,7 +212,10 @@ def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-S
 		expFile.close();
 	print('end');
 		
-	return matrixAllNGramsProba;
+	print(notJs);
+	print(structureError);
+	 	
+	#return matrixAllNGramsProba;
 	
 
 

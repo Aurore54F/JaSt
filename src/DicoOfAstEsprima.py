@@ -1,7 +1,9 @@
 #!/usr/bin/python
  
 '''
-	Configuration file storing the mapping between every Esprima syntax element and their corresponding integer.
+	Configuration file storing the dictionary astDico.
+		Key: Esprima syntactical tokens;
+		Value: Unique integers.
 '''
 
 

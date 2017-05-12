@@ -1,7 +1,9 @@
 #!/usr/bin/python
  
 '''
-	Configuration file storing the mapping between every slimIt token and their corresponding integer.
+	Configuration file storing the dictionary tokensDico.
+		Key: SlimIt lexical tokens;
+		Value: Unique integers.
 '''
 
 

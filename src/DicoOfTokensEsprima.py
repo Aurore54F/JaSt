@@ -1,7 +1,9 @@
 #!/usr/bin/python
  
 '''
-	Configuration file storing the mapping between every esprima token and their corresponding integer. 
+	Configuration file storing the dictionary tokensDico.
+		Key: Esprima lexical tokens;
+		Value: Unique integers.
 	Complete list: <https://github.com/jquery/esprima/blob/master/src/token.ts>.
 '''
 

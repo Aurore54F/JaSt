@@ -1,27 +1,38 @@
 
 '''
-	Creation of Esprima syntax elements dictionary.
+	Creation of Esprima syntactical dictionary.
 '''
 
-import re # for regular expressions
-import collections
+import re # For regular expressions
+import collections # To order a dictionary
 
-# Esprima AST syntax
+# Esprima syntactical tokens:
 Syntax = "     AssignmentExpression: 'AssignmentExpression',     AssignmentPattern: 'AssignmentPattern',     ArrayExpression: 'ArrayExpression',     ArrayPattern: 'ArrayPattern',     ArrowFunctionExpression: 'ArrowFunctionExpression',     AwaitExpression: 'AwaitExpression',     BlockStatement: 'BlockStatement',     BinaryExpression: 'BinaryExpression',     BreakStatement: 'BreakStatement',     CallExpression: 'CallExpression',     CatchClause: 'CatchClause',     ClassBody: 'ClassBody',     ClassDeclaration: 'ClassDeclaration',     ClassExpression: 'ClassExpression',     ConditionalExpression: 'ConditionalExpression',     ContinueStatement: 'ContinueStatement',     DoWhileStatement: 'DoWhileStatement',     DebuggerStatement: 'DebuggerStatement',     EmptyStatement: 'EmptyStatement',     ExportAllDeclaration: 'ExportAllDeclaration',     ExportDefaultDeclaration: 'ExportDefaultDeclaration',     ExportNamedDeclaration: 'ExportNamedDeclaration',     ExportSpecifier: 'ExportSpecifier',     ExpressionStatement: 'ExpressionStatement',     ForStatement: 'ForStatement',     ForOfStatement: 'ForOfStatement',     ForInStatement: 'ForInStatement',     FunctionDeclaration: 'FunctionDeclaration',     FunctionExpression: 'FunctionExpression',     Identifier: 'Identifier',     IfStatement: 'IfStatement',     Import: 'Import',     ImportDeclaration: 'ImportDeclaration',     ImportDefaultSpecifier: 'ImportDefaultSpecifier',     ImportNamespaceSpecifier: 'ImportNamespaceSpecifier',     ImportSpecifier: 'ImportSpecifier',     Literal: 'Literal',     LabeledStatement: 'LabeledStatement',     LogicalExpression: 'LogicalExpression',     MemberExpression: 'MemberExpression',     MetaProperty: 'MetaProperty',     MethodDefinition: 'MethodDefinition',     NewExpression: 'NewExpression',     ObjectExpression: 'ObjectExpression',     ObjectPattern: 'ObjectPattern',     Program: 'Program',     Property: 'Property',     RestElement: 'RestElement',     ReturnStatement: 'ReturnStatement',     SequenceExpression: 'SequenceExpression',     SpreadElement: 'SpreadElement',     Super: 'Super',     SwitchCase: 'SwitchCase',     SwitchStatement: 'SwitchStatement',     TaggedTemplateExpression: 'TaggedTemplateExpression',     TemplateElement: 'TemplateElement',     TemplateLiteral: 'TemplateLiteral',     ThisExpression: 'ThisExpression',     ThrowStatement: 'ThrowStatement',     TryStatement: 'TryStatement',     UnaryExpression: 'UnaryExpression',     UpdateExpression: 'UpdateExpression',     VariableDeclaration: 'VariableDeclaration',     VariableDeclarator: 'VariableDeclarator',     WhileStatement: 'WhileStatement',     WithStatement: 'WithStatement',     YieldExpression: 'YieldExpression' ";
-# List of elements available here <https://github.com/jquery/esprima/blob/master/src/syntax.ts>.
+# List of tokens available here <https://github.com/jquery/esprima/blob/master/src/syntax.ts>.
 
 
 def buildAstDicoEsprima():
 	'''
-		Construction of a dictionary containing every Esprima syntax element mapped to an integer.
-		The dictionary is also stored in a configuration file (DicoOfAstEsprima.py).
+		Construction of a dictionary containing every Esprima syntactical token mapped to an integer.
+		The dictionary is also stored in a configuration file (see DicoOfAstEsprima.py).
+		
+		-------
+		Returns:
+		- Ordered dictionary
+			Key: Esprima syntactical tokens;
+			Value: A unique integer.
+		- Configuration file
+			Stores the previous dictionary (see DicoOfAstEsprima.py).	
 	'''
 	
 	i = 0;
 	dico = {};
 	
+	
+	# Creation of a dictionary mapping Esprima syntactical tokens to unique integers.
+	
 	m = re.findall("\'[A-z]+\'", Syntax);
-	astList = [m[i].split("'")[1] for i in range(len(m))];
+	astList = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
 	
 	for el in sorted(astList):
 		dico[el] = i;
@@ -29,22 +40,32 @@ def buildAstDicoEsprima():
 	
 	j = len(astList);
 	orderedDico = collections.OrderedDict(sorted(dico.items()));
-	orderedDico['LineComment'] = j ; # single-line comment (// towards the end-of-line)
-	orderedDico['BlockComment'] = j + 1 ; # multi-line comment (enclosed by /* and */)
+	orderedDico['LineComment'] = j ; # Single-line comment (// towards the end-of-line)
+	orderedDico['BlockComment'] = j + 1 ; # Multi-line comment (enclosed by /* and */)
+	
+	
+	# Storage of the dictionary in a configuration file
 	
 	dicoFile = open('DicoOfAstEsprima.py','w');
-	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the mapping between every Esprima syntax element and their corresponding integer.\n'''\n\n\nastDico = { \n");
+	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary astDico.\n\t\tKey: Esprima syntactical tokens;\n\t\tValue: Unique integers.\n'''\n\n\nastDico = { \n");
 	for el in orderedDico:
 		dicoFile.write("\t'" + el + "'" + ' : ' + str(orderedDico[el]) + ', \n');
 	dicoFile.write('}');
 	dicoFile.close();
 	
+	
 	return orderedDico;
 
 
-def prettyPrintAstDico(dico):
+def prettyPrintDico(dico):
 	'''
-		Print a human-readable content of the syntactic elements from the dictionary.
+		Print a human-readable content of a dictionary.
+		-------
+		Parameter:
+		- dico: Dictionary
 	'''
+	
+	print('================================');
 	for el in dico:
-		print(el + '\t : ' + str(dico[el]) + '\n');
+		print(str(el) + '\t : ' + str(dico[el]) + '\n');
+	print('================================');
