@@ -10,6 +10,7 @@ from textwrap import wrap
 def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', ylabel = ''):
 	'''
 		Histogram displaying the probability of apparition of each n-gram as stored in the dictionary in input.
+		
 		-------
 		Parameters:
 		- orderedDico: Dictionary
@@ -28,7 +29,6 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 		Returns:
 		- File
 			Displays the histogram.
-			
 	'''
 
 	plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center');

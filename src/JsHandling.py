@@ -150,7 +150,7 @@ def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-S
 	nbSamples = len(l); # Number of JS file samples
 	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS files
 	
-	print(simplifiedDico);
+	#print(simplifiedDico);
 	where = 0;
 	for javaScriptFile in sorted(l):
 		where = where + 1;
@@ -162,7 +162,8 @@ def mainSimplified(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-S
 		print(javaScriptFile);
 	vectNGramsProba = np.zeros(len(simplifiedDico));
 	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3 and Weka
-	print(collections.OrderedDict(sorted(simplifiedDico.items())));
+	#print(collections.OrderedDict(sorted(simplifiedDico.items())));
+	return collections.OrderedDict(sorted(simplifiedDico.items()));
 	
 	if exportedFile == True:
 		# Directory to store the matrix files

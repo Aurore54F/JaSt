@@ -5,6 +5,10 @@
 
 from slimit.lexer import Lexer
 
+import DicoOfTokensSlimit
+import DicoOfTokensEsprima
+import DicoOfAstEsprima
+
 import subprocess # to call Shell commands
 import os
 
@@ -116,7 +120,62 @@ def tokensUsedSlimit(inputFile):
 		l += [tokenComplete[0]];
 	
 	return l;
+		
 
+def tokensUsed(parser, jsFile):
+	'''
+		Return the list of tokens (for a given parser) present in a given JavaScript document.
+				
+		-------
+		Parameter:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- jsFile: String
+			Path of the JavaScript file to be analysed.
+			
+		-------
+		Returns:
+		- List
+			Contains the tokens present in jsFile given in input.
+	'''
+	
+	if parser.lower() == 'slimit':
+		tokensList = tokensUsedSlimit(jsFile);
+	elif parser.lower() == 'esprima':
+		tokensList = tokensUsedEsprima(jsFile);
+	elif parser.lower() == 'esprimaast':
+		tokensList = astUsedEsprima(jsFile);
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+	return tokensList;
+
+
+def dicoUsed(parser):
+	'''
+		Return the Dictionary corresponding to the parser given in input.
+				
+		-------
+		Parameter:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+			
+		-------
+		Returns:
+		- Dictionary
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico.
+	'''
+	
+	if parser.lower() == 'slimit':
+		dico = DicoOfTokensSlimit.tokensDico;
+	elif parser.lower() == 'esprima':
+		dico = DicoOfTokensEsprima.tokensDico;
+	elif parser.lower() == 'esprimaast':
+		dico = DicoOfAstEsprima.astDico;		
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+	return dico;
 
 
 def tokensToNumbers(tokensDico, tokensList):
@@ -126,7 +185,7 @@ def tokensToNumbers(tokensDico, tokensList):
 		-------
 		Parameters:
 		- tokensDico: Dictionary
-			Either DicoOfTokensSlimit.tokensDico, or DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico. TODO
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico. TODO
 		- tokensList: List
 			List containing the tokens extracted from a JS file.
 		-------
