@@ -2,8 +2,8 @@
  
 '''
 	Configuration file storing the dictionary astDico.
-		Key: Esprima syntactical tokens;
-		Value: Unique integers.
+		Key: Esprima syntactical token;
+		Value: Unique integer.
 '''
 
 

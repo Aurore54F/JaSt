@@ -2,8 +2,8 @@
  
 '''
 	Configuration file storing the dictionary tokensDico.
-		Key: SlimIt lexical tokens;
-		Value: Unique integers.
+		Key: SlimIt lexical token;
+		Value: Unique integer.
 '''
 
 

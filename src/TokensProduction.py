@@ -1,16 +1,18 @@
 
 '''
-	Producing tokens from a JavaScript file and converting them into integers.
+	Extracting lexical and syntactical tokens from a JavaScript file and converting them into integers.
 '''
 
 from slimit.lexer import Lexer
+import sys
+sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
 
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
 
 import subprocess # to call Shell commands
-import os
+
 
 def astUsedEsprima(inputFile):
 	'''

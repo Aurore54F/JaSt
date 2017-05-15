@@ -1,6 +1,6 @@
 
 '''
-	Producing n-grams from tokens and dealing with them.
+	Producing n-grams from tokens by moving a fixed-length window to extract subsequence of length n.
 '''
 
 from itertools import product # for the cartesian product
@@ -74,37 +74,6 @@ def nGramsCsv(numbersList, n = 4, filePath = 'nGram.csv'):
 				csvFile.write('\n');
 				
 			csvFile.close();
-
-
-def countSetsOfNGrams(matrixAllNGrams):
-	'''
-		Given a matrix containing every possible n-gram (for a JavaScript given file), count and store (once) the probability of occurrences of each set of n-gram in a dictionary.
-		
-		-------
-		Parameter:
-		- matrixAllNGrams: 
-			Contains in each row a tuple representing an n-gram.
-			
-		-------
-		Returns:
-		- Dictionary
-			Key: tuple representing an n-gram;
-			Value: probability of occurrences of a given tuple of n-gram.
-		- or None if matrixAllNGrams is empty.
-	'''
-		
-	if matrixAllNGrams is not None:
-		dicoOfNGrams = {};
-		setsNGrams = len(matrixAllNGrams); # Number of lines in the matrix, i.e. of sets of n-grams.
-		for j in range(setsNGrams):
-			if matrixAllNGrams[j] in dicoOfNGrams:
-				dicoOfNGrams[matrixAllNGrams[j]] = dicoOfNGrams[matrixAllNGrams[j]] + 1/setsNGrams; # Normalization to enable future comparisons
-			else:
-				dicoOfNGrams[matrixAllNGrams[j]] = 1/setsNGrams;
-				
-		return dicoOfNGrams;
-	#else:
-		#print('Matrix of type NoneType');
 	
 
 def allPossibleNGrams(dico, n = 4):
@@ -132,6 +101,13 @@ def allPossibleNGrams(dico, n = 4):
 	return listNGrams;
 
 
+#####################################################################################
+
+# Depreciated. Old functions to map n-grams to int and int to n-grams.
+# Now, as the list of n-grams has been simplified, the functions are not the same.
+# The new ones are in NGramsRepresentation.py (and the corresponding dictionaries in the directory Dico_MapNGrams-Int).
+
+"""
 def nGramToInt(nMax, nGram):
 	'''
 		Convert an n-gram into an int.
@@ -173,3 +149,6 @@ def intToNGram(nMax, i, n = 4):
 	'''
 	
 	return tuple([int(i/(nMax**j) % nMax) for j in range(n)]);
+"""
+
+#####################################################################################
