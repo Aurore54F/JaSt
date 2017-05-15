@@ -65,7 +65,7 @@ def classifierFormat(classifier = 'Weka'):
 		-------
 		Parameter:
 		- classifier: String
-			Either 'Weka' or 'xcluster'.
+			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
 			
 		-------
 		Returns:
@@ -95,20 +95,23 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 				
 		-------
 		Parameter:
-		- parser:
+		- parser: String
 			Either 'slimIt', 'esprima', or 'esprimaAst'.
-		- jsDir:
-			Path of the directory containing the JS files to be analysed.
+		- jsDir: String
+			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
 		- n: Integer
 			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
 			
 		-------
 		Returns:
-		- List
-			Contains one dictionary per JS file:
-				Key: tuple representing an n-gram;
-				Value: probability of occurrences of a given tuple of n-gram.
-				The dictionary corresponds to the analysis of one JS file.
+		- List of lists
+			* List 1:
+				Contains one dictionary per JS file:
+					Key: tuple representing an n-gram;
+					Value: probability of occurrences of a given tuple of n-gram.
+					The dictionary corresponds to the analysis of one JS file.
+			* List 2:
+				Contains the name of the well-formed JS files.
 	'''
 	
 	allProba = [];
@@ -121,21 +124,24 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 			allProba.append(dicoForHisto);
 			filesStudied += [javaScriptFile];
 
-	return ([allProba] + filesStudied);
+	return ([allProba] + [filesStudied]);
 	
 	
 def simplifiedDicoOfAllNGrams(allProba):
 	'''
-		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
+		From a list containing dictionaries, each containing n-grams with their associated probability, returns a simplified set with only the n-grams whose probability is not null.
 				
 		-------
 		Parameter:
 		- allProba: List of Dictionaries.
+			Key: tuple representing an n-gram;
+			Value: probability of occurrences of a given tuple of n-gram.
+			One dictionary corresponds to the analysis of one JS file.
 			
 		-------
 		Returns:
 		- Set
-			Contains tuples representing n-grams.
+			Contains tuples representing n-grams whose probability of occurrences is not null.
 	'''
 	
 	nGramList = [i.keys() for i in allProba];
@@ -147,9 +153,31 @@ def simplifiedDicoOfAllNGrams(allProba):
 
 
 def saveHisto(parser, allProba, filesStudied, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+	'''
+		From a list containing dictionaries, each containing n-grams (abscissa) with their associated probability (ordinate), saves the corresponding histograms.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- allProba: List of Dictionaries.
+			Key: tuple representing an n-gram;
+			Value: probability of occurrences of a given tuple of n-gram.
+			One dictionary corresponds to the analysis of one JS file.
+		- filesStudied: List of Strings
+			Contains the name of the well-formed JS files.
+		- histoDir: String
+			Path of the directory to store the histograms. Default: TODO only for Aurore.
+		- n: Integer
+			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
+			
+		-------
+		Returns:
+		- Files
+			The number of .png files returned (i.e. of histograms) corresponds to the number of valid JS files (i.e. len(allProba) = len(filesStudied)).
+	'''
 	
 	# Directory to store the histograms files
-	print(histoDir);
 	
 	if not os.path.exists(histoDir):
 		os.makedirs(histoDir);
@@ -160,11 +188,36 @@ def saveHisto(parser, allProba, filesStudied, histoDir = '/home/aurore/Documents
 		
 	for dico in allProba: # Data for the histogram (i.e. n-gram with occurrence);
 		figPath =  '/home/aurore/Documents/Code/Histograms/' + histoFilePart1 + str(i) + histoFilePart3;
-		NGramsAnalysis.histoFromDico(dico, figPath, title = filesStudied[i-1]);
+		NGramsAnalysis.histoFromDico(dico, figPath, title = filesStudied[i-1]); # Saving an histogram in png format.
 		i += 1;
 		
 		
 def saveFile(parser, allProba, filesStudied, fileDir = '/home/aurore/Documents/Code/MatrixFiles/', classifier = 'Weka', n = 4):
+	'''
+		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- allProba: List of Dictionaries.
+			Key: tuple representing an n-gram;
+			Value: probability of occurrences of a given tuple of n-gram.
+			One dictionary corresponds to the analysis of one JS file.
+		- filesStudied: List of Strings
+			Contains the name of the well-formed JS files.
+		- fileDir: String
+			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
+		- classifier: String
+			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
+		- n: Integer
+			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
+			
+		-------
+		Returns:
+		- File
+			Contains for each JS file studied the probability of occurrences of all the n-gram encountered in the JS corpus considered.
+	'''
 	
 	dico = TokensProduction.dicoUsed(parser); # Dictionary used, according to the parser selected
 
@@ -176,6 +229,7 @@ def saveFile(parser, allProba, filesStudied, fileDir = '/home/aurore/Documents/C
 	simplifiedListNGrams = simplifiedDicoOfAllNGrams(allProba);
 	vectNGramsProba = np.zeros(len(simplifiedListNGrams));
 	matrixAllNGramsProba[0] = [i for i,j in enumerate(vectNGramsProba)]; # Structured for xCluster3 and Weka
+	NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams);
 	
 	# Directory to store the matrix files
 	if not os.path.exists(fileDir):
@@ -212,11 +266,38 @@ def saveFile(parser, allProba, filesStudied, fileDir = '/home/aurore/Documents/C
 		
 	return matrixAllNGramsProba;
 	
+	
 
 def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
 	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
 	'''
 		Main program, entry point.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- jsDir: String
+			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
+		- exportedFile: Boolean
+			True to call function 'saveFile' and therefore produce a csv/txt file for Weka/xcluster. Default value is True.
+		- classifier: String
+			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
+		- fileDir: String
+			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
+		- histo: Boolean
+			True to call function 'saveHisto' and therefore produce histograms from the JS corpus. Default value is True.
+		- histoDir: String
+			Path of the directory to store the histograms. Default: TODO only for Aurore.
+		- n: Integer
+			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
+			
+		-------
+		Returns:
+		- Histogram files (if enabled)
+			The number of .png files returned (i.e. of histograms) corresponds to the number of valid JS files in the corpus.
+		- File
+			Contains for each JS file studied the probability of occurrences of all the n-gram encountered in the JS corpus considered.
 	'''
 	
 	allNGrams = dicoOfAllNGrams(parser, jsDir, n);
