@@ -259,8 +259,8 @@ def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, 
 	expFile.write('\n');
 		
 	#for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-	for m in range(1,len(allProba)): # Dico for one JS file, key = n-gram and value = proba
-		vectNGramsProba = jsToProbaOfNGramsComplete(allProba[m], simplifiedListNGrams);
+	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
+		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams);
 		expFile.write(filesStudied[i-1] + formatt); # Name of the current file
 		for el in range(len(vectNGramsProba)-1):
 			expFile.write(str(vectNGramsProba[el]) + formatt);
