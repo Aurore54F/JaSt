@@ -314,10 +314,65 @@ def printProbaOfNGramsMatrix(allProba, simplifiedListNGrams):
 
 		
 	return matrixAllNGramsProba;
+
 	
+
+def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
+	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+	'''
+		Main program, entry point.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- jsDir: String
+			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
+		- exportedFile: Boolean
+			True to call function 'saveFile' and therefore produce a csv/txt file for Weka/xcluster. Default value is True.
+		- classifier: String
+			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
+		- fileDir: String
+			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
+		- histo: Boolean
+			True to call function 'saveHisto' and therefore produce histograms from the JS corpus. Default value is True.
+		- histoDir: String
+			Path of the directory to store the histograms. Default: TODO only for Aurore.
+		- n: Integer
+			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
+			
+		-------
+		Returns:
+		- Histogram files (if enabled)
+			The number of .png files returned (i.e. of histograms) corresponds to the number of valid JS files in the corpus.
+		- File
+			Contains for each JS file studied the probability of occurrences of all the n-gram encountered in the JS corpus considered.
+	'''
 	
+	allNGrams = dicoOfAllNGrams(parser, jsDir, n);
 	
-	
+	if allNGrams != [[]]:
+		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
+		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
+		
+		simplifiedListNGrams = simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
+		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+			# TODO: current problem, the update comes too late, as the previous version of the dictionary has always been imported...
+		
+		if histo == True:
+			saveHisto(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
+		
+		if exportedFile == True:
+			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
+			saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, fileDir, classifier);
+
+
+#####################################################################################
+
+# Depreciated. Old function to create the file for Weka/xcluster.
+# Now it is split in 3 functions: one which creates a line of the matrix, one which returns the complete matrix, and one which creates the file.
+
+"""
 def saveFile(parser, allProba, filesStudied, fileDir = '/home/aurore/Documents/Code/MatrixFiles/', classifier = 'Weka', n = 4):
 	'''
 		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
@@ -392,58 +447,9 @@ def saveFile(parser, allProba, filesStudied, fileDir = '/home/aurore/Documents/C
 	print('end');
 		
 	return matrixAllNGramsProba;
+"""
 
-	
-
-def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', fileDir = '/home/aurore/Documents/Code/MatrixFiles/',
-	histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
-	'''
-		Main program, entry point.
-				
-		-------
-		Parameters:
-		- parser: String
-			Either 'slimIt', 'esprima', or 'esprimaAst'.
-		- jsDir: String
-			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
-		- exportedFile: Boolean
-			True to call function 'saveFile' and therefore produce a csv/txt file for Weka/xcluster. Default value is True.
-		- classifier: String
-			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
-		- fileDir: String
-			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
-		- histo: Boolean
-			True to call function 'saveHisto' and therefore produce histograms from the JS corpus. Default value is True.
-		- histoDir: String
-			Path of the directory to store the histograms. Default: TODO only for Aurore.
-		- n: Integer
-			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
-			
-		-------
-		Returns:
-		- Histogram files (if enabled)
-			The number of .png files returned (i.e. of histograms) corresponds to the number of valid JS files in the corpus.
-		- File
-			Contains for each JS file studied the probability of occurrences of all the n-gram encountered in the JS corpus considered.
-	'''
-	
-	allNGrams = dicoOfAllNGrams(parser, jsDir, n);
-	
-	if allNGrams != [[]]:
-		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
-		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
-		
-		simplifiedListNGrams = simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
-		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
-			# TODO: current problem, the update comes too late, as the previous version of the dictionary has always been imported...
-		
-		if histo == True:
-			saveHisto(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
-		
-		if exportedFile == True:
-			saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
-			#saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, fileDir, classifier);
-
+#####################################################################################
 
 #####################################################################################
 
