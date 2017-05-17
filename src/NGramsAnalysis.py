@@ -3,8 +3,6 @@
 	Counting the number of occurrences (probability) of each n-gram in JavaScript files.
 '''
 
-from itertools import product # for the cartesian product
-
 import matplotlib.pyplot as plt
 from textwrap import wrap
 

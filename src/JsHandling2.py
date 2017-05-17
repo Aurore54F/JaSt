@@ -4,7 +4,6 @@
 '''
 
 import collections # to order a dictionary
-import shutil
 import glob # Unix style pathname pattern expansion
 import os # To create repositories
 import numpy as np
@@ -308,7 +307,7 @@ def printProbaOfNGramsMatrix(allProba, simplifiedListNGrams):
 	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS file
 	
 	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJs, simplifiedListNGrams);
+		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams);
 		matrixAllNGramsProba[i] = vectNGramsProba;
 		i += 1;
 
@@ -360,7 +359,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 			# TODO: current problem, the update comes too late, as the previous version of the dictionary has always been imported...
 		
 		if histo == True:
-			saveHisto(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
+			saveProbaOfNGramsFile(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
 		
 		if exportedFile == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
