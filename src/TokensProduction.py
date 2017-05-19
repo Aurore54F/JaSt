@@ -55,6 +55,34 @@ def astUsedEsprima(inputFile):
 		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
 	'''
 	
+
+def isJsFile(givenFile):
+	'''
+		Given a file path, indicate whether the file is either valid JavaScript, malformed JavaScript or no JavaScript.
+				
+		-------
+		Parameter:
+		- givenFile: string
+			Path of the file to be analysed.
+			
+		-------
+		Returns:
+		- Integer
+			Indicates whether the file is either valid JavaScript (0), malformed JavaScript (2) or no JavaScript (1).
+	'''
+	
+	try:
+		subprocess.check_output('node JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
+	except subprocess.CalledProcessError as e:  # TODO catch exception if file cannot be opened
+		if  e.returncode == 1:
+			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
+				print('File ' + givenFile + ': not JavaScript');
+				return 1;
+			else: # The file could partially be parsed: malformed JS
+				print('File ' + givenFile + ': malformed JavaScript');
+				return 2;
+	return 0;
+	
 	
 def tokensUsedEsprima(inputFile):
 	'''
@@ -72,13 +100,14 @@ def tokensUsedEsprima(inputFile):
 		- or None if the file either is no JS or malformed.
 	'''
 	
-	result = subprocess.run(['node' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
-	# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
-	# Structure of a token: "b'Punctuator\n'"
-	tokenPart = str(result).split('\n'); # Keyword as used in JS
-	del(tokenPart[len(tokenPart) - 1]); # As last one = ''
-		
-	return tokenPart;
+	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
+		result = subprocess.run(['node' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+		# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
+		# Structure of a token: "b'Punctuator\n'"
+		tokenPart = str(result).split('\n'); # Keyword as used in JS
+		del(tokenPart[len(tokenPart) - 1]); # As last one = ''
+			
+		return tokenPart;
 	
 		
 	
@@ -98,30 +127,31 @@ def tokensUsedSlimit(inputFile):
 		- or None if the file either is no JS or malformed.
 	'''
 	
-	inF = open(inputFile,'r');
-	s = '';
-	for line in inF:
-		s += str(line); # Store the content of the JS file in a string, because far more quicker than using SlimIt minifier.
-	inF.close();
-	
-	lexer = Lexer();
-	lexer.input(s);
-	l = [];
-
-	'''
-		result = subprocess.run(['slimit', '--mangle', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
+		inF = open(inputFile,'r');
+		s = '';
+		for line in inF:
+			s += str(line); # Store the content of the JS file in a string, because far more quicker than using SlimIt minifier.
+		inF.close();
+		
 		lexer = Lexer();
-		lexer.input(result);
+		lexer.input(s);
 		l = [];
-	'''
-
-	for token in lexer:
-		# Structure of a token: "LexToken(VAR,'var',1,0)"
-		tokenPart = str(token).split('(');
-		tokenComplete = tokenPart[1].split(','); # Keyword as used in JS
-		l += [tokenComplete[0]];
 	
-	return l;
+		'''
+			result = subprocess.run(['slimit', '--mangle', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+			lexer = Lexer();
+			lexer.input(result);
+			l = [];
+		'''
+	
+		for token in lexer:
+			# Structure of a token: "LexToken(VAR,'var',1,0)"
+			tokenPart = str(token).split('(');
+			tokenComplete = tokenPart[1].split(','); # Keyword as used in JS
+			l += [tokenComplete[0]];
+		
+		return l;
 		
 
 def tokensUsed(parser, jsFile):

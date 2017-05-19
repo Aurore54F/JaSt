@@ -252,7 +252,7 @@ def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, 
 	expFile = open(fileDir + parser + extension,'w');
 	expFile.write('Outlook');
 	
-	vectNGramsProba = jsToProbaOfNGramsComplete(allProba[0], allProba);
+	vectNGramsProba = jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams); # allProba[0] being a dictionary representing the analysis of one JS file (i.e. n-gram with associated probability).
 	for j,k in enumerate(vectNGramsProba): # TODO
 		expFile.write(formatt + str(j));
 	expFile.write('\n');
@@ -359,7 +359,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 			# TODO: current problem, the update comes too late, as the previous version of the dictionary has always been imported...
 		
 		if histo == True:
-			saveProbaOfNGramsFile(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
+			saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
 		
 		if exportedFile == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
