@@ -5,11 +5,6 @@
 
 import os # To create repositories
 import collections # To order a dictionary
-import sys
-sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
-
-import DicoIntToNGrams
-import DicoNGramsToInt
 
 
 def mappingNGramsInt(nGramsSet):
@@ -63,7 +58,7 @@ def mappingNGramsInt(nGramsSet):
 	dicoFile.close();
 	
 
-def nGramToInt(nGram):
+def nGramToInt(dico, nGram):
 	'''
 		Convert an n-gram into an int.
 		
@@ -78,10 +73,11 @@ def nGramToInt(nGram):
 			Note that the operation that transforms an n-gram to an int is a bijection.
 	'''
 	
-	return DicoNGramsToInt.dicoNGramsToInt[str(nGram)];
+	# return DicoNGramsToInt.dicoNGramsToInt[str(nGram)];
+	return dico[str(nGram)];
 
 
-def intToNGram(i):
+def intToNGram(dico, i):
 	'''
 		Convert an int into an n-gram.
 		
@@ -97,4 +93,5 @@ def intToNGram(i):
 			Note that the operation that transforms an int to an n-gram is a bijection.
 	'''
 	
-	return DicoIntToNGrams.dicoIntToNGrams[str(i)];
+	# return DicoIntToNGrams.dicoIntToNGrams[str(i)];
+	return dico[str(i)];

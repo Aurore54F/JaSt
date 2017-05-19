@@ -7,9 +7,13 @@ import collections # to order a dictionary
 import glob # Unix style pathname pattern expansion
 import os # To create repositories
 import numpy as np
+import importlib; # To reload updated modules
 import sys
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
+sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
+import DicoIntToNGrams
+import DicoNGramsToInt
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
@@ -191,7 +195,7 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = '/home/aur
 		i += 1;
 		
 
-def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, classification = False):
+def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint, classification = False):
 	'''
 		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
 				
@@ -210,13 +214,13 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, classification = Fal
 	vectNGramsProba = np.zeros(len(simplifiedListNGrams) + i);	
 	for key in dicoJS: # Key = n-gram
 		if key in simplifiedListNGrams: # Simplification so as not to consider n-grams that never appear
-			vectNGramsProba[NGramsRepresentation.nGramToInt(key)] = dicoJS[key]; # We use the mapping int/n-gram to store the proba of an n-gram at a given place in a vector.
+			vectNGramsProba[NGramsRepresentation.nGramToInt(dicoNgramIint, key)] = dicoJS[key]; # We use the mapping int/n-gram to store the proba of an n-gram at a given place in a vector.
 
 	return vectNGramsProba;
 	
 	
 	
-def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, fileDir = '/home/aurore/Documents/Code/MatrixFiles/', classifier = 'Weka'):
+def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, dicoNgramIint, filesStudied, fileDir = '/home/aurore/Documents/Code/MatrixFiles/', classifier = 'Weka'):
 	'''
 		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
 				
@@ -252,14 +256,14 @@ def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, 
 	expFile = open(fileDir + parser + extension,'w');
 	expFile.write('Outlook');
 	
-	vectNGramsProba = jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams); # allProba[0] being a dictionary representing the analysis of one JS file (i.e. n-gram with associated probability).
+	vectNGramsProba = jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint); # allProba[0] being a dictionary representing the analysis of one JS file (i.e. n-gram with associated probability).
 	for j,k in enumerate(vectNGramsProba): # TODO
 		expFile.write(formatt + str(j));
 	expFile.write('\n');
 		
 	#for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
 	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams);
+		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint);
 		expFile.write(filesStudied[i-1] + formatt); # Name of the current file
 		for el in range(len(vectNGramsProba)-1):
 			expFile.write(str(vectNGramsProba[el]) + formatt);
@@ -275,7 +279,7 @@ def saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, 
 	
 	
 	
-def printProbaOfNGramsMatrix(allProba, simplifiedListNGrams):
+def printProbaOfNGramsMatrix(allProba, simplifiedListNGrams, dicoNgramIint):
 	'''
 		From a list containing dictionaries, each containing n-grams with their associated probability, return a simplified set with only the n-grams whose probability is not null.
 				
@@ -307,7 +311,7 @@ def printProbaOfNGramsMatrix(allProba, simplifiedListNGrams):
 	matrixAllNGramsProba = [[] for j in range(nbSamples + 1)]; # Matrix creation: column = n-grams and row = proba of n-gram for a given JS file
 	
 	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams);
+		vectNGramsProba = jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint);
 		matrixAllNGramsProba[i] = vectNGramsProba;
 		i += 1;
 
@@ -358,12 +362,14 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 			# TODO: current problem, the update comes too late, as the previous version of the dictionary has always been imported...
 		
+		importlib.reload(DicoNGramsToInt);
+		
 		if histo == True:
 			saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = histoDir, n = n); # Production of the histograms.
 		
 		if exportedFile == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
-			saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, filesStudied, fileDir, classifier);
+			saveProbaOfNGramsFile(parser, allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, fileDir, classifier);
 
 
 #####################################################################################
