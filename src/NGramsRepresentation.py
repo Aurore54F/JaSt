@@ -13,6 +13,11 @@ def mappingNGramsInt(nGramsSet):
 		They are stored in a configuration file (see DicoNGramsToInt.py and DicoIntToNGrams.py).
 		
 		-------
+		Parameter:
+		- nGramsSet: 
+			Set of n-grams to be mapped to unique integers.
+			
+		-------
 		Returns:
 		- Configuration file 1
 			Stores the dictionary dicoNGramsToInt:
@@ -63,7 +68,11 @@ def nGramToInt(dico, nGram):
 		Convert an n-gram into an int.
 		
 		-------
-		Parameter:
+		Parameters:
+		- dico: Dictionary
+			Key: N-gram;
+			Value: Unique integer.
+			Why is DicoNGramsToInt.dicoNGramsToInt no more hard-coded? Because I needed to reload it, after it being modified by the program.
 		- nGram: Tuple
 			Represents the n-gram to be converted into an int.
 			
@@ -83,6 +92,10 @@ def intToNGram(dico, i):
 		
 		-------
 		Parameters:
+		- dico: Dictionary
+			Key: Integer;
+			Value: Unique n-gram.
+			Why is DicoNGramsToInt.dicoNGramsToInt no more hard-coded? Because I needed to reload it, after it being modified by the program.
 		- i: Integer
 			Represents the int to be converted into an n-gram.
 			

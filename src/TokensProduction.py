@@ -43,9 +43,9 @@ def astUsedEsprima(inputFile):
 	except subprocess.CalledProcessError as e: # TODO catch exception if file cannot be opened
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
-				print('The file ' + inputFile + ' is not considered as JavaScript.');
+				print('File ' + inputFile + ': not JavaScript');
 			else: # The file could partially be parsed: malformed JS
-				print('Error on the file ' + inputFile + ' structure.');
+				print('File ' + inputFile + ': malformed JavaScript');
 	
 	'''
 		result = subprocess.run(['node' , 'JsEsprima/parser.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');

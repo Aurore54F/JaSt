@@ -36,7 +36,7 @@ def nGramsList(numbersList, n = 4):
 				matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)]; # Loop on the components of a given n-gram
 					
 				matrixAllNGrams[j] = tuple(matrixAllNGrams[j]); # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
-				 #a new string is created). I needed an immutable type since it will be used as key in a dictionary.
+					#a new string is created). I needed an immutable type since it will be used as key in a dictionary.
 
 			return matrixAllNGrams;
 
