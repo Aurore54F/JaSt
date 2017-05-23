@@ -89,7 +89,7 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = '/home/aur
 
 	
 def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgramIint, formatt, extension, 
-							fileDir = '/home/aurore/Documents/Code/MatrixFiles/'):
+							fileDir = '/home/aurore/Documents/Code/MatrixFiles/', label = None):
 	'''
 		Writes the header (i.e. columns labeling) of the file for Weka/xcluster.
 				
@@ -126,7 +126,7 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
 	expFile = open(fileDir + parser + extension,'w');
 	expFile.write('Outlook');
 	
-	vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint); # allProba[0] being a dictionary representing 
+	vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint, label); # allProba[0] being a dictionary representing 
 	#the analysis of one JS file (i.e. n-gram with associated probability).
 	# vectNGramsProba contains at position i the probability of encountering the n-gram mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
 	for j,k in enumerate(vectNGramsProba):
@@ -187,7 +187,7 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 			expFile.write(str(vectNGramsProba[el]) + formatt);
 		expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1])); # Last one could not be in the previous loop, otherwise the last character would have been a separator.
 		if label is not None:
-			expFile.write(formatt + label);
+			expFile.write(formatt + label[i - 1]); # i - 1 as initially i value is 1
 		
 		print('End line' + str(i));
 		expFile.write('\n');

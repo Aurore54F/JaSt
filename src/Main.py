@@ -50,7 +50,7 @@ if args['d'] == None and args['f'] == None:
 	print('Indicate a directory or a JS file to be studied');
 	
 else:	
-	allNGrams = [[] for j in range(2)];
+	allNGrams = [[] for j in range(3)];
 	
 	if args['d'] != None:
 		for jsDir in args['d']:
@@ -58,6 +58,7 @@ else:
 			allNGrams[0] += preprocess1Dir[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a 
 			#given tuple of n-gram.
 			allNGrams[1] += preprocess1Dir[1]; # Contains the name of the well-formed JS files.
+			allNGrams[2] += preprocess1Dir[1];
 	
 	if args['f'] != None:
 		for jsFile in args['f']:
@@ -66,10 +67,12 @@ else:
 				allNGrams[0].append(dico); # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a 
 				#given tuple of n-gram.
 				allNGrams[1] += [jsFile]; # Contains the name of the well-formed JS files.
+				allNGrams[2] += [jsFile];
 
 	if allNGrams != [[]]:
 		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
 		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
+		labels = allNGrams[2];
 	
 		formatt = FilesForJsClustering.classifierFormat(args['c'])[0]; # Separator between the value: either ',' or '\t' (arg = classifier).
 		extension = FilesForJsClustering.classifierFormat(args['c'])[1]; # File extension: either '.csv' or '.txt' (arg = classifier).
@@ -84,7 +87,7 @@ else:
 				
 		if args['e'] == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
-			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, args['ep']);
+			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, args['ep'], labels);
 			#TODO loop on the function below
 			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, formatt, 
-															extension, args['ep'], label = 'Test');
+															extension, args['ep'], labels);
