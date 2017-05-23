@@ -59,7 +59,7 @@ def jsToProbaOfNGrams(parser, jsFile = '/home/aurore/Documents/Code/JS-samples1/
 		return orderedDico;
 
 	
-def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', n = 4):
+def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', label = None, n = 4):
 	'''
 		This function goes through a directory containing several JS files and returns a list containing all the dictionaries
 		containing (for each file) the number of occurrences (probability) of each n-gram.
@@ -70,6 +70,8 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 			Either 'slimIt', 'esprima', or 'esprimaAst'.
 		- jsDir: String
 			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
+		- label: String
+			Indicates the label's name of the current data (if any), useful for supervised classification. Default value is None.
 		- n: Integer
 			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
 			
@@ -83,6 +85,8 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 					The dictionary corresponds to the analysis of one JS file.
 			* List 2:
 				Contains the name of the well-formed JS files.
+			* List 3:
+				Only if Label is not None. Contains the label assigned to all the files in jsDir.
 	'''
 	
 	allProba = [];
@@ -95,8 +99,9 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 		if dicoForHisto is not None:
 			allProba.append(dicoForHisto); # Store all the dictionaries in a list (this way, we go only once through the JS files).
 			filesStudied += [javaScriptFile]; # Store the name of the valid JS files.
-
-	return ([allProba] + [filesStudied]);
+		if label is not None:
+			l = label;
+	return ([allProba] + [filesStudied] + [l]);
 	
 	
 def simplifiedDicoOfAllNGrams(allProba):

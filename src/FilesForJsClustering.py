@@ -4,17 +4,21 @@
 '''
 
 import os # To create repositories
+import importlib
 import sys
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+
+import PreprocessingJsData
+import NGramsAnalysis
+import NGramsRepresentation
 
 import DicoIntToNGrams
 import DicoNGramsToInt
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
-import PreprocessingJsData
-import NGramsAnalysis
+
 
 
 def classifierFormat(classifier = 'Weka'):
@@ -192,4 +196,63 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 		
 	expFile.close();
 	print('end');
+	
+	
+def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', 
+		fileDir = '/home/aurore/Documents/Code/MatrixFiles/', histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+	'''
+		Main program, entry point.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- jsDir: String
+			Path of the directory containing the JS files to be analysed. Default: TODO only for Aurore.
+			TODO: glob.glob(allJsDir).
+		- exportedFile: Boolean
+			True to call function 'saveFile' and therefore produce a csv/txt file for Weka/xcluster. Default value is True.
+		- classifier: String
+			Either 'Weka' or 'xcluster'. Default value is 'Weka'.
+		- fileDir: String
+			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
+		- histo: Boolean
+			True to call function 'saveHisto' and therefore produce histograms from the JS corpus. Default value is True.
+		- histoDir: String
+			Path of the directory to store the histograms. Default: TODO only for Aurore.
+		- n: Integer
+			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
+			
+		-------
+		Returns:
+		- Histogram files (if enabled)
+			The number of .png files returned (i.e. of histograms) corresponds to the number of valid JS files in the corpus.
+		- File
+			Contains for each JS file studied the probability of occurrences of all the n-gram encountered in the JS corpus considered.
+	'''
+	
+	allNGrams = PreprocessingJsData.dicoOfAllNGrams(parser, jsDir, n);
+	
+	if allNGrams != [[]]:
+		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
+		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
+		
+		formatt = classifierFormat(classifier)[0]; # Separator between the value: either ',' or '\t'.
+		extension = classifierFormat(classifier)[1]; # File extension: either '.csv' or '.txt'.
+		
+		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
+		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+		
+		importlib.reload(DicoNGramsToInt);
+		
+		if histo == True:
+			saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = histoDir); # Production of the histograms.
+		
+		if exportedFile == True:
+			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
+			saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, fileDir);
+			#TODO loop on the function below
+			saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, formatt, extension, fileDir, label = None);
+			
+
 	
