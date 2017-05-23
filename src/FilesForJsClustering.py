@@ -112,6 +112,8 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
 			File extension (either '.csv' or '.txt').
 		- fileDir: String
 			Path of the directory to store the csv/txt files for Weka/xcluster. Default: TODO only for Aurore.
+		- label: String
+			Indicates the label's name of the current data (if any), useful for supervised classification. Default value is None.
 		
 		-------
 		Returns:
@@ -181,7 +183,8 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 	
 	#for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
 	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint);
+		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint); # Contains at position i the probability of 
+		#encountering the n-gram mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
 		expFile.write(filesStudied[i-1] + formatt); # Name of the current file
 		for el in range(len(vectNGramsProba)-1):
 			expFile.write(str(vectNGramsProba[el]) + formatt);
@@ -198,6 +201,8 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 	print('end');
 	
 	
+
+# Depreciated. See the main in Main.py (to launch from the command line).	
 def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', 
 		fileDir = '/home/aurore/Documents/Code/MatrixFiles/', histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
 	'''

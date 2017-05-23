@@ -9,7 +9,8 @@ from textwrap import wrap
 
 def countSetsOfNGrams(matrixAllNGrams):
 	'''
-		Given a matrix containing every possible n-gram (for a JavaScript given file), count and store (once) the probability of occurrences of each set of n-gram in a dictionary.
+		Given a matrix containing every possible n-gram (for a JavaScript given file), count and store (once) the probability of occurrences of each set of 
+		n-gram in a dictionary.
 		
 		-------
 		Parameter:

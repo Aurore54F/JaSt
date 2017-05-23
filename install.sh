@@ -5,6 +5,7 @@ sudo apt install python3-pip
 pip3 install slimit # min pip 7
 sudo apt-get install python3-matplotlib
 pip3 install plotly
+pip3 install numpy
 
 sudo apt install nodejs
 sudo apt-get install nodejs-legacy

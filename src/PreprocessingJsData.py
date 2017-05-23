@@ -93,6 +93,7 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 	l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin'); # Extension in .bin or .js
 	# TODO recursive: directories in a directory
 	filesStudied = [];
+	lab = [];
 	
 	for javaScriptFile in sorted(l):
 		dicoForHisto = jsToProbaOfNGrams(parser, javaScriptFile, n) # Histogram containing for each n-gram (key) the probability of occurrences (value).
@@ -100,8 +101,9 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 			allProba.append(dicoForHisto); # Store all the dictionaries in a list (this way, we go only once through the JS files).
 			filesStudied += [javaScriptFile]; # Store the name of the valid JS files.
 		if label is not None:
-			l = label;
-	return ([allProba] + [filesStudied] + [l]);
+			lab += [label]; # Store the label of the valid JS files. It is duplicated so that the information from allProba[i], filesStudied[i] and lab[i] 
+			#corresponds to the same file.
+	return ([allProba] + [filesStudied] + [lab]);
 	
 	
 def simplifiedDicoOfAllNGrams(allProba):
@@ -160,7 +162,7 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint, label
 	
 	i = 0;
 	if label != None:
-		i = 1;
+		i = 1; # To have a vector with one extra space for the label
 	vectNGramsProba = np.zeros(len(simplifiedListNGrams) + i);	
 	for key in dicoJS: # Key = n-gram
 		if key in simplifiedListNGrams: # Simplification so as not to consider n-grams that never appear

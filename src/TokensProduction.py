@@ -37,6 +37,7 @@ def astUsedEsprima(inputFile):
 		# Structure of a token: "b'Literal\n'"
 		syntaxPart = str(result).split("b'")[1].split('\\n'); # Keyword as used in JS
 		del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
+		print('File ' + inputFile + ': valid JavaScript');
 		
 		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
 		
@@ -44,8 +45,10 @@ def astUsedEsprima(inputFile):
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
 				print('File ' + inputFile + ': not JavaScript');
+				#return;
 			else: # The file could partially be parsed: malformed JS
 				print('File ' + inputFile + ': malformed JavaScript');
+				#return;
 	
 	'''
 		result = subprocess.run(['node' , 'JsEsprima/parser.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');

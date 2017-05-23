@@ -31,7 +31,8 @@ def nGramsList(numbersList, n = 4):
 			#return;
 			
 		else:
-			matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))]; # "len(numbersList) - (n - 1)" being the number of n-grams that can be obtained from the data of numbersList
+			matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))]; # "len(numbersList) - (n - 1)" being the number of n-grams that can be obtained from the data 
+			#of numbersList
 			for j in range(len(numbersList) - (n - 1)): # Loop on all the n-grams
 				matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)]; # Loop on the components of a given n-gram
 					
