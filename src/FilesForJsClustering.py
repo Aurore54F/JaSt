@@ -128,14 +128,15 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
 	expFile = open(fileDir + parser + extension,'w');
 	expFile.write('Outlook');
 	
-	vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint, label); # allProba[0] being a dictionary representing 
-	#the analysis of one JS file (i.e. n-gram with associated probability).
-	# vectNGramsProba contains at position i the probability of encountering the n-gram mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
-	for j,k in enumerate(vectNGramsProba):
-		expFile.write(formatt + str(j)); # Columns labeling
-	expFile.write('\n');
-	
-	#expFile.close();
+	if allProba is not None and allProba != []:
+		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint, label); # allProba[0] being a dictionary representing 
+		#the analysis of one JS file (i.e. n-gram with associated probability).
+		# vectNGramsProba contains at position i the probability of encountering the n-gram mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
+		for j,k in enumerate(vectNGramsProba):
+			expFile.write(formatt + str(j)); # Columns labeling
+		expFile.write('\n');
+		
+		#expFile.close();
 	
 	
 def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgramIint, filesStudied, formatt, extension, 
@@ -189,7 +190,7 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 		for el in range(len(vectNGramsProba)-1):
 			expFile.write(str(vectNGramsProba[el]) + formatt);
 		expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1])); # Last one could not be in the previous loop, otherwise the last character would have been a separator.
-		if label is not None:
+		if label is not None and label != []:
 			expFile.write(formatt + label[i - 1]); # i - 1 as initially i value is 1
 		
 		print('End line' + str(i));

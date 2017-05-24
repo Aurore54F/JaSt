@@ -75,7 +75,9 @@ def isJsFile(givenFile):
 	'''
 	
 	try:
-		subprocess.check_output('node JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
+		subprocess.check_output('node JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True);
+		print('File ' + givenFile + ': valid JavaScript');
+		return 0;
 	except subprocess.CalledProcessError as e:  # TODO catch exception if file cannot be opened
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
@@ -84,7 +86,6 @@ def isJsFile(givenFile):
 			else: # The file could partially be parsed: malformed JS
 				print('File ' + givenFile + ': malformed JavaScript');
 				return 2;
-	return 0;
 	
 	
 def tokensUsedEsprima(inputFile):
@@ -230,10 +231,14 @@ def tokensToNumbers(tokensDico, tokensList):
 		- or None if tokensDico is empty.
 	'''
 
-	if tokensList is not None:
+	if tokensList is not None and tokensList != []:
+		#i = 0;
+		#print('Debug, len(tokensList): ' + str(len(tokensList)));
 		numbers = [];
 		
 		for token in tokensList:
+			#print(str(i));
 			numbers = numbers + [tokensDico[token]];
+			#i += 1;
 		
 		return numbers;
