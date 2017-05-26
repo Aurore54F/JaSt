@@ -100,8 +100,8 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 		if dicoForHisto is not None:
 			allProba.append(dicoForHisto); # Store all the dictionaries in a list (this way, we go only once through the JS files).
 			filesStudied += [javaScriptFile]; # Store the name of the valid JS files.
-		if label is not None:
-			lab += [label]; # Store the label of the valid JS files. It is duplicated so that the information from allProba[i], filesStudied[i] and lab[i] 
+			if label is not None and label is not []:
+				lab += [label]; # Store the label of the valid JS files. It is duplicated so that the information from allProba[i], filesStudied[i] and lab[i] 
 			#corresponds to the same file.
 	return ([allProba] + [filesStudied] + [lab]);
 	

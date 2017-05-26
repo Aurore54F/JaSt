@@ -13,6 +13,7 @@ import DicoOfAstEsprima
 
 import subprocess # to call Shell commands
 
+globVar = 1;
 
 def astUsedEsprima(inputFile):
 	'''
@@ -30,7 +31,8 @@ def astUsedEsprima(inputFile):
 			Contains the esprima syntactical tokens present in the input file.
 		- or None if the file either is no JS or malformed.
 	'''
-	
+	global globVar;
+	#globVar = 0;
 	try:
 		result = subprocess.check_output('node JsEsprima/parser.js ' + inputFile + ' 2> /dev/null', shell = True);
 		# result is a string containing the syntactical tokens (as found by esprima) of the given JS script, separated by '\n'.
@@ -38,7 +40,8 @@ def astUsedEsprima(inputFile):
 		syntaxPart = str(result).split("b'")[1].split('\\n'); # Keyword as used in JS
 		del(syntaxPart[len(syntaxPart) - 1]); # As last one = ''
 		print('File ' + inputFile + ': valid JavaScript');
-		
+		print('Tot ' + str(globVar));
+		globVar += 1;
 		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
 		
 	except subprocess.CalledProcessError as e: # TODO catch exception if file cannot be opened
@@ -74,9 +77,12 @@ def isJsFile(givenFile):
 			Indicates whether the file is either valid JavaScript (0), malformed JavaScript (2) or no JavaScript (1).
 	'''
 	
+	global globVar;
 	try:
 		subprocess.check_output('node JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True);
 		print('File ' + givenFile + ': valid JavaScript');
+		print('Tot ' + str(globVar));
+		globVar += 1;
 		return 0;
 	except subprocess.CalledProcessError as e:  # TODO catch exception if file cannot be opened
 		if  e.returncode == 1:

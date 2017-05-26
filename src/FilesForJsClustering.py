@@ -181,7 +181,8 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 		print('File does not exist.');
 		
 	expFile = open(fileDir + parser + extension,'a');
-	
+	print(label);
+	print('Label save ' + str(len(label)));
 	#for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
 	for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
 		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint); # Contains at position i the probability of 
@@ -191,12 +192,14 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 			expFile.write(str(vectNGramsProba[el]) + formatt);
 		expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1])); # Last one could not be in the previous loop, otherwise the last character would have been a separator.
 		if label is not None and label != []:
+			#print(label[i - 1]);
 			expFile.write(formatt + label[i - 1]); # i - 1 as initially i value is 1
 		
 		print('End line' + str(i));
 		expFile.write('\n');
 
 		i += 1;
+	print('Len ' + str(i));
 		
 	expFile.close();
 	print('end');
