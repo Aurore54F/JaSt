@@ -13,8 +13,13 @@ import PreprocessingJsData
 import NGramsAnalysis
 import NGramsRepresentation
 
-import DicoIntToNGrams
-import DicoNGramsToInt
+#import DicoIntToNGramsSlimit
+#import DicoNGramsToIntSlimit
+#import DicoIntToNGramsEsprima
+#import DicoNGramsToIntEsprima
+import DicoIntToNGramsEsprimaAst
+import DicoNGramsToIntEsprimaAst
+
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
@@ -208,7 +213,7 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 
 # Depreciated. See the main in Main.py (to launch from the command line).	
 def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile = True, classifier = 'Weka', 
-		fileDir = '/home/aurore/Documents/Code/MatrixFiles/', histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', n = 4):
+		fileDir = '/home/aurore/Documents/Code/MatrixFiles/', histo = True, histoDir = '/home/aurore/Documents/Code/Histograms/', updateDico = False, n = 4):
 	'''
 		Main program, entry point.
 				
@@ -229,6 +234,8 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 			True to call function 'saveHisto' and therefore produce histograms from the JS corpus. Default value is True.
 		- histoDir: String
 			Path of the directory to store the histograms. Default: TODO only for Aurore.
+		- updateDico: Boolean
+			Indicates whether the dictionary mapping n-grams and integers has to be updated. Default value is False.
 		- n: Integer
 			Stands for the size of the sliding-window which goes through the previous list. Default value is 4.
 			
@@ -251,7 +258,9 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 		extension = classifierFormat(classifier)[1]; # File extension: either '.csv' or '.txt'.
 		
 		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
-		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+		
+		if updateDico == True:
+			NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 		
 		#importlib.reload(DicoNGramsToInt);
 		
