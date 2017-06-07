@@ -122,7 +122,7 @@ else:
 		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
 		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 				
-		importlib.reload(DicoNGramsToInt);
+		#importlib.reload(DicoNGramsToInt);
 				
 		if args['h'][0] == True:
 			FilesForJsClustering.saveProbaOfNGramsHisto(args['p'][0], allProba, filesStudied, histoDir = args['hp'][0]); # Production of the histograms.
@@ -130,8 +130,9 @@ else:
 		if args['e'][0] == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
 			print('Labels ' + str(len(labels)));
-			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, 
+			dicoNGramsToInt = NGramsRepresentation.dicoUsed(args['p'][0]);
+			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
 															args['ep'][0], labels);
 			#TODO loop on the function below
-			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, formatt, 
+			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
 															extension, args['ep'][0], labels);

@@ -6,15 +6,15 @@
 import collections # to order a dictionary
 import glob # Unix style pathname pattern expansion
 import numpy as np
-import sys
-sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
-sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+#import sys
+#sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
+#sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
-import DicoIntToNGrams
-import DicoNGramsToInt
-import DicoOfTokensSlimit
-import DicoOfTokensEsprima
-import DicoOfAstEsprima
+#import DicoIntToNGrams
+#import DicoNGramsToInt
+#import DicoOfTokensSlimit
+#import DicoOfTokensEsprima
+#import DicoOfAstEsprima
 import TokensProduction
 import NGramsProduction
 import NGramsAnalysis

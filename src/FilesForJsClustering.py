@@ -241,6 +241,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 	'''
 	
 	allNGrams = PreprocessingJsData.dicoOfAllNGrams(parser, jsDir, n);
+	dicoNGramsToInt = NGramsRepresentation.dicoUsed(parser);
 	
 	if allNGrams != [[]]:
 		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
@@ -252,16 +253,16 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
 		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 		
-		importlib.reload(DicoNGramsToInt);
+		#importlib.reload(DicoNGramsToInt);
 		
 		if histo == True:
 			saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = histoDir); # Production of the histograms.
 		
 		if exportedFile == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
-			saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, fileDir);
+			saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, fileDir);
 			#TODO loop on the function below
-			saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, formatt, extension, fileDir, label = None);
+			saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, extension, fileDir, label = None);
 			
 
 	
