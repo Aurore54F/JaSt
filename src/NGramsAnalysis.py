@@ -14,7 +14,7 @@ def countSetsOfNGrams(matrixAllNGrams):
 		
 		-------
 		Parameter:
-		- matrixAllNGrams: 
+		- matrixAllNGrams: matrix
 			Contains in each row a tuple representing an n-gram.
 			
 		-------

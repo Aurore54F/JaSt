@@ -11,11 +11,17 @@ import sys
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
-import DicoIntToNGrams
-import DicoNGramsToInt
+#import DicoIntToNGramsSlimit
+#import DicoNGramsToIntSlimit
+#import DicoIntToNGramsEsprima
+#import DicoNGramsToIntEsprima
+import DicoIntToNGramsEsprimaAst
+import DicoNGramsToIntEsprimaAst
+
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
+
 import PreprocessingJsData
 import NGramsRepresentation
 import FilesForJsClustering
@@ -47,6 +53,7 @@ def parsingCommands():
 	parser.add_argument('--ep', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/MatrixFiles/'], help='path of the directory to store the csv/txt files for Weka/xcluster');
 	parser.add_argument('--h', metavar='BOOL', type = bool, nargs=1,  default = [False], help='produce histograms from the JS corpus');
 	parser.add_argument('--hp', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/Histograms/'], help='path of the directory to store the histograms');
+	parser.add_argument('--u', metavar='BOOL', type = bool, nargs=1,  default = [False], help='indicates whether the dictionary mapping n-grams and integers has to be updated');
 	parser.add_argument('--n', metavar='INTEGER', type = int, nargs=1,  default = [4], help='stands for the size of the sliding-window which goes through the previous list');
 	#parser.add_argument('--l', metavar='LABEL', type = str, nargs='*',  default = None, help='indicates the label\'s name of the current data (if any), useful for supervised classification');
 	# TODO l must be a sub-command <https://docs.python.org/3.3/library/argparse.html#argparse.Namespace>.
@@ -120,9 +127,11 @@ else:
 		extension = FilesForJsClustering.classifierFormat(args['c'][0])[1]; # File extension: either '.csv' or '.txt' (arg = classifier).
 		
 		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
-		NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+		
+		if args['u'][0] == True:
+			NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 				
-		importlib.reload(DicoNGramsToInt);
+		#importlib.reload(DicoNGramsToInt);
 				
 		if args['h'][0] == True:
 			FilesForJsClustering.saveProbaOfNGramsHisto(args['p'][0], allProba, filesStudied, histoDir = args['hp'][0]); # Production of the histograms.
@@ -130,8 +139,9 @@ else:
 		if args['e'][0] == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
 			print('Labels ' + str(len(labels)));
-			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, formatt, extension, 
+			dicoNGramsToInt = NGramsRepresentation.dicoUsed(args['p'][0]);
+			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
 															args['ep'][0], labels);
 			#TODO loop on the function below
-			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, DicoNGramsToInt.dicoNGramsToInt, filesStudied, formatt, 
+			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
 															extension, args['ep'][0], labels);

@@ -5,17 +5,30 @@
 
 import os # To create repositories
 import collections # To order a dictionary
+import sys
+sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+
+#import DicoIntToNGramsSlimit
+#import DicoNGramsToIntSlimit
+#import DicoIntToNGramsEsprima
+#import DicoNGramsToIntEsprima
+import DicoIntToNGramsEsprimaAst
+import DicoNGramsToIntEsprimaAst
 
 
-def mappingNGramsInt(nGramsSet):
+def mappingNGramsInt(nGramsSet, name1 = 'DicoNGramsToInt.py', name2 = 'DicoIntToNGrams.py'):
 	'''
 		Construction of dictionaries mapping integers and n-grams.
 		They are stored in a configuration file (see DicoNGramsToInt.py and DicoIntToNGrams.py).
 		
 		-------
 		Parameter:
-		- nGramsSet: 
+		- nGramsSet: set
 			Set of n-grams to be mapped to unique integers.
+		- name1: string
+			Name of the dictionary storing the mapping of an n-gram to a unique integer.
+		- name2: string
+			Name of the dictionary storing the mapping of an integer to a unique n-gram.
 			
 		-------
 		Returns:
@@ -47,7 +60,7 @@ def mappingNGramsInt(nGramsSet):
 		os.makedirs('Dico_MapNGrams-Int');
 	
 	# dicoNGramsToInt
-	dicoFile = open('Dico_MapNGrams-Int/DicoNGramsToInt.py','w');
+	dicoFile = open('Dico_MapNGrams-Int/' + name1,'w');
 	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoNGramsToInt.\n\t\tKey: N-gram;\n\t\tValue: Unique integer.\n'''\n\n\ndicoNGramsToInt = { \n");
 	for el in collections.OrderedDict(sorted(dicoNGramsToInt.items())):
 		dicoFile.write("\t'" + str(el) + "'" + ' : ' + str(dicoNGramsToInt[el]) + ', \n');
@@ -55,7 +68,7 @@ def mappingNGramsInt(nGramsSet):
 	dicoFile.close();
 	
 	# dicoIntToNGrams
-	dicoFile = open('Dico_MapNGrams-Int/DicoIntToNGrams.py','w');
+	dicoFile = open('Dico_MapNGrams-Int/' + name2,'w');
 	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoIntToNGrams.\n\t\tKey: Integer;\n\t\tValue: Unique n-gram.\n'''\n\n\ndicoIntToNGrams = { \n");
 	for el in collections.OrderedDict(sorted(dicoIntToNGrams.items())):
 		dicoFile.write("\t'" + str(el) + "'" + ' : ' + str(dicoIntToNGrams[el]) + ', \n');
@@ -83,7 +96,12 @@ def nGramToInt(dico, nGram):
 	'''
 	
 	# return DicoNGramsToInt.dicoNGramsToInt[str(nGram)];
-	return dico[str(nGram)];
+	try:
+		i = dico[str(nGram)];
+		return i;
+	except KeyError as e:
+		print('The key ' + e + ' is not in the dictionary.')
+		pass;
 
 
 def intToNGram(dico, i):
@@ -107,4 +125,39 @@ def intToNGram(dico, i):
 	'''
 	
 	# return DicoIntToNGrams.dicoIntToNGrams[str(i)];
-	return dico[str(i)];
+	try:
+		ngram = dico[str(i)];
+		return i;
+	except KeyError as e:
+		print('The key ' + e + ' is not in the dictionary.')
+		pass;
+	return ngram;
+
+
+def dicoUsed(parser):
+	'''
+		Return the Dictionary corresponding to the parser given in input.
+				
+		-------
+		Parameter:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+			
+		-------
+		Returns:
+		- Dictionary
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico.
+	'''
+	
+	if parser.lower() == 'slimit':
+		#dico = DicoNGramsToIntSlimit.dicoNGramsToInt;
+		pass;
+	elif parser.lower() == 'esprima':
+		#dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
+		pass;
+	elif parser.lower() == 'esprimaast':
+		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt;		
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+	return dico;
