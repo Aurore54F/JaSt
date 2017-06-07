@@ -161,7 +161,7 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint, label
 	'''
 	
 	i = 0;
-	if label != None:
+	if label != None and label != []:
 		i = 1; # To have a vector with one extra space for the label
 	vectNGramsProba = np.zeros(len(simplifiedListNGrams) + i);	
 	for key in dicoJS: # Key = n-gram
