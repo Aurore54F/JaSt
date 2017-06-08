@@ -34,7 +34,7 @@ def astUsedEsprima(inputFile):
 	global globVar;
 	#globVar = 0;
 	try:
-		result = subprocess.check_output('node JsEsprima/parser.js ' + inputFile + ' 2> /dev/null', shell = True);
+		result = subprocess.check_output('nodejs JsEsprima/parser.js ' + inputFile + ' 2> /dev/null', shell = True);
 		# result is a string containing the syntactical tokens (as found by esprima) of the given JS script, separated by '\n'.
 		# Structure of a token: "b'Literal\n'"
 		syntaxPart = str(result).split("b'")[1].split('\\n'); # Keyword as used in JS
@@ -79,7 +79,7 @@ def isJsFile(givenFile):
 	
 	global globVar;
 	try:
-		subprocess.check_output('node JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True);
+		subprocess.check_output('nodejs JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True);
 		print('File ' + givenFile + ': valid JavaScript');
 		print('Tot ' + str(globVar));
 		globVar += 1;
@@ -111,7 +111,7 @@ def tokensUsedEsprima(inputFile):
 	'''
 	
 	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
-		result = subprocess.run(['node' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+		result = subprocess.run(['nodejs' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
 		# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
 		# Structure of a token: "b'Punctuator\n'"
 		tokenPart = str(result).split('\n'); # Keyword as used in JS

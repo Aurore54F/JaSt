@@ -150,8 +150,7 @@ def dicoUsed(parser):
 	'''
 	
 	if parser.lower() == 'slimit':
-		#dico = DicoNGramsToIntSlimit.dicoNGramsToInt;
-		pass;
+		dico = DicoNGramsToInt.dicoNGramsToInt;
 	elif parser.lower() == 'esprima':
 		#dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
 		pass;
