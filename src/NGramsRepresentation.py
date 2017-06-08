@@ -8,10 +8,10 @@ import collections # To order a dictionary
 import sys
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
-#import DicoIntToNGramsSlimit
-#import DicoNGramsToIntSlimit
-#import DicoIntToNGramsEsprima
-#import DicoNGramsToIntEsprima
+import DicoIntToNGramsSlimit
+import DicoNGramsToIntSlimit
+import DicoIntToNGramsEsprima
+import DicoNGramsToIntEsprima
 import DicoIntToNGramsEsprimaAst
 import DicoNGramsToIntEsprimaAst
 
@@ -100,7 +100,7 @@ def nGramToInt(dico, nGram):
 		i = dico[str(nGram)];
 		return i;
 	except KeyError as e:
-		print('The key ' + e + ' is not in the dictionary.')
+		print('The key ' + str(e) + ' is not in the dictionary.')
 		pass;
 
 
@@ -129,7 +129,7 @@ def intToNGram(dico, i):
 		ngram = dico[str(i)];
 		return i;
 	except KeyError as e:
-		print('The key ' + e + ' is not in the dictionary.')
+		print('The key ' + str(e) + ' is not in the dictionary.')
 		pass;
 	return ngram;
 
@@ -150,9 +150,9 @@ def dicoUsed(parser):
 	'''
 	
 	if parser.lower() == 'slimit':
-		dico = DicoNGramsToInt.dicoNGramsToInt;
+		dico = DicoNGramsToIntSlimit.dicoNGramsToInt;
 	elif parser.lower() == 'esprima':
-		#dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
+		dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
 		pass;
 	elif parser.lower() == 'esprimaast':
 		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt;		

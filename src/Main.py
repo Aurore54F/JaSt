@@ -11,10 +11,10 @@ import sys
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
-#import DicoIntToNGramsSlimit
-#import DicoNGramsToIntSlimit
-#import DicoIntToNGramsEsprima
-#import DicoNGramsToIntEsprima
+import DicoIntToNGramsSlimit
+import DicoNGramsToIntSlimit
+import DicoIntToNGramsEsprima
+import DicoNGramsToIntEsprima
 import DicoIntToNGramsEsprimaAst
 import DicoNGramsToIntEsprimaAst
 
@@ -48,7 +48,7 @@ def parsingCommands():
 	"""
 	
 	parser.add_argument('--p', metavar='PARSER', type = str, nargs=1, choices = ['esprimaAst', 'esprima', 'slimIt'], default = ['esprimaAst'], help='parser\'s name');
-	parser.add_argument('--e', metavar='BOOL', type = bool, nargs=1, default = [False], help='produce a csv/txt file for Weka/xcluster');
+	parser.add_argument('--e', metavar='BOOL', type = bool, nargs=1, default = [True], help='produce a csv/txt file for Weka/xcluster');
 	parser.add_argument('--c', metavar='CLASSIFIER', type = str, nargs=1, default = ['Weka'], help='classifier\'s name');
 	parser.add_argument('--ep', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/MatrixFiles/'], help='path of the directory to store the csv/txt files for Weka/xcluster');
 	parser.add_argument('--h', metavar='BOOL', type = bool, nargs=1,  default = [False], help='produce histograms from the JS corpus');

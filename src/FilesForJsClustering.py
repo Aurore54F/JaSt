@@ -13,10 +13,10 @@ import PreprocessingJsData
 import NGramsAnalysis
 import NGramsRepresentation
 
-#import DicoIntToNGramsSlimit
-#import DicoNGramsToIntSlimit
-#import DicoIntToNGramsEsprima
-#import DicoNGramsToIntEsprima
+import DicoIntToNGramsSlimit
+import DicoNGramsToIntSlimit
+import DicoIntToNGramsEsprima
+import DicoNGramsToIntEsprima
 import DicoIntToNGramsEsprimaAst
 import DicoNGramsToIntEsprimaAst
 
