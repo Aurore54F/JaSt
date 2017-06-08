@@ -6,6 +6,7 @@
 
 import subprocess # to call Shell commands
 import glob # Unix style pathname pattern expansion
+import os
 import argparse
 
 
@@ -25,7 +26,7 @@ def isJsFile(givenFile):
 	'''
 	
 	try:
-		subprocess.check_output('node ../src/JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
+		subprocess.check_output('nodejs ../src/JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
 	except subprocess.CalledProcessError as e:  # TODO catch exception if file cannot be opened
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
@@ -49,9 +50,11 @@ args = vars(parser.parse_args());
 
 if args['d'] != None:
 	for el in args['d']:
-		l = glob.glob(el + '/*.js') + glob.glob(el + '/*.bin'); # Extension in .bin or .js			
-		for givenFile in sorted(l):
-			isJsFile(givenFile);
+		#l = glob.glob(el + '/*.js') + glob.glob(el + '/*.bin'); # Extension in .bin or .js			
+		#for givenFile in sorted(l):
+			#isJsFile(givenFile);
+		for givenFile in sorted(os.listdir(el)):
+			isJsFile(el + '/' + givenFile);
 
 
 if args['f'] != None:
