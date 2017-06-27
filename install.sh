@@ -14,6 +14,11 @@ npm install esprima
 
 sudo apt-get install cluster3
 sudo apt-get install weka
+
+pip3 install scipy
+pip3 install sklearn
+pip3 install pandas
+
 # Get jar files for weka and TreeView
 
 #file '/home/aurore/Documents/Code/MalwareClustering/src/slimitMatrix.txt' 
