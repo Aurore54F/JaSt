@@ -10,6 +10,7 @@ sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import module
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
+import DicoOfAstEsprimaSimplified
 
 import subprocess # to call Shell commands
 
@@ -185,7 +186,7 @@ def tokensUsed(parser, jsFile):
 		tokensList = tokensUsedSlimit(jsFile);
 	elif parser.lower() == 'esprima':
 		tokensList = tokensUsedEsprima(jsFile);
-	elif parser.lower() == 'esprimaast':
+	elif (parser.lower() == 'esprimaast' or parser.lower() == 'esprimaastsimp'):
 		tokensList = astUsedEsprima(jsFile);
 	else:
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
@@ -205,7 +206,7 @@ def dicoUsed(parser):
 		-------
 		Returns:
 		- Dictionary
-			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico.
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.astDico or DicoOfAstEsprimaSimplified.astDico.
 	'''
 	
 	if parser.lower() == 'slimit':
@@ -213,7 +214,9 @@ def dicoUsed(parser):
 	elif parser.lower() == 'esprima':
 		dico = DicoOfTokensEsprima.tokensDico;
 	elif parser.lower() == 'esprimaast':
-		dico = DicoOfAstEsprima.astDico;		
+		dico = DicoOfAstEsprima.astDico;	
+	elif parser.lower() == 'esprimaastsimp':
+		dico = DicoOfAstEsprimaSimplified.astDico	
 	else:
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
@@ -227,7 +230,7 @@ def tokensToNumbers(tokensDico, tokensList):
 		-------
 		Parameters:
 		- tokensDico: Dictionary
-			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, or DicoOfAstEsprima.astDico. TODO
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.astDico, or DicoOfAstEsprimaSimplified.astDico. TODO
 		- tokensList: List
 			List containing the tokens extracted from a JS file.
 		-------

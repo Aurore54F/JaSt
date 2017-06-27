@@ -23,6 +23,7 @@ import DicoNGramsToIntEsprimaAst
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
+import DicoOfAstEsprimaSimplified
 
 
 

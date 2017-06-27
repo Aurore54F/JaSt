@@ -74,7 +74,7 @@ def buildAstSimplifiedDicoEsprima():
     for l in simplifiedList:
         for el in sorted(l):
             dico[el] = i;
-            i = i + 1;
+        i = i + 1;
         
     orderedDico = collections.OrderedDict(sorted(dico.items()));
     

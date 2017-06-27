@@ -154,7 +154,7 @@ def dicoUsed(parser):
 	elif parser.lower() == 'esprima':
 		dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
 		pass;
-	elif parser.lower() == 'esprimaast':
+	elif (parser.lower() == 'esprimaast' or parser.lower() == 'esprimaastsimp'):
 		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt;		
 	else:
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
