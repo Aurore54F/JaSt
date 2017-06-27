@@ -53,6 +53,8 @@ def parsingCommands():
 	parser.add_argument('--ep', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/MatrixFiles/'], help='path of the directory to store the csv/txt files for Weka/xcluster');
 	parser.add_argument('--h', metavar='BOOL', type = bool, nargs=1,  default = [False], help='produce histograms from the JS corpus');
 	parser.add_argument('--hp', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/Histograms/'], help='path of the directory to store the histograms');
+	parser.add_argument('--g', metavar='BOOL', type = bool, nargs=1,  default = [False], help='produce a graphical 2D representation of the files from the JS corpus');
+	parser.add_argument('--gp', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/PcaPlot/'], help='path of the directory to store the PCA graph');
 	parser.add_argument('--u', metavar='BOOL', type = bool, nargs=1,  default = [False], help='indicates whether the dictionary mapping n-grams and integers has to be updated');
 	parser.add_argument('--n', metavar='INTEGER', type = int, nargs=1,  default = [4], help='stands for the size of the sliding-window which goes through the previous list');
 	#parser.add_argument('--l', metavar='LABEL', type = str, nargs='*',  default = None, help='indicates the label\'s name of the current data (if any), useful for supervised classification');
@@ -119,10 +121,6 @@ else:
 		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
 		labels = allNGrams[2]; # Contains the label of the well-formed JS files.
 		
-		print('allProba ' + str(len(allProba)));
-		print('filesStudied ' + str(len(filesStudied)));
-		print('labels ' + str(len(labels)));
-		
 		formatt = FilesForJsClustering.classifierFormat(args['c'][0])[0]; # Separator between the value: either ',' or '\t' (arg = classifier).
 		extension = FilesForJsClustering.classifierFormat(args['c'][0])[1]; # File extension: either '.csv' or '.txt' (arg = classifier).
 		
@@ -143,5 +141,8 @@ else:
 			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
 															args['ep'][0], labels);
 			#TODO loop on the function below
-			FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
+			file = FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
 															extension, args['ep'][0], labels);
+															
+		if args['g'][0] == True:
+			FilesForJsClustering.savePcaPlotting(args['p'][0], file, plotDir = args['gp'][0], label = labels);

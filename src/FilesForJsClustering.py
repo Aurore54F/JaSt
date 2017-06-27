@@ -91,7 +91,34 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = '/home/aur
 		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
 		NGramsAnalysis.histoFromDico(dico, figPath, title = filesStudied[i-1]); # Saving an histogram in png format.
 		i += 1;
-
+		
+def savePcaPlotting(parser, file, plotDir = '/home/aurore/Documents/Code/PcaPlot/', label = None):
+	'''
+		From a list containing dictionaries, each containing n-grams (abscissa) with their associated probability (ordinate), saves the corresponding histograms.
+				
+		-------
+		Parameters:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+		- file: File
+			Contains for each JS file studied (row) the probability of occurrences of all the n-gram (column) encountered in the JS corpus considered.
+		- plotDir: String
+			Path of the directory to store the graph. Default: TODO only for Aurore.
+		- label: String
+			Indicates the label's name of the current data (if any), useful for supervised classification. Default value is None.
+			
+		-------
+		Returns:
+		- File
+			Plots the multi dimensional vector representing the n-grams, using a 2-dimensional PCA.
+	'''
+	
+	# Directory to store the histograms files
+	if not os.path.exists(plotDir):
+		os.makedirs(plotDir);
+	
+	NGramsAnalysis.pcaPlotting(file, plotDir + parser + 'PcaPlotting.png', label = label);
+	
 	
 def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgramIint, formatt, extension, 
 							fileDir = '/home/aurore/Documents/Code/MatrixFiles/', label = None):
@@ -132,6 +159,8 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
 	
 	expFile = open(fileDir + parser + extension,'w');
 	expFile.write('Outlook');
+	if label is not None and label != []:
+		expFile.write(formatt + 'Label');
 	
 	if allProba is not None and allProba != []:
 		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0], simplifiedListNGrams, dicoNgramIint, label); # allProba[0] being a dictionary representing 
@@ -193,12 +222,12 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 		vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint); # Contains at position i the probability of 
 		#encountering the n-gram mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
 		expFile.write(filesStudied[i-1] + formatt); # Name of the current file
+		if label is not None and label != []:
+			#print(label[i - 1]);
+			expFile.write(label[i - 1] + formatt); # i - 1 as initially i value is 1
 		for el in range(len(vectNGramsProba)-1):
 			expFile.write(str(vectNGramsProba[el]) + formatt);
 		expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1])); # Last one could not be in the previous loop, otherwise the last character would have been a separator.
-		if label is not None and label != []:
-			#print(label[i - 1]);
-			expFile.write(formatt + label[i - 1]); # i - 1 as initially i value is 1
 		
 		print('End line' + str(i));
 		expFile.write('\n');
@@ -208,6 +237,8 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
 		
 	expFile.close();
 	print('end');
+	
+	return fileDir + parser + extension;
 	
 	
 

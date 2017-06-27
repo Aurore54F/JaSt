@@ -4,6 +4,9 @@
 '''
 
 import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.decomposition import PCA as sklearnPCA
+
 from textwrap import wrap
 
 
@@ -74,6 +77,76 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 	# Manage the histogram size
 	fig = plt.gcf(); # uncomment for slimit and esprimaAst
 	fig.set_size_inches(25, 10); # uncomment for slimit and esprimaAst
+	
+	plt.savefig(figPath, dpi = 100);
+	plt.clf(); # Otherwise all figures are written on one another
+	
+	
+	
+def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', figPath = 'pcaPlotting.png', title = '', xlabel = '', ylabel = '', 
+			annotate = False, label = None):
+	'''
+		Graph representing each file features (i.e. list of n-grams with their associated probability) in 2D (using a PCA 2-dimensional transformation).
+		<http://www.apnorton.com/blog/2016/12/19/Visualizing-Multidimensional-Data-in-Python/>.
+		
+		-------
+		Parameters:
+		- file: File
+			Contains for each JS file studied (row) the probability of occurrences of all the n-gram (column) encountered in the JS corpus considered.
+		- figPath: 
+			Figure location. Default: "./pcaPlotting.png".
+		- title: String
+			Title of the histogram. Default: no title.
+		- xlabel: String
+			Xlabel of the histogram. Default: no xlabel.
+		- ylabel: String
+			Ylabel of the histogram. Default: no ylabel.
+		- annotate: Boolean
+			Indicates whether each file, represented by a circle on the figure, will be given a unique id. Default value is True.
+		- label: String
+			Indicates the label's name of the current data (if any), useful for supervised classification. Default value is None.
+			
+		-------
+		Returns:
+		- File
+			Plots the multi dimensional vector representing the n-grams, using a 2-dimensional PCA.
+	'''
+
+	data = pd.read_csv(file);
+	
+	X = data.ix[:, '0':];  # Split off features
+	
+	
+	pca = sklearnPCA(n_components=2); #2-dimensional PCA
+	#X_norm = (X - X.min())/(X.max() - X.min());
+	transformed = pd.DataFrame(pca.fit_transform(X));
+	
+	if label is not None and label != []:
+		'''
+		colors = [];
+		for name,hex in matplotlib.colors.cnames.items():
+			colors.append(name);
+		'''
+		j = 0;
+		colors = ['red', 'deepskyblue', 'seagreen', 'sandybrown', 'lightpink', 'darkslateblue', 'khaki', 'lightgray', 'slategray', 'mintcream', 'darkcyan', 'darkslategrey', 'lightyellow', 'gainsboro', 'midnightblue', 'lawngreen', 'deeppink', 'thistle', 'aliceblue', 'oldlace', 'mediumorchid', 'lavenderblush', 'lightblue', 'orangered', 'floralwhite', 'paleturquoise', 'coral', 'navy', 'slateblue', 'rebeccapurple', 'darkslategray', 'limegreen', 'blanchedalmond', 'lightcyan', 'seashell', 'beige', 'magenta', 'darkgoldenrod', 'skyblue', 'forestgreen', 'blue', 'lavender', 'mediumslateblue', 'aqua', 'mediumvioletred', 'lightsteelblue', 'azure', 'cyan', 'mistyrose', 'darkorchid', 'orange', 'gold', 'chartreuse', 'bisque', 'olive', 'darkmagenta', 'lightgreen', 'darkviolet', 'lightgrey', 'mediumblue', 'indigo', 'papayawhip', 'powderblue', 'black', 'aquamarine', 'wheat', 'hotpink', 'mediumseagreen', 'royalblue', 'pink', 'mediumaquamarine', 'goldenrod', 'peachpuff', 'darkkhaki', 'silver', 'mediumspringgreen', 'yellowgreen', 'cadetblue', 'olivedrab', 'darkgray', 'chocolate', 'palegoldenrod', 'darkred', 'peru', 'fuchsia', 'darkturquoise', 'cornsilk', 'lightgoldenrodyellow', 'lightslategray', 'dimgray', 'white', 'sienna', 'orchid', 'darkorange', 'darkseagreen', 'steelblue', 'darkgreen', 'violet', 'slategrey', 'lightsalmon', 'palegreen', 'yellow', 'lemonchiffon', 'antiquewhite', 'green', 'lightslategrey', 'tan', 'honeydew', 'whitesmoke', 'blueviolet', 'navajowhite', 'darkblue', 'mediumturquoise', 'dodgerblue', 'lightskyblue', 'crimson', 'snow', 'brown', 'indianred', 'palevioletred', 'plum', 'linen', 'cornflowerblue', 'saddlebrown', 'springgreen', 'lightseagreen', 'greenyellow', 'ghostwhite', 'rosybrown', 'darkgrey', 'grey', 'lime', 'teal', 'gray', 'mediumpurple', 'darkolivegreen', 'burlywood', 'tomato', 'lightcoral', 'purple', 'salmon', 'darksalmon', 'dimgrey', 'moccasin', 'maroon', 'ivory', 'turquoise', 'firebrick'];
+		y = data['Label']      # Split off classifications
+		uniqueLabel = [];
+		for el in y:
+			if el not in uniqueLabel:
+				uniqueLabel.append(el);
+		for l in uniqueLabel:
+			plt.scatter(transformed[y==l][0], transformed[y==l][1], label=l, marker = 'o', facecolors='none', edgecolors = colors[j]);
+			j += 1;
+	else:
+		plt.scatter(transformed[:][0], transformed[:][1]);
+	
+	if annotate == True:
+		for i in range(len(data)):
+			plt.annotate(str(i+1), (transformed[0][i],transformed[1][i]));
+	
+	plt.legend();
+	
+	#plt.show()
 	
 	plt.savefig(figPath, dpi = 100);
 	plt.clf(); # Otherwise all figures are written on one another
