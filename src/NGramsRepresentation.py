@@ -22,7 +22,7 @@ import DicoNGramsToIntEsprimaAstSimplified
 import ConfFileProduction
 
 
-def mappingNGramsInt(nGramsSet, parser, name1 = 'DicoNGramsToIntEsprimaAstSimplified.py', name2 = 'DicoIntToNGramsEsprimaAstSimplified.py'):
+def mappingNGramsInt(nGramsSet, parser):
 	'''
 		Construction of dictionaries mapping integers and n-grams.
 		They are stored in a configuration file (see DicoNGramsToInt.py and DicoIntToNGrams.py).
@@ -31,10 +31,6 @@ def mappingNGramsInt(nGramsSet, parser, name1 = 'DicoNGramsToIntEsprimaAstSimpli
 		Parameter:
 		- nGramsSet: set
 			Set of n-grams to be mapped to unique integers.
-		- name1: string
-			Name of the dictionary storing the mapping of an n-gram to a unique integer.
-		- name2: string
-			Name of the dictionary storing the mapping of an integer to a unique n-gram.
 			
 		-------
 		Returns:
@@ -72,6 +68,9 @@ def mappingNGramsInt(nGramsSet, parser, name1 = 'DicoNGramsToIntEsprimaAstSimpli
 	
 	dico1 = collections.OrderedDict(sorted(dicoNGramsToIntOld.items()));
 	dico2 = collections.OrderedDict(sorted(dicoIntToNGramsOld.items()));
+	
+	name1 = dicoNGramsIntNames(parser)[0];
+	name2 = dicoNGramsIntNames(parser)[1];
 	
 	# dicoNGramsToInt
 	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name1, descr1, dico1);
@@ -203,3 +202,47 @@ def dicoIntToNGramsUsed(parser):
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
 	return dico;
+
+
+def dicoNGramsIntNames(parser):
+	'''
+		Return the names of the dictionaries mapping n-grams and integers.
+				
+		-------
+		Parameter:
+		- parser: String
+			Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
+			
+		-------
+		Returns:
+		- List
+			Contains as:
+			* name1: either DicoNGramsToIntSlimit.dicoNGramsToInt, DicoNGramsToIntEsprima.dicoNGramsToInt, DicoNGramsToIntEsprimaAst.dicoNGramsToInt, or
+			DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt.
+			*name2: either DicoIntToNGramsSlimit.dicoIntToNGrams, DicoIntToNGramsEsprima.dicoIntToNGrams, DicoIntToNGramsEsprimaAst.dicoIntToNGrams, or
+			DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams.
+	'''
+	
+	'''
+	- name1: string
+		Name of the dictionary storing the mapping of an n-gram to a unique integer.
+	- name2: string
+		Name of the dictionary storing the mapping of an integer to a unique n-gram.
+	'''
+	
+	if parser.lower() == 'slimit':
+		name1 = 'DicoNGramsToIntSlimit.py';
+		name2 = 'DicoIntToNGramsSlimit.py';
+	elif parser.lower() == 'esprima':
+		name1 = 'DicoNGramsToIntEsprima.py';
+		name2 = 'DicoIntToNGramsEsprima.py';
+	elif parser.lower() == 'esprimaast':
+		name1 = 'DicoNGramsToIntEsprimaAst.py';
+		name2 = 'DicoIntToNGramsEsprimaAst.py';
+	elif parser.lower() == 'esprimaastsimp':
+		name1 = 'DicoNGramsToIntEsprimaAstSimplified.py';
+		name2 = 'DicoIntToNGramsEsprimaAstSimplified.py';
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+	return [name1, name2];
