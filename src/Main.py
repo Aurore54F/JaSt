@@ -17,6 +17,8 @@ import DicoIntToNGramsEsprima
 import DicoNGramsToIntEsprima
 import DicoIntToNGramsEsprimaAst
 import DicoNGramsToIntEsprimaAst
+import DicoIntToNGramsEsprimaAstSimplified
+import DicoNGramsToIntEsprimaAstSimplified
 
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima

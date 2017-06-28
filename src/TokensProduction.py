@@ -206,7 +206,7 @@ def dicoUsed(parser):
 		-------
 		Returns:
 		- Dictionary
-			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.astDico or DicoOfAstEsprimaSimplified.astDico.
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.tokensDico or DicoOfAstEsprimaSimplified.tokensDico.
 	'''
 	
 	if parser.lower() == 'slimit':
@@ -214,9 +214,9 @@ def dicoUsed(parser):
 	elif parser.lower() == 'esprima':
 		dico = DicoOfTokensEsprima.tokensDico;
 	elif parser.lower() == 'esprimaast':
-		dico = DicoOfAstEsprima.astDico;	
+		dico = DicoOfAstEsprima.tokensDico;	
 	elif parser.lower() == 'esprimaastsimp':
-		dico = DicoOfAstEsprimaSimplified.astDico	
+		dico = DicoOfAstEsprimaSimplified.tokensDico	
 	else:
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;
@@ -230,7 +230,7 @@ def tokensToNumbers(tokensDico, tokensList):
 		-------
 		Parameters:
 		- tokensDico: Dictionary
-			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.astDico, or DicoOfAstEsprimaSimplified.astDico. TODO
+			Either DicoOfTokensSlimit.tokensDico, DicoOfTokensEsprima.tokensDico, DicoOfAstEsprima.tokensDico, or DicoOfAstEsprimaSimplified.tokensDico. TODO
 		- tokensList: List
 			List containing the tokens extracted from a JS file.
 		-------

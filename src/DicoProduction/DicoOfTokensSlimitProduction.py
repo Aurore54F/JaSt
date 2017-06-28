@@ -6,7 +6,8 @@
 '''
 
 import collections # To order a dictionary
-import os # To create repositories
+
+import ConfFileProduction
 
 # SlimIt lexical tokens:
 lextokens = {'BOR': 1, 'LBRACKET': 1, 'WITH': 1, 'MINUS': 1, 'RPAREN': 1, 'PLUS': 1, 'VOID': 1, 'BLOCK_COMMENT': 1, 'GT': 1, 'RBRACE': 1, 'PERIOD': 1, 'GE': 1, 'VAR': 1, 'THIS': 1, 'MINUSEQUAL': 1, 'TYPEOF': 1, 'OR': 1, 'DELETE': 1, 'DIVEQUAL': 1, 'RETURN': 1, 'RSHIFTEQUAL': 1, 'EQEQ': 1, 'SETPROP': 1, 'BNOT': 1, 'URSHIFTEQUAL': 1, 'TRUE': 1, 'COLON': 1, 'FUNCTION': 1, 'LINE_COMMENT': 1, 'FOR': 1, 'PLUSPLUS': 1, 'ELSE': 1, 'TRY': 1, 'EQ': 1, 'AND': 1, 'LBRACE': 1, 'CONTINUE': 1, 'NOT': 1, 'OREQUAL': 1, 'MOD': 1, 'RSHIFT': 1, 'DEFAULT': 1, 'WHILE': 1, 'NEW': 1, 'CASE': 1, 'MODEQUAL': 1, 'NE': 1, 'MULTEQUAL': 1, 'SWITCH': 1, 'CATCH': 1, 'STREQ': 1, 'INSTANCEOF': 1, 'PLUSEQUAL': 1, 'GETPROP': 1, 'FALSE': 1, 'CONDOP': 1, 'BREAK': 1, 'LINE_TERMINATOR': 1, 'ANDEQUAL': 1, 'DO': 1, 'NUMBER': 1, 'LSHIFT': 1, 'DIV': 1, 'NULL': 1, 'MULT': 1, 'DEBUGGER': 1, 'LE': 1, 'SEMI': 1, 'BXOR': 1, 'LT': 1, 'COMMA': 1, 'REGEX': 1, 'STRING': 1, 'BAND': 1, 'FINALLY': 1, 'STRNEQ': 1, 'LPAREN': 1, 'IN': 1, 'MINUSMINUS': 1, 'ID': 1, 'IF': 1, 'XOREQUAL': 1, 'LSHIFTEQUAL': 1, 'URSHIFT': 1, 'RBRACKET': 1, 'THROW': 1, 'CLASS': 1, 'CONST': 1, 'ENUM': 1, 'EXPORT': 1, 'EXTENDS': 1, 'IMPORT': 1, 'SUPER': 1};
@@ -52,18 +53,8 @@ def buildTokensDicoSlimit():
 		orderedDico['ERR'] = j + 9;
 	'''
 	
-	
 	# Storage of the dictionary in a configuration file
-	
-	if not os.path.exists('Dico_MapTokens-Int'):
-		os.makedirs('Dico_MapTokens-Int');
-	
-	dicoFile = open('Dico_MapTokens-Int/DicoOfTokensSlimit.py','w');
-	dicoFile.write('#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary tokensDico.\n\t\tKey: SlimIt lexical token;\n\t\tValue: Unique integer.\n'''\n\n\ntokensDico = { \n");
-	for token in orderedDico:
-		dicoFile.write("\t'" + token + "'" + ' : ' + str(orderedDico[token]) + ', \n');
-	dicoFile.write('}');
-	dicoFile.close();
-	
+	descr = '#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary tokensDico.\n\t\tKey: SlimIt lexical token;\n\t\tValue: Unique integer.\n'''\n\n\ntokensDico = { \n";
+	ConfFileProduction.dicoStorage('../Dico_MapTokens-Int', 'DicoOfTokensSlimit.py', descr, orderedDico);
 	
 	return orderedDico;

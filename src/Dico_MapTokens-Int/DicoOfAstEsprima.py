@@ -1,13 +1,13 @@
 #!/usr/bin/python
  
 '''
-	Configuration file storing the dictionary astDico.
+	Configuration file storing the dictionary tokensDico.
 		Key: Esprima syntactical token;
 		Value: Unique integer.
 '''
 
 
-astDico = { 
+tokensDico = { 
 	'ArrayExpression' : 0, 
 	'ArrayPattern' : 1, 
 	'ArrowFunctionExpression' : 2, 
