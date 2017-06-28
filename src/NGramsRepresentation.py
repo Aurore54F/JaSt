@@ -5,6 +5,7 @@
 
 import os # To create repositories
 import collections # To order a dictionary
+import importlib; # To reload updated modules
 import sys
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 sys.path.insert(0, './DicoProduction') # To add a directory to import modules from
@@ -21,7 +22,7 @@ import DicoNGramsToIntEsprimaAstSimplified
 import ConfFileProduction
 
 
-def mappingNGramsInt(nGramsSet, name1 = 'DicoNGramsToInt.py', name2 = 'DicoIntToNGrams.py'):
+def mappingNGramsInt(nGramsSet, parser, name1 = 'DicoNGramsToIntEsprimaAstSimplified.py', name2 = 'DicoIntToNGramsEsprimaAstSimplified.py'):
 	'''
 		Construction of dictionaries mapping integers and n-grams.
 		They are stored in a configuration file (see DicoNGramsToInt.py and DicoIntToNGrams.py).
@@ -48,22 +49,29 @@ def mappingNGramsInt(nGramsSet, name1 = 'DicoNGramsToInt.py', name2 = 'DicoIntTo
 	'''
 	
 	s = sorted(nGramsSet);
-	i = 0;
-	dicoNGramsToInt = {};
-	dicoIntToNGrams = {};
+	
+	dicoNGramsToIntOld = dicoNGramsToIntUsed(parser);
+	dicoIntToNGramsOld = dicoIntToNGramsUsed(parser);
+	i = len(dicoNGramsToIntOld);
+	#dicoNGramsToIntOld = {};
+	#dicoIntToNGramsOld = {};
+	#i = 0;
+	
+	print('Size ' + str(i));
 	
 	for el in s:
-		dicoNGramsToInt[el] = i; # Dictionary mapping n-grams to unique integers.
-		dicoIntToNGrams[i] = el; # Dictionary mapping integers to unique n-grams.
-		i = i + 1;
+		if str(el) not in dicoNGramsToIntOld:
+			dicoNGramsToIntOld[str(el)] = str(i); # Dictionary mapping n-grams to unique integers.
+			dicoIntToNGramsOld[str(i)] = str(el); # Dictionary mapping integers to unique n-grams.
+			i = i + 1;
 	
 	# Storage of the dictionaries in configuration files
 	
 	descr1 = '#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoNGramsToInt.\n\t\tKey: N-gram;\n\t\tValue: Unique integer.\n'''\n\n\ndicoNGramsToInt = { \n";
 	descr2 = '#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoIntToNGrams.\n\t\tKey: Integer;\n\t\tValue: Unique n-gram.\n'''\n\n\ndicoIntToNGrams = { \n";
 	
-	dico1 = collections.OrderedDict(sorted(dicoNGramsToInt.items()));
-	dico2 = collections.OrderedDict(sorted(dicoIntToNGrams.items()));
+	dico1 = collections.OrderedDict(sorted(dicoNGramsToIntOld.items()));
+	dico2 = collections.OrderedDict(sorted(dicoIntToNGramsOld.items()));
 	
 	# dicoNGramsToInt
 	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name1, descr1, dico1);
@@ -122,14 +130,14 @@ def intToNGram(dico, i):
 	# return DicoIntToNGrams.dicoIntToNGrams[str(i)];
 	try:
 		ngram = dico[str(i)];
-		return i;
+		return ngram;
 	except KeyError as e:
 		print('The key ' + str(e) + ' is not in the dictionary.')
 		pass;
 	return ngram;
 
 
-def dicoUsed(parser):
+def dicoNGramsToIntUsed(parser):
 	'''
 		Return the Dictionary corresponding to the parser given in input.
 				
@@ -141,18 +149,56 @@ def dicoUsed(parser):
 		-------
 		Returns:
 		- Dictionary
-			Either DicoNGramsToIntSlimit.dicoNGramsToInt, DicoNGramsToIntEsprima.dicoNGramsToInt, DicoNGramsToIntEsprimaAst.dicoNGramsToInt, or.
+			Either DicoNGramsToIntSlimit.dicoNGramsToInt, DicoNGramsToIntEsprima.dicoNGramsToInt, DicoNGramsToIntEsprimaAst.dicoNGramsToInt, or
+			DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt.
 	'''
 	
 	if parser.lower() == 'slimit':
+		importlib.reload(DicoNGramsToIntSlimit); # Reload to be sure to work with the last version of the dico
 		dico = DicoNGramsToIntSlimit.dicoNGramsToInt;
 	elif parser.lower() == 'esprima':
+		importlib.reload(DicoNGramsToIntEsprima);
 		dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
-		pass;
 	elif parser.lower() == 'esprimaast':
+		importlib.reload(DicoNGramsToIntEsprimaAst);
 		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt;	
 	elif parser.lower() == 'esprimaastsimp':
+		importlib.reload(DicoNGramsToIntEsprimaAstSimplified);
 		dico = DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt;	
+	else:
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
+		return;
+	return dico;
+
+
+def dicoIntToNGramsUsed(parser):
+	'''
+		Return the Dictionary corresponding to the parser given in input.
+				
+		-------
+		Parameter:
+		- parser: String
+			Either 'slimIt', 'esprima', or 'esprimaAst'.
+			
+		-------
+		Returns:
+		- Dictionary
+			Either DicoIntToNGramsSlimit.dicoIntToNGrams, DicoIntToNGramsEsprima.dicoIntToNGrams, DicoIntToNGramsEsprimaAst.dicoIntToNGrams, or
+			DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams.
+	'''
+	
+	if parser.lower() == 'slimit':
+		importlib.reload(DicoNGramsToIntSlimit); # Reload to be sure to work with the last version of the dico
+		dico = DicoIntToNGramsSlimit.dicoIntToNGrams;
+	elif parser.lower() == 'esprima':
+		importlib.reload(DicoNGramsToIntEsprima);
+		dico = DicoIntToNGramsEsprima.dicoIntToNGrams;
+	elif parser.lower() == 'esprimaast':
+		importlib.reload(DicoNGramsToIntEsprimaAst);
+		dico = DicoIntToNGramsEsprimaAst.dicoIntToNGrams;	
+	elif parser.lower() == 'esprimaastsimp':
+		importlib.reload(DicoNGramsToIntEsprimaAstSimplified);
+		dico = DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams;	
 	else:
 		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
 		return;

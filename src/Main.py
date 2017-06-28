@@ -58,7 +58,7 @@ def parsingCommands():
 	parser.add_argument('--hp', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/Histograms/'], help='path of the directory to store the histograms');
 	parser.add_argument('--g', metavar='BOOL', type = bool, nargs=1,  default = [False], help='produce a graphical 2D representation of the files from the JS corpus');
 	parser.add_argument('--gp', metavar='FILE-PATH', type = str, nargs=1,  default = ['/home/aurore/Documents/Code/PcaPlot/'], help='path of the directory to store the PCA graph');
-	parser.add_argument('--u', metavar='BOOL', type = bool, nargs=1,  default = [False], help='indicates whether the dictionary mapping n-grams and integers has to be updated');
+	parser.add_argument('--u', metavar='BOOL', type = bool, nargs=1,  default = [True], help='indicates whether the dictionary mapping n-grams and integers has to be updated');
 	parser.add_argument('--n', metavar='INTEGER', type = int, nargs=1,  default = [4], help='stands for the size of the sliding-window which goes through the previous list');
 	#parser.add_argument('--l', metavar='LABEL', type = str, nargs='*',  default = None, help='indicates the label\'s name of the current data (if any), useful for supervised classification');
 	# TODO l must be a sub-command <https://docs.python.org/3.3/library/argparse.html#argparse.Namespace>.
@@ -130,7 +130,7 @@ else:
 		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
 		
 		if args['u'][0] == True:
-			NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+			NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams, args['p'][0]); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
 				
 		#importlib.reload(DicoNGramsToInt);
 				
@@ -140,7 +140,7 @@ else:
 		if args['e'][0] == True:
 			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
 			print('Labels ' + str(len(labels)));
-			dicoNGramsToInt = NGramsRepresentation.dicoUsed(args['p'][0]);
+			dicoNGramsToInt = NGramsRepresentation.dicoNGramsToIntUsed(args['p'][0]);
 			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
 															args['ep'][0], labels);
 			#TODO loop on the function below

@@ -1,10 +1,49 @@
 
+'''
+	Basis for storing dictionaries in a configuration file.
+'''
+
 import os # To create repositories
+import sys
 
+sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
+sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
-# Storage of the dictionary in a configuration file
+import DicoOfTokensSlimit
+import DicoOfTokensEsprima
+import DicoOfAstEsprima
+import DicoOfAstEsprimaSimplified
+
+import DicoIntToNGramsSlimit
+import DicoNGramsToIntSlimit
+import DicoIntToNGramsEsprima
+import DicoNGramsToIntEsprima
+import DicoIntToNGramsEsprimaAst
+import DicoNGramsToIntEsprimaAst
+import DicoIntToNGramsEsprimaAstSimplified
+import DicoNGramsToIntEsprimaAstSimplified
+
 
 def dicoStorage(directoryName, fileName, description, orderedDico):
+	'''
+		Construction of a dictionary containing every Esprima syntactical token mapped to an integer.
+		The dictionary is also stored in a configuration file (see DicoOfAstEsprima.py).
+		
+		-------
+		Parameters:
+		- directoryName: String
+			Indicates where the configuration file will be stored.
+		- fileName: String
+			Indicates the configuration file name.
+		- description: String
+			Provides a short description for the configuration file.
+		- orderedDico: Dictionary
+			Dictionary to be stored in a configuration file
+		-------
+		Returns:
+		- Configuration file
+			Stores the previous dictionary.	
+	'''
 	
 	if not os.path.exists(directoryName):
 		os.makedirs(directoryName);
@@ -16,7 +55,6 @@ def dicoStorage(directoryName, fileName, description, orderedDico):
 	dicoFile.write('}');
 	dicoFile.close();
 	
-
 
 def prettyPrintDico(dico):
 	'''

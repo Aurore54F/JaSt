@@ -282,7 +282,7 @@ def main(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-Samples', e
 	'''
 	
 	allNGrams = PreprocessingJsData.dicoOfAllNGrams(parser, jsDir, n);
-	dicoNGramsToInt = NGramsRepresentation.dicoUsed(parser);
+	dicoNGramsToInt = NGramsRepresentation.dicoNGramsToIntUsed(parser);
 	
 	if allNGrams != [[]]:
 		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
