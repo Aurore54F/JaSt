@@ -145,9 +145,10 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 			plt.annotate(str(i+1), (transformed[0][i],transformed[1][i]));
 	
 	fig = plt.gcf();
-	fig.set_size_inches(25, 10);
+	#fig.set_size_inches(25, 10);
 	
 	plt.legend();
+	plt.grid();
 	
 	#plt.show()
 	
