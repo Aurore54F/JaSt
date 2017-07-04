@@ -67,6 +67,7 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 			Displays the histogram.
 	'''
 
+	fig = plt.figure();
 	plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center');
 	plt.xticks(range(len(orderedDico)),(orderedDico.keys()),rotation = 90); # n-gram labels are vertical
 	plt.title("\n".join(wrap(title, 60))); # Title written in several line if necessary
@@ -76,10 +77,11 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 	#plt.show(); # To display the histogram
 	
 	# Manage the histogram size
-	fig = plt.gcf(); # uncomment for slimit and esprimaAst
-	fig.set_size_inches(25, 10); # uncomment for slimit and esprimaAst
+	#fig = plt.gcf(); # uncomment for slimit and esprimaAst
+	#fig.set_size_inches(25, 10); # uncomment for slimit and esprimaAst
 	
-	plt.savefig(figPath, dpi = 100);
+	#plt.savefig(figPath, dpi = 100);
+	pickle.dump(fig,open(figPath,'wb'));
 	plt.clf(); # Otherwise all figures are written on one another
 	
 	

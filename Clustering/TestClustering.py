@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import pickle # to save figure to disk
 
 from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.cluster import KMeans
@@ -13,30 +14,32 @@ from sklearn.datasets import make_blobs
 #from pandas.tools.plotting import parallel_coordinates
 
 
-def nbClusters(file, figPath):
+def nbClusters(file, figPath, minA = 1, maxA = 20):
 
     data = pd.read_csv(file);
+    fig = plt.figure();
     
     y = data['Label']      # Split off classifications
     X = data.ix[:, '0':];  # Split off features
     
     distorsions = [];
-    for i in range (1, 40):
+    for i in range (minA, maxA):
         kmeans = KMeans(n_clusters = i, init = 'k-means++', n_init = 10, max_iter = 300, random_state = 0);
         kmeans.fit(X);
         distorsions.append(kmeans.inertia_)
     
-    plt.plot(range(1,40), distorsions, marker = 'x');
+    plt.plot(range(minA,maxA), distorsions, marker = 'x');
     plt.grid();
     
+    pickle.dump(fig,open(figPath,'wb'));
     #plt.show();
-    plt.savefig(figPath, dpi = 100);
+    #plt.savefig(figPath, dpi = 100);
     plt.clf(); # Otherwise all figures are written on one another
     
     
-def clustering(nbCluster = 5, file ='', filePath = ''):
+def clustering(nbCluster = 5, file ='', figPath = ''):
     
-    
+    fig = plt.figure();
     data = pd.read_csv(file);
         
     y = data['Label']      # Split off classifications
@@ -95,20 +98,21 @@ def clustering(nbCluster = 5, file ='', filePath = ''):
 
     plt.legend();
     plt.grid();
-    plt.show();
+    pickle.dump(fig,open(figPath,'wb'));
+    #plt.show();
 
     
 
 def prettyPrintClusters(file, figPath = '/home/aurore/Documents/Code/JS-samples2-malicious/esprima.png', nbClusters = 4, annotate = False):
 
     data = pd.read_csv(file);
+    fig = plt.figure();
     
     y = data['Label']  # Split off classifications
     X = data.ix[:, '0':];  # Split off features
     
-    
     pca = sklearnPCA(n_components=2); #2-dimensional PCA
-    X_norm = (X - X.min())/(X.max() - X.min());
+    #X_norm = (X - X.min())/(X.max() - X.min());
     transformed = pd.DataFrame(pca.fit_transform(X));
     
     colors = ['red', 'blue', 'lightgreen', 'green', 'purple'];
@@ -126,6 +130,6 @@ def prettyPrintClusters(file, figPath = '/home/aurore/Documents/Code/JS-samples2
     plt.legend();
     plt.grid();
     #plt.show()
-    
-    plt.savefig(figPath, dpi = 100);
+    pickle.dump(fig,open(figPath,'wb'));
+    #plt.savefig(figPath, dpi = 100);
     plt.clf(); # Otherwise all figures are written on one another

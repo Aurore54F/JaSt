@@ -88,10 +88,10 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir = '/home/aur
 	
 	i = 1;	
 	histoFilePart1 = 'Histo' + parser;
-	histoFilePart3 = '.png';
+	#histoFilePart3 = '.png';
 		
 	for dico in allProba: # Data for the histogram (i.e. n-gram with occurrence);
-		figPath =  histoDir + histoFilePart1 + str(i) + histoFilePart3;
+		figPath =  histoDir + histoFilePart1 + str(i);
 		NGramsAnalysis.histoFromDico(dico, figPath, title = filesStudied[i-1]); # Saving an histogram in png format.
 		i += 1;
 		
