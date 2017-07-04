@@ -119,8 +119,7 @@ def savePcaPlotting(parser, file, plotDir = '/home/aurore/Documents/Code/PcaPlot
 	# Directory to store the histograms files
 	if not os.path.exists(plotDir):
 		os.makedirs(plotDir);
-	
-	NGramsAnalysis.pcaPlotting(file, plotDir + parser + 'PcaPlotting.png', label = label);
+	NGramsAnalysis.pcaPlotting(file, plotDir + parser + 'PcaPlotting', label = label);
 	
 	
 def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgramIint, formatt, extension, 

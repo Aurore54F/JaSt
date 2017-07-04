@@ -4,6 +4,7 @@
 '''
 
 import matplotlib.pyplot as plt
+import pickle # to save figure to disk
 import pandas as pd
 from sklearn.decomposition import PCA as sklearnPCA
 
@@ -116,10 +117,11 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 	
 	X = data.ix[:, '0':];  # Split off features
 	
-	
 	pca = sklearnPCA(n_components=2); #2-dimensional PCA
 	#X_norm = (X - X.min())/(X.max() - X.min());
 	transformed = pd.DataFrame(pca.fit_transform(X));
+	
+	fig = plt.figure();
 	
 	if label is not None and label != []:
 		'''
@@ -142,15 +144,24 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 	
 	if annotate == True:
 		for i in range(len(data)):
-			plt.annotate(str(i+1), (transformed[0][i],transformed[1][i]));
+			fig.annotate(str(i+1), (transformed[0][i],transformed[1][i]));
 	
-	fig = plt.gcf();
+	#fig = plt.gcf();
 	#fig.set_size_inches(25, 10);
 	
 	plt.legend();
 	plt.grid();
+
+	#fig.show()
+	pickle.dump(fig,open(figPath,'wb'));
+	#plt.savefig(figPath, dpi = 100);
+	fig.clf(); # Otherwise all figures are written on one another
 	
-	#plt.show()
-	
-	plt.savefig(figPath, dpi = 100);
-	plt.clf(); # Otherwise all figures are written on one another
+	# To see the figure:
+	'''
+	import pickle
+	fig = pickle.load(open(path ,'wb'))
+	plt.title('Test')
+	fig = pickle.load(open(path ,'rb'))
+	fig.show()
+	'''

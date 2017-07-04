@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+node_modules-3
 node_modules
 .csvesprimaAst,
 .project
