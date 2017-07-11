@@ -141,8 +141,11 @@ def tokensUsedSlimit(inputFile):
 	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
 		inF = open(inputFile,'r');
 		s = '';
-		for line in inF:
-			s += str(line); # Store the content of the JS file in a string, because far more quicker than using SlimIt minifier.
+		try:
+			for line in inF:
+				s += str(line); # Store the content of the JS file in a string, because far more quicker than using SlimIt minifier.
+		except UnicodeDecodeError as e:
+			print('Exception handling');
 		inF.close();
 		
 		lexer = Lexer();
