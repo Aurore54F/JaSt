@@ -80,7 +80,7 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 	#fig = plt.gcf(); # uncomment for slimit and esprimaAst
 	#fig.set_size_inches(25, 10); # uncomment for slimit and esprimaAst
 	
-	#plt.savefig(figPath, dpi = 100);
+	plt.savefig(figPath, dpi = 100);
 	pickle.dump(fig,open(figPath,'wb'));
 	plt.clf(); # Otherwise all figures are written on one another
 	
@@ -156,7 +156,7 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 
 	#fig.show()
 	pickle.dump(fig,open(figPath,'wb'));
-	#plt.savefig(figPath, dpi = 100);
+	plt.savefig(figPath, dpi = 100);
 	fig.clf(); # Otherwise all figures are written on one another
 	
 	# To see the figure:

@@ -34,7 +34,7 @@ def nbClusters(file, figPath, minA = 1, maxA = 20):
     
     pickle.dump(fig,open(figPath,'wb'));
     #plt.show();
-    #plt.savefig(figPath, dpi = 100);
+    plt.savefig(figPath, dpi = 100);
     plt.clf(); # Otherwise all figures are written on one another
     
     
@@ -74,6 +74,7 @@ def clustering(nbCluster = 5, file ='', figPath = ''):
     plt.grid();
     pickle.dump(fig,open(figPath,'wb'));
     #plt.show();
+    plt.savefig(figPath, dpi = 100);
     plt.clf(); # Otherwise all figures are written on one another
     
 
@@ -89,10 +90,11 @@ def prettyPrintClusters(file, figPath = '/home/aurore/Documents/Code/JS-samples2
     #X_norm = (X - X.min())/(X.max() - X.min());
     transformed = pd.DataFrame(pca.fit_transform(X));
     
-    colors = ['red', 'blue', 'lightgreen', 'green', 'purple'];
+    #colors = ['red', 'blue', 'lightgreen', 'green', 'purple'];
+    colors = ['red', 'blue', 'green', 'purple'];
     
     if nbClusters > 0:
-        for i in range (nbClusters + 1):
+        for i in range (nbClusters):
             plt.scatter(transformed[y==i+1][0], transformed[y==i+1][1], label='Class ' + str(i+1), c = colors[i]);
     else:
         plt.scatter(transformed[:][0], transformed[:][1]);
@@ -105,5 +107,5 @@ def prettyPrintClusters(file, figPath = '/home/aurore/Documents/Code/JS-samples2
     plt.grid();
     #plt.show()
     pickle.dump(fig,open(figPath,'wb'));
-    #plt.savefig(figPath, dpi = 100);
+    plt.savefig(figPath, dpi = 100);
     plt.clf(); # Otherwise all figures are written on one another
