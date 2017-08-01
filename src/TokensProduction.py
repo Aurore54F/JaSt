@@ -6,11 +6,14 @@
 from slimit.lexer import Lexer
 import sys
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
+sys.path.insert(0, '.././JsDetection') # To add a directory to import modules from
 
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
 import DicoOfAstEsprimaSimplified
+
+import JsDetection
 
 import subprocess # to call Shell commands
 
@@ -63,8 +66,9 @@ def astUsedEsprima(inputFile):
 	'''
 	
 
+'''
 def isJsFile(givenFile):
-	'''
+
 		Given a file path, indicate whether the file is either valid JavaScript, malformed JavaScript or no JavaScript.
 				
 		-------
@@ -76,7 +80,7 @@ def isJsFile(givenFile):
 		Returns:
 		- Integer
 			Indicates whether the file is either valid JavaScript (0), malformed JavaScript (2) or no JavaScript (1).
-	'''
+
 	
 	global globVar;
 	try:
@@ -93,6 +97,7 @@ def isJsFile(givenFile):
 			else: # The file could partially be parsed: malformed JS
 				print('File ' + givenFile + ': malformed JavaScript');
 				return 2;
+'''
 	
 	
 def tokensUsedEsprima(inputFile):
@@ -111,7 +116,7 @@ def tokensUsedEsprima(inputFile):
 		- or None if the file either is no JS or malformed.
 	'''
 	
-	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
+	if JsDetection.isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
 		result = subprocess.run(['nodejs' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
 		# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
 		# Structure of a token: "b'Punctuator\n'"
@@ -138,7 +143,7 @@ def tokensUsedSlimit(inputFile):
 		- or None if the file either is no JS or malformed.
 	'''
 	
-	if isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
+	if JsDetection.isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
 		inF = open(inputFile,'r');
 		s = '';
 		try:

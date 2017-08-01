@@ -101,51 +101,63 @@ def handleFiles(allNGrams, file, labels, parser, n):
 	return allNGrams;
 	
 
+def main():
+	'''
+			
+		-------
+		Returns:
+		- 
+	'''
 
-args = parsingCommands();
-
-print('\n');
-print(args);
-print('\n');
-
-if args['d'] == None and args['f'] == None:
-	print('Indicate a directory or a JS file to be studied');
+	args = parsingCommands();
 	
-else:	
-	allNGrams = [[] for j in range(3)];
-	if args['d'] != None:
-		handleDirs(allNGrams, args['d'], args['l'], args['p'][0], args['n'][0]); # Args: directory, labels, parser, n
+	print('\n');
+	print(args);
+	print('\n');
+	
+	if args['d'] == None and args['f'] == None:
+		print('Indicate a directory or a JS file to be studied');
+		
+	else:	
+		allNGrams = [[] for j in range(3)];
+		if args['d'] != None:
+			handleDirs(allNGrams, args['d'], args['l'], args['p'][0], args['n'][0]); # Args: directory, labels, parser, n
+	
+		if args['f'] != None:
+			handleFiles(allNGrams, args['f'], args['l'], args['p'][0], args['n'][0]);
+	
+		if allNGrams != [[]]:
+			allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
+			filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
+			labels = allNGrams[2]; # Contains the label of the well-formed JS files.
+			
+			formatt = FilesForJsClustering.classifierFormat(args['c'][0])[0]; # Separator between the value: either ',' or '\t' (arg = classifier).
+			extension = FilesForJsClustering.classifierFormat(args['c'][0])[1]; # File extension: either '.csv' or '.txt' (arg = classifier).
+			
+			simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
+			
+			if args['u'][0] == True:
+				NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams, args['p'][0]); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
+					
+			#importlib.reload(DicoNGramsToInt);
+					
+			if args['h'][0] == True:
+				FilesForJsClustering.saveProbaOfNGramsHisto(args['p'][0], allProba, filesStudied, histoDir = args['hp'][0]); # Production of the histograms.
+					
+			if args['e'][0] == True:
+				#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
+				print('Labels ' + str(len(labels)));
+				dicoNGramsToInt = NGramsRepresentation.dicoNGramsToIntUsed(args['p'][0]);
+				FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
+																args['ep'][0], labels);
+				#TODO loop on the function below
+				file = FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
+																extension, args['ep'][0], labels);
+																
+			if args['g'][0] == True:
+				FilesForJsClustering.savePcaPlotting(args['p'][0], file, plotDir = args['gp'][0], label = labels);
 
-	if args['f'] != None:
-		handleFiles(allNGrams, args['f'], args['l'], args['p'][0], args['n'][0]);
 
-	if allNGrams != [[]]:
-		allProba = allNGrams[0]; # Contains one dictionary per JS file: key = tuple representing an n-gram and value = probability of occurrences of a given tuple of n-gram.
-		filesStudied = allNGrams[1]; # Contains the name of the well-formed JS files.
-		labels = allNGrams[2]; # Contains the label of the well-formed JS files.
-		
-		formatt = FilesForJsClustering.classifierFormat(args['c'][0])[0]; # Separator between the value: either ',' or '\t' (arg = classifier).
-		extension = FilesForJsClustering.classifierFormat(args['c'][0])[1]; # File extension: either '.csv' or '.txt' (arg = classifier).
-		
-		simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba); # Set containing the name of the n-grams present in our JS corpus.
-		
-		if args['u'][0] == True:
-			NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams, args['p'][0]); # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
-				
-		#importlib.reload(DicoNGramsToInt);
-				
-		if args['h'][0] == True:
-			FilesForJsClustering.saveProbaOfNGramsHisto(args['p'][0], allProba, filesStudied, histoDir = args['hp'][0]); # Production of the histograms.
-				
-		if args['e'][0] == True:
-			#saveFile(parser, allProba, filesStudied, fileDir, classifier, n); # Production of the file for Weka/xcluster.
-			print('Labels ' + str(len(labels)));
-			dicoNGramsToInt = NGramsRepresentation.dicoNGramsToIntUsed(args['p'][0]);
-			FilesForJsClustering.saveProbaOfNGramsFileHeader(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, formatt, extension, 
-															args['ep'][0], labels);
-			#TODO loop on the function below
-			file = FilesForJsClustering.saveProbaOfNGramsFileContent(args['p'][0], allProba, simplifiedListNGrams, dicoNGramsToInt, filesStudied, formatt, 
-															extension, args['ep'][0], labels);
-															
-		if args['g'][0] == True:
-			FilesForJsClustering.savePcaPlotting(args['p'][0], file, plotDir = args['gp'][0], label = labels);
+			
+if __name__ == "__main__": # Executed only if run as a script
+	main();			

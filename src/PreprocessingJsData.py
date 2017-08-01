@@ -6,6 +6,7 @@
 import collections # to order a dictionary
 import glob # Unix style pathname pattern expansion
 import numpy as np
+import os # for OS dependent functionality
 #import sys
 #sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
 #sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
@@ -90,16 +91,17 @@ def dicoOfAllNGrams(parser, jsDir = '/home/aurore/Documents/Code/JS-samples1/JS-
 	'''
 	
 	allProba = [];
-	l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin'); # Extension in .bin or .js
+	#l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin'); # Extension in .bin or .js
 	# TODO recursive: directories in a directory
 	filesStudied = [];
 	lab = [];
 	
-	for javaScriptFile in sorted(l):
-		dicoForHisto = jsToProbaOfNGrams(parser, javaScriptFile, n) # Histogram containing for each n-gram (key) the probability of occurrences (value).
+	#for javaScriptFile in sorted(l):
+	for javaScriptFile in sorted(os.listdir(jsDir)):
+		dicoForHisto = jsToProbaOfNGrams(parser, jsDir + '/' + javaScriptFile, n) # Histogram containing for each n-gram (key) the probability of occurrences (value).
 		if dicoForHisto is not None:
 			allProba.append(dicoForHisto); # Store all the dictionaries in a list (this way, we go only once through the JS files).
-			filesStudied += [javaScriptFile]; # Store the name of the valid JS files.
+			filesStudied += [jsDir + '/' + javaScriptFile]; # Store the name of the valid JS files.
 			if label is not None and label is not []:
 				lab += [label]; # Store the label of the valid JS files. It is duplicated so that the information from allProba[i], filesStudied[i] and lab[i] 
 			#corresponds to the same file.

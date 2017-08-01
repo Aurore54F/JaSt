@@ -3,7 +3,7 @@
 	Basis for storing dictionaries in a configuration file.
 '''
 
-import os # To create repositories
+import os # for OS dependent functionality
 import sys
 
 sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
@@ -26,8 +26,7 @@ import DicoNGramsToIntEsprimaAstSimplified
 
 def dicoStorage(directoryName, fileName, description, orderedDico):
 	'''
-		Construction of a dictionary containing every Esprima syntactical token mapped to an integer.
-		The dictionary is also stored in a configuration file (see DicoOfAstEsprima.py).
+		Storing a given dictionary in a configuration file.
 		
 		-------
 		Parameters:
@@ -39,6 +38,7 @@ def dicoStorage(directoryName, fileName, description, orderedDico):
 			Provides a short description for the configuration file.
 		- orderedDico: Dictionary
 			Dictionary to be stored in a configuration file
+			
 		-------
 		Returns:
 		- Configuration file

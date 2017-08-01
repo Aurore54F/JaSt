@@ -24,27 +24,27 @@ def simplifyEsprimaSyntacticalTokens():
     # List of tokens available here <https://github.com/jquery/esprima/blob/master/src/syntax.ts>.
        
     m = re.findall("\'[A-z]*Expression\'", Syntax);
-    expressions = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    expressions = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical expression tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Element\'", Syntax);
-    elements = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    elements = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical element tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Statement\'", Syntax);
-    statements = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    statements = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical statement tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Literal\'", Syntax);
-    literals = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    literals = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical literal tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Declaration\'", Syntax);
-    declarations = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    declarations = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical declaration tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Pattern\'", Syntax);
-    patterns = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    patterns = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical pattern tokens present in the string "Syntax" above.
     
     m = re.findall("\'[A-z]*Specifier\'", Syntax);
-    specifiers = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    specifiers = [m[i].split("'")[1] for i in range(len(m))]; # List containing the Esprima syntactical specifier tokens present in the string "Syntax" above.
     
-    comments = ['LineComment', 'BlockComment'];
+    comments = ['LineComment', 'BlockComment']; # List containing the Esprima syntactical comment tokens.
     
     program = ['Program'];
     property2 = ['Property'];
@@ -88,7 +88,7 @@ def buildAstSimplifiedDicoEsprima():
     
     for l in simplifiedList:
         for el in sorted(l):
-            dico[el] = i;
+            dico[el] = i; # Every elements el in a given list l will be mapped to the same integer, hence the simplification.
         i = i + 1;
         
     orderedDico = collections.OrderedDict(sorted(dico.items()));
