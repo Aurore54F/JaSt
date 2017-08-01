@@ -151,8 +151,6 @@ def tokensUsedSlimit(inputFile):
 				s += str(line); # Store the content of the JS file in a string, because far more quicker than using SlimIt minifier.
 		except UnicodeDecodeError as e:
 			print('Exception handling');
-		except TypeError as e:
-			print('Exception handling');
 		inF.close();
 		
 		lexer = Lexer();
@@ -166,11 +164,14 @@ def tokensUsedSlimit(inputFile):
 			l = [];
 		'''
 	
-		for token in lexer:
-			# Structure of a token: "LexToken(VAR,'var',1,0)"
-			tokenPart = str(token).split('(');
-			tokenComplete = tokenPart[1].split(','); # Keyword as used in JS
-			l += [tokenComplete[0]];
+		try:
+			for token in lexer:
+				# Structure of a token: "LexToken(VAR,'var',1,0)"
+				tokenPart = str(token).split('(');
+				tokenComplete = tokenPart[1].split(','); # Keyword as used in JS
+				l += [tokenComplete[0]];
+		except TypeError as e:
+			print('Exception handling');
 		
 		return l;
 		
