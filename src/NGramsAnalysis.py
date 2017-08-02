@@ -144,7 +144,7 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 	else:
 		plt.scatter(transformed[:][0], transformed[:][1]);
 	
-	if annotate == True:
+	if annotate is True:
 		for i in range(len(data)):
 			fig.annotate(str(i+1), (transformed[0][i],transformed[1][i]));
 	
