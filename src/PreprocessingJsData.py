@@ -168,9 +168,10 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint, label
 	vectNGramsProba = np.zeros(len(dicoNgramIint) + i);	
 	for key in dicoJS: # Key = n-gram
 		if key in simplifiedListNGrams: # Simplification so as not to consider n-grams that never appear
-			vectNGramsProba[NGramsRepresentation.nGramToInt(dicoNgramIint, key)] = dicoJS[key]; # We use the mapping int/n-gram to store the proba of an 
-			#n-gram at a 
-			#given place in a vector.
+			if NGramsRepresentation.nGramToInt(dicoNgramIint, key) is not None:
+				vectNGramsProba[NGramsRepresentation.nGramToInt(dicoNgramIint, key)] = dicoJS[key]; # We use the mapping int/n-gram to store the proba of an 
+				#n-gram at a 
+				#given place in a vector.
 
 	return vectNGramsProba;
 	
