@@ -133,7 +133,6 @@ def intToNGram(dico, i):
 	except KeyError as e:
 		print('The key ' + str(e) + ' is not in the dictionary.')
 		pass;
-	return ngram;
 
 
 def dicoNGramsToIntUsed(parser):

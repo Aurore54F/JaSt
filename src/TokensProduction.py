@@ -48,7 +48,7 @@ def astUsedEsprima(inputFile):
 		globVar += 1;
 		return syntaxPart; # The order of the tokens returned resembles a tree traversal using the depth-first algorithm.
 		
-	except subprocess.CalledProcessError as e: # TODO catch exception if file cannot be opened
+	except subprocess.CalledProcessError as e:
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
 				print('File ' + inputFile + ': not JavaScript');
@@ -56,6 +56,9 @@ def astUsedEsprima(inputFile):
 			else: # The file could partially be parsed: malformed JS
 				print('File ' + inputFile + ': malformed JavaScript');
 				#return;
+	except OSError: # System-related error, e.g. if file cannot be opened
+		print("System-related error");
+		#return;
 	
 	'''
 		result = subprocess.run(['node' , 'JsEsprima/parser.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
@@ -117,13 +120,18 @@ def tokensUsedEsprima(inputFile):
 	'''
 	
 	if JsDetection.isJsFile(inputFile) == 0: # Only if the current file is a well-formed JS sample
-		result = subprocess.run(['nodejs' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
-		# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
-		# Structure of a token: "b'Punctuator\n'"
-		tokenPart = str(result).split('\n'); # Keyword as used in JS
-		del(tokenPart[len(tokenPart) - 1]); # As last one = ''
-			
-		return tokenPart;
+		try:
+			result = subprocess.run(['nodejs' , 'JsEsprima/tokenizer.js', inputFile], stdout = subprocess.PIPE).stdout.decode('utf-8');
+			# result is a string containing the lexical tokens (as found by esprima) of the given JS script, separated by '\n'.
+			# Structure of a token: "b'Punctuator\n'"
+			tokenPart = str(result).split('\n'); # Keyword as used in JS
+			del(tokenPart[len(tokenPart) - 1]); # As last one = ''
+				
+			return tokenPart;
+		except subprocess.CalledProcessError:
+			print("Subprocess-related error");
+		except OSError: # System-related error, e.g. if file cannot be opened
+			print("System-related error");
 	
 		
 	
