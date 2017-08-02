@@ -70,11 +70,11 @@ def nGramsCsv(numbersList, n = 4, filePath = 'nGram.csv'):
 			
 		else:
 			with open(filePath, 'w') as csvFile:
-			        for j in range(len(numbersList) - (n - 1))
-				        csvFile.write(str(numbersList[j]))
-				        for i in range(n - 1):
-					        csvFile.write(',' + str(numbersList[j + i + 1]))
-				        csvFile.write('\n')
+				for j in range(len(numbersList) - (n - 1)):
+					csvFile.write(str(numbersList[j]))
+					for i in range(n - 1):
+						csvFile.write(',' + str(numbersList[j + i + 1]))
+						csvFile.write('\n')
 	
 
 def allPossibleNGrams(dico, n = 4):
