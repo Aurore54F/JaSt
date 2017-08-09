@@ -5,7 +5,7 @@
 
 import os # To create repositories
 import collections # To order a dictionary
-import importlib; # To reload updated modules
+import importlib # To reload updated modules
 import sys
 sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 sys.path.insert(0, './DicoProduction') # To add a directory to import modules from
@@ -44,38 +44,38 @@ def mappingNGramsInt(nGramsSet, parser):
 				Value: Unique n-gram.
 	'''
 	
-	s = sorted(nGramsSet);
+	s = sorted(nGramsSet)
 	
-	dicoNGramsToIntOld = dicoNGramsToIntUsed(parser);
-	dicoIntToNGramsOld = dicoIntToNGramsUsed(parser);
-	i = len(dicoNGramsToIntOld);
-	#dicoNGramsToIntOld = {};
-	#dicoIntToNGramsOld = {};
-	#i = 0;
+	dicoNGramsToIntOld = dicoNGramsToIntUsed(parser)
+	dicoIntToNGramsOld = dicoIntToNGramsUsed(parser)
+	i = len(dicoNGramsToIntOld)
+	#dicoNGramsToIntOld = {}
+	#dicoIntToNGramsOld = {}
+	#i = 0
 	
-	print('Size ' + str(i));
+	print('Size ' + str(i))
 	
 	for el in s:
 		if str(el) not in dicoNGramsToIntOld:
-			dicoNGramsToIntOld[str(el)] = str(i); # Dictionary mapping n-grams to unique integers.
-			dicoIntToNGramsOld[str(i)] = str(el); # Dictionary mapping integers to unique n-grams.
-			i = i + 1;
+			dicoNGramsToIntOld[str(el)] = str(i) # Dictionary mapping n-grams to unique integers.
+			dicoIntToNGramsOld[str(i)] = str(el) # Dictionary mapping integers to unique n-grams.
+			i = i + 1
 	
 	# Storage of the dictionaries in configuration files
 	
 	descr1 = '#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoNGramsToInt.\n\t\tKey: N-gram;\n\t\tValue: Unique integer.\n'''\n\n\ndicoNGramsToInt = { \n";
 	descr2 = '#!/usr/bin/python' + '\n \n' + "'''\n\tConfiguration file storing the dictionary dicoIntToNGrams.\n\t\tKey: Integer;\n\t\tValue: Unique n-gram.\n'''\n\n\ndicoIntToNGrams = { \n";
 	
-	dico1 = collections.OrderedDict(sorted(dicoNGramsToIntOld.items()));
-	dico2 = collections.OrderedDict(sorted(dicoIntToNGramsOld.items()));
+	dico1 = collections.OrderedDict(sorted(dicoNGramsToIntOld.items()))
+	dico2 = collections.OrderedDict(sorted(dicoIntToNGramsOld.items()))
 	
-	name1 = dicoNGramsIntNames(parser)[0];
-	name2 = dicoNGramsIntNames(parser)[1];
+	name1 = dicoNGramsIntNames(parser)[0]
+	name2 = dicoNGramsIntNames(parser)[1]
 	
 	# dicoNGramsToInt
-	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name1, descr1, dico1);
+	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name1, descr1, dico1)
 	# dicoIntToNGrams
-	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name2, descr2, dico2);
+	ConfFileProduction.dicoStorage('Dico_MapNGrams-Int', name2, descr2, dico2)
 	
 
 def nGramToInt(dico, nGram):
@@ -97,13 +97,13 @@ def nGramToInt(dico, nGram):
 			Note that the operation that transforms an n-gram to an int is a bijection.
 	'''
 	
-	# return DicoNGramsToInt.dicoNGramsToInt[str(nGram)];
+	# return DicoNGramsToInt.dicoNGramsToInt[str(nGram)]
 	try:
-		i = dico[str(nGram)];
-		return i;
+		i = dico[str(nGram)]
+		return i
 	except KeyError as e:
 		print('The key ' + str(e) + ' is not in the dictionary.')
-		pass;
+		pass
 
 
 def intToNGram(dico, i):
@@ -126,13 +126,13 @@ def intToNGram(dico, i):
 			Note that the operation that transforms an int to an n-gram is a bijection.
 	'''
 	
-	# return DicoIntToNGrams.dicoIntToNGrams[str(i)];
+	# return DicoIntToNGrams.dicoIntToNGrams[str(i)]
 	try:
-		ngram = dico[str(i)];
-		return ngram;
+		ngram = dico[str(i)]
+		return ngram
 	except KeyError as e:
 		print('The key ' + str(e) + ' is not in the dictionary.')
-		pass;
+		pass
 
 
 def dicoNGramsToIntUsed(parser):
@@ -152,21 +152,21 @@ def dicoNGramsToIntUsed(parser):
 	'''
 	
 	if parser.lower() == 'slimit':
-		importlib.reload(DicoNGramsToIntSlimit); # Reload to be sure to work with the last version of the dico
-		dico = DicoNGramsToIntSlimit.dicoNGramsToInt;
+		importlib.reload(DicoNGramsToIntSlimit) # Reload to be sure to work with the last version of the dico
+		dico = DicoNGramsToIntSlimit.dicoNGramsToInt
 	elif parser.lower() == 'esprima':
-		importlib.reload(DicoNGramsToIntEsprima);
-		dico = DicoNGramsToIntEsprima.dicoNGramsToInt;
+		importlib.reload(DicoNGramsToIntEsprima)
+		dico = DicoNGramsToIntEsprima.dicoNGramsToInt
 	elif parser.lower() == 'esprimaast':
-		importlib.reload(DicoNGramsToIntEsprimaAst);
-		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt;	
+		importlib.reload(DicoNGramsToIntEsprimaAst)
+		dico = DicoNGramsToIntEsprimaAst.dicoNGramsToInt	
 	elif parser.lower() == 'esprimaastsimp':
-		importlib.reload(DicoNGramsToIntEsprimaAstSimplified);
-		dico = DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt;	
+		importlib.reload(DicoNGramsToIntEsprimaAstSimplified)
+		dico = DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt	
 	else:
-		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
-		return;
-	return dico;
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.")
+		return
+	return dico
 
 
 def dicoIntToNGramsUsed(parser):
@@ -186,21 +186,21 @@ def dicoIntToNGramsUsed(parser):
 	'''
 	
 	if parser.lower() == 'slimit':
-		importlib.reload(DicoNGramsToIntSlimit); # Reload to be sure to work with the last version of the dico
-		dico = DicoIntToNGramsSlimit.dicoIntToNGrams;
+		importlib.reload(DicoNGramsToIntSlimit) # Reload to be sure to work with the last version of the dico
+		dico = DicoIntToNGramsSlimit.dicoIntToNGrams
 	elif parser.lower() == 'esprima':
-		importlib.reload(DicoNGramsToIntEsprima);
-		dico = DicoIntToNGramsEsprima.dicoIntToNGrams;
+		importlib.reload(DicoNGramsToIntEsprima)
+		dico = DicoIntToNGramsEsprima.dicoIntToNGrams
 	elif parser.lower() == 'esprimaast':
-		importlib.reload(DicoNGramsToIntEsprimaAst);
-		dico = DicoIntToNGramsEsprimaAst.dicoIntToNGrams;	
+		importlib.reload(DicoNGramsToIntEsprimaAst)
+		dico = DicoIntToNGramsEsprimaAst.dicoIntToNGrams	
 	elif parser.lower() == 'esprimaastsimp':
-		importlib.reload(DicoNGramsToIntEsprimaAstSimplified);
-		dico = DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams;	
+		importlib.reload(DicoNGramsToIntEsprimaAstSimplified)
+		dico = DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams	
 	else:
-		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
-		return;
-	return dico;
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.")
+		return
+	return dico
 
 
 def dicoNGramsIntNames(parser):
@@ -230,18 +230,18 @@ def dicoNGramsIntNames(parser):
 	'''
 	
 	if parser.lower() == 'slimit':
-		name1 = 'DicoNGramsToIntSlimit.py';
-		name2 = 'DicoIntToNGramsSlimit.py';
+		name1 = 'DicoNGramsToIntSlimit.py'
+		name2 = 'DicoIntToNGramsSlimit.py'
 	elif parser.lower() == 'esprima':
-		name1 = 'DicoNGramsToIntEsprima.py';
-		name2 = 'DicoIntToNGramsEsprima.py';
+		name1 = 'DicoNGramsToIntEsprima.py'
+		name2 = 'DicoIntToNGramsEsprima.py'
 	elif parser.lower() == 'esprimaast':
-		name1 = 'DicoNGramsToIntEsprimaAst.py';
-		name2 = 'DicoIntToNGramsEsprimaAst.py';
+		name1 = 'DicoNGramsToIntEsprimaAst.py'
+		name2 = 'DicoIntToNGramsEsprimaAst.py'
 	elif parser.lower() == 'esprimaastsimp':
-		name1 = 'DicoNGramsToIntEsprimaAstSimplified.py';
-		name2 = 'DicoIntToNGramsEsprimaAstSimplified.py';
+		name1 = 'DicoNGramsToIntEsprimaAstSimplified.py'
+		name2 = 'DicoIntToNGramsEsprimaAstSimplified.py'
 	else:
-		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.");
-		return;
-	return [name1, name2];
+		print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.")
+		return
+	return [name1, name2]

@@ -27,21 +27,21 @@ def nGramsList(numbersList, n = 4):
 	
 	if numbersList is not None:
 		if (n < 1 or n > (len(numbersList))):
-			print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)');
-			print('\nIt means that the file has less tokens than the length n of an n-gram.');
+			print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)')
+			print('\nIt means that the file has less tokens than the length n of an n-gram.')
 			# TODO: possible that n > (len(numbersList)), e.g. the JS file only contains comments: 1 token < n if n > 1.
-			#return;
+			#return
 			
 		else:
-			matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))]; # "len(numbersList) - (n - 1)" being the number of n-grams that can be obtained from the data 
+			matrixAllNGrams = [[] for j in range(len(numbersList) - (n - 1))] # "len(numbersList) - (n - 1)" being the number of n-grams that can be obtained from the data 
 			#of numbersList
 			for j in range(len(numbersList) - (n - 1)): # Loop on all the n-grams
-				matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)]; # Loop on the components of a given n-gram
+				matrixAllNGrams[j] = [numbersList[j + i] for i in range(n)] # Loop on the components of a given n-gram
 					
-				matrixAllNGrams[j] = tuple(matrixAllNGrams[j]); # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
+				matrixAllNGrams[j] = tuple(matrixAllNGrams[j]) # Stored in tuples as they are immutable (lists are not; strings are, but for every op in a string,
 					#a new string is created). I needed an immutable type since it will be used as key in a dictionary.
 
-			return matrixAllNGrams;
+			return matrixAllNGrams
 
 
 def nGramsCsv(numbersList, n = 4, filePath = 'nGram.csv'):
@@ -65,8 +65,8 @@ def nGramsCsv(numbersList, n = 4, filePath = 'nGram.csv'):
 	
 	if numbersList is not None:
 		if (n < 1 or n >= (len(numbersList))):
-			print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)');
-			#return;
+			print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)')
+			#return
 			
 		else:
 			with open(filePath, 'w') as csvFile:
@@ -94,12 +94,12 @@ def allPossibleNGrams(dico, n = 4):
 			Contains every possible n-grams that can be produced from the values of the input "dico".
 	'''
 
-	l = [str(dico[key]) for key in dico]; # List containing all the numbers associated with a token
+	l = [str(dico[key]) for key in dico] # List containing all the numbers associated with a token
 	
 	listNGrams = [i for i in product(l, repeat = n)] # Cartesian product
-	print('Theorie: ' + str(len(l)**n) + '\nReality: ' + str(len(listNGrams))); # Nb of n-grams that can be produced
+	print('Theorie: ' + str(len(l)**n) + '\nReality: ' + str(len(listNGrams))) # Nb of n-grams that can be produced
 	
-	return listNGrams;
+	return listNGrams
 
 
 #####################################################################################
@@ -126,7 +126,7 @@ def nGramToInt(nMax, nGram):
 			Note that the operation that transforms an n-gram to an int is a bijection.
 	'''
 	
-	return sum(nMax**i*j for i,j in enumerate(nGram));
+	return sum(nMax**i*j for i,j in enumerate(nGram))
 
 
 def intToNGram(nMax, i, n = 4):
@@ -149,7 +149,7 @@ def intToNGram(nMax, i, n = 4):
 			Note that the operation that transforms an int to an n-gram is a bijection.
 	'''
 	
-	return tuple([int(i/(nMax**j) % nMax) for j in range(n)]);
+	return tuple([int(i/(nMax**j) % nMax) for j in range(n)])
 """
 
 #####################################################################################
