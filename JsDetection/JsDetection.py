@@ -8,6 +8,7 @@ import subprocess # to call Shell commands
 import os # for OS dependent functionality
 import argparse # to deal with command line arguments
 
+globVar2 = 1
 
 def isJsFile(givenFile):
 	'''
@@ -24,10 +25,14 @@ def isJsFile(givenFile):
 			Indicates whether the file is either valid JavaScript (0), malformed JavaScript (2) or no JavaScript (1).
 	'''
 	
+	global globVar2
 	try:
 		subprocess.check_output('nodejs ../src/JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
 		print(givenFile + ': valid JavaScript')
+		print('Correct file number ' + str(globVar2))
+		globVar2 += 1
 		return 0
+	
 	except subprocess.CalledProcessError as e:
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
@@ -36,6 +41,7 @@ def isJsFile(givenFile):
 			else: # The file could partially be parsed: malformed JS
 				print(givenFile + ': malformed JavaScript')
 				return 2
+			
 	except OSError: # System-related error
 		print("System-related error")
 		return
@@ -43,30 +49,27 @@ def isJsFile(givenFile):
 
 def main():
 	'''
-		A list of files or repositories can be given as command line arguments, for this program to indicate whether the files are either valid, malformed or no JavaScript.
+		A list of files, or of repositories, can be given as command line arguments, for this program to indicate whether the files are either valid, malformed or no JavaScript.
 				
 		-------
 		Returns:
 		- Message (stdout) whose format is:
 			* For valid JS files: <fileName>: valid JavaScript
 			* For malformed JS files: <fileName>: malformed JavaScript
-			* For not JS files: <fileName>: not JavaScript
+			* For no JS files: <fileName>: not JavaScript
 	'''
 	
-	parser = argparse.ArgumentParser(description='Given a list of repositories or files paths, indicate whether the files are either valid, malformed or if they are no JavaScript.') # Creating an ArgumentParser object
+	parser = argparse.ArgumentParser(description='Given a list of repositories, or of files paths, indicate whether the files are either valid, malformed or if they are no JavaScript.') # Creating an ArgumentParser object
 	# The ArgumentParser object holds all the information necessary to parse the command line into Python data types.
 	
-	parser.add_argument('--f', metavar='FILE', nargs='+', help='file to be tested')
-	parser.add_argument('--d', metavar='DIR', nargs='+', help='directory to be tested')
+	parser.add_argument('--f', metavar='FILE', nargs='+', help='files to be tested')
+	parser.add_argument('--d', metavar='DIR', nargs='+', help='directories to be tested')
 		
 	args = vars(parser.parse_args())
 	
 	
 	if args['d'] != None:
 		for el in args['d']:
-			#l = glob.glob(el + '/*.js') + glob.glob(el + '/*.bin') # Extension in .bin or .js			
-			#for givenFile in sorted(l):
-				#isJsFile(givenFile)
 			for givenFile in sorted(os.listdir(el)):
 				isJsFile(el + '/' + givenFile)
 	

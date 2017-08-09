@@ -48,12 +48,11 @@ def dicoStorage(directoryName, fileName, description, orderedDico):
 	if not os.path.exists(directoryName):
 		os.makedirs(directoryName)
 	
-	dicoFile = open(directoryName + '/' + fileName,'w')
-	dicoFile.write(description)
-	for el in orderedDico:
-		dicoFile.write("\t'" + str(el) + "'" + ' : ' + str(orderedDico[el]) + ', \n')
-	dicoFile.write('}')
-	dicoFile.close()
+	with open(directoryName + '/' + fileName, 'w') as dicoFile:
+		dicoFile.write(description)
+		for el in orderedDico:
+			dicoFile.write("\t'" + str(el) + "'" + ' : ' + str(orderedDico[el]) + ', \n')
+		dicoFile.write('}')
 	
 
 def prettyPrintDico(dico):
