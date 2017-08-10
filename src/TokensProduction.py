@@ -126,7 +126,7 @@ def tokensUsedSlimit(inputFile):
 				tokenPart = str(token).split('(')
 				tokenComplete = tokenPart[1].split(',') # Keyword as used in JS
 				l += [tokenComplete[0]]
-				return l # Lexical tokens
+			return l # Lexical tokens
 				
 		except TypeError:
 			print('Exception handling')
