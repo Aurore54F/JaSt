@@ -43,7 +43,7 @@ def countSetsOfNGrams(matrixAllNGrams):
 		#print('Matrix of type NoneType')
 	
 
-def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', ylabel = ''):
+def histoFromDico(orderedDico, figPath = 'histo.png', title = '4-grams frequency in a given JavaScript document', xlabel = '4-grams', ylabel = 'Frequency'):
 	'''
 		Histogram displaying the probability of apparition of each n-gram as stored in the dictionary in input.
 		
@@ -55,11 +55,11 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 		- figPath: 
 			Histogram location. Default: "./histo.png".
 		- title: String
-			Title of the histogram. Default: no title.
+			Title of the histogram. Default: '4-grams frequency in a given JavaScript document'.
 		- xlabel: String
-			Xlabel of the histogram. Default: no xlabel.
+			Xlabel of the histogram. Default: '4-grams'.
 		- ylabel: String
-			Ylabel of the histogram. Default: no ylabel.
+			Ylabel of the histogram. Default: 'Frequency'.
 			
 		-------
 		Returns:
@@ -71,8 +71,8 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 	plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center')
 	plt.xticks(range(len(orderedDico)),(orderedDico.keys()),rotation = 90) # n-gram labels are vertical
 	plt.title("\n".join(wrap(title, 60))) # Title written in several line if necessary
-	#plt.xlabel(xlabel)
-	#plt.ylabel(ylabel)
+	plt.xlabel(xlabel)
+	plt.ylabel(ylabel)
 	plt.tight_layout() # Otherwise the xlabel does not fit in the figure
 	#plt.show() # To display the histogram
 	
@@ -86,7 +86,7 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '', xlabel = '', y
 	
 	
 	
-def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', figPath = 'pcaPlotting.png', title = '', xlabel = '', ylabel = '', 
+def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', figPath = 'pcaPlotting.png', title = 'Projection of the 4-grams frequency of JavaScript files', xlabel = '', ylabel = '', 
 			annotate = False, label = None):
 	'''
 		Graph representing each file features (i.e. list of n-grams with their associated probability) in 2D (using a PCA 2-dimensional transformation).
@@ -99,7 +99,7 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 		- figPath: 
 			Figure location. Default: "./pcaPlotting.png".
 		- title: String
-			Title of the histogram. Default: no title.
+			Title of the histogram. Default: 'Projection of the 4-grams frequency of JavaScript files'.
 		- xlabel: String
 			Xlabel of the histogram. Default: no xlabel.
 		- ylabel: String
@@ -151,6 +151,9 @@ def pcaPlotting(file = '/home/aurore/Documents/Code/MatrixFiles/esprima.csv', fi
 	#fig = plt.gcf()
 	#fig.set_size_inches(25, 10)
 	
+	plt.title(title);
+	#plt.xlabel(xlabel)
+	#plt.ylabel(ylabel)
 	plt.legend()
 	plt.grid()
 
