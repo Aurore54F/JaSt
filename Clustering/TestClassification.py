@@ -11,6 +11,7 @@ def classify(file ='/home/aurore/Documents/Code/JS-samples5-mixed/MatrixFilesesp
     
     data = pd.read_csv(file)
         
+    names = data['Outlook']
     labels = data['Label']      # Split off classifications
     X = data.ix[:, '0':]  # Split off features
     X = np.asarray(X)
@@ -41,6 +42,9 @@ def classify(file ='/home/aurore/Documents/Code/JS-samples5-mixed/MatrixFilesesp
     
     print("Detection: " + str(accuracy))
     print("TP: " + str(TP) + ", FP: " + str(FP) + ", FN: " + str(FN) + ", TN: " + str(TN))
+    
+    for i in range(0, len(names)):
+        print(str(names[i]) + ': ' + str(labelsPredicted[i]) + ': ' + str(labels[i]))
     
     
     labelsPredictedTest = trained.predict(XTest) # Perform classification on an array of test vectors X and predict the target values
