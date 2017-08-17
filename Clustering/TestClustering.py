@@ -1,4 +1,7 @@
 
+# DRAFT
+# TODO, comments, reorganise and improve functionalities + remove code duplicate
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -6,7 +9,6 @@ import pickle # to save figure to disk
 
 from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.cluster import KMeans
-from sklearn.datasets import make_blobs
 
 #from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 #from sklearn.datasets.samples_generator import make_blobs
