@@ -47,14 +47,10 @@ def classify(trainingFile):
     labelsPredicted = clf.predict(X) # Perform classification on an array of test vectors X and predict the target values
     accuracy = clf.score(X,labels) # Detection rate
     
-    cm = confusion_matrix(labels, labelsPredicted) # y = labels, predicted = labels predicted
-    TP = cm[0][0]
-    FP = cm[0][1]
-    FN = cm[1][0]
-    TN = cm[1][1]
+    TN, FP, FN, TP = confusion_matrix(labels, labelsPredicted).ravel() # y = labels, predicted = labels predicted
     
-    #print("Detection: " + str(accuracy))
-    #print("TP: " + str(TP) + ", FP: " + str(FP) + ", FN: " + str(FN) + ", TN: " + str(TN))
+    print("Detection: " + str(accuracy))
+    print("TP: " + str(TP) + ", FP: " + str(FP) + ", FN: " + str(FN) + ", TN: " + str(TN))
     
     #for i in range(0, len(names)):
         #print(str(names[i]) + ': ' + str(labelsPredicted[i]) + ': ' + str(labels[i]))
@@ -122,30 +118,22 @@ def test(testFile, model):
     labelsPredictedTest = model.predict(XTest) # Perform classification on an array of test vectors X and predict the target values
     accuracyTest = model.score(XTest, labelsTest) # Detection rate
     
-    cmTest = confusion_matrix(labelsTest, labelsPredictedTest) # y = labels, predicted = labels predicted
-    TP_test = cmTest[0][0]
-    FP_test = cmTest[0][1]
-    FN_test = cmTest[1][0]
-    TN_test = cmTest[1][1]
+    TN_test, FP_test, FN_test, TP_test = confusion_matrix(labelsTest, labelsPredictedTest).ravel() # y = labels, predicted = labels predicted
     
     print("Detection: " + str(accuracyTest))
     print("TP: " + str(TP_test) + ", FP: " + str(FP_test) + ", FN: " + str(FN_test) + ", TN: " + str(TN_test))
     
     
-def rocAnalysis(labels, labelsPredicted):
-    '''
-        TODO ROC analysis, plots ROC curve and gives AUC
-    ''' 
-    
+
     labelsTestInt = []
-    for el in labels:
+    for el in labelsTest:
         if el == 'benign':
             labelsTestInt.append(1)
         else:
             labelsTestInt.append(-1)
         
     labelsPredictedTestInt = []
-    for el in labelsPredicted:
+    for el in labelsPredictedTest:
         if el == 'benign':
             labelsPredictedTestInt.append(1)
         else:
