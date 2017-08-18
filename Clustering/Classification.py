@@ -5,10 +5,13 @@
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix
+from sklearn import metrics
+from sklearn.metrics import roc_curve, auc
 
 
 def classify(trainingFile):
@@ -50,8 +53,8 @@ def classify(trainingFile):
     FN = cm[1][0]
     TN = cm[1][1]
     
-    print("Detection: " + str(accuracy))
-    print("TP: " + str(TP) + ", FP: " + str(FP) + ", FN: " + str(FN) + ", TN: " + str(TN))
+    #print("Detection: " + str(accuracy))
+    #print("TP: " + str(TP) + ", FP: " + str(FP) + ", FN: " + str(FN) + ", TN: " + str(TN))
     
     #for i in range(0, len(names)):
         #print(str(names[i]) + ': ' + str(labelsPredicted[i]) + ': ' + str(labels[i]))
@@ -111,6 +114,7 @@ def test(testFile, model):
     testSet = pd.read_csv(testFile)
         
     labelsTest = testSet['Label'] # Split off classifications
+    #labelsTest = np.asarray(labelsTest)
     XTest = testSet.ix[:, '0':] # Split off features
     XTest = np.asarray(XTest)
     
@@ -127,5 +131,42 @@ def test(testFile, model):
     print("Detection: " + str(accuracyTest))
     print("TP: " + str(TP_test) + ", FP: " + str(FP_test) + ", FN: " + str(FN_test) + ", TN: " + str(TN_test))
     
+    
+def rocAnalysis(labels, labelsPredicted):
+    '''
+        TODO ROC analysis, plots ROC curve and gives AUC
+    ''' 
+    
+    labelsTestInt = []
+    for el in labels:
+        if el == 'benign':
+            labelsTestInt.append(1)
+        else:
+            labelsTestInt.append(-1)
+        
+    labelsPredictedTestInt = []
+    for el in labelsPredicted:
+        if el == 'benign':
+            labelsPredictedTestInt.append(1)
+        else:
+            labelsPredictedTestInt.append(-1)
+            
+            
+    fpr, tpr, thresholds = metrics.roc_curve(labelsTestInt, labelsPredictedTestInt, pos_label=1)
+    print("AUC of the predictions: {0}".format(metrics.auc(fpr, tpr)))
+    roc_auc = auc(fpr,tpr)
+    
+    plt.figure()
+    lw = 2
+    
+    plt.plot(fpr, tpr, color='darkorange', lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic example')
+    plt.legend(loc="lower right")
+    plt.show()
     
     
