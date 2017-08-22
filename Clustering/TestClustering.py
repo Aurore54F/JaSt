@@ -26,18 +26,28 @@ def nbClusters(file, figPath, minA = 1, maxA = 20):
     
     
     distorsions = []
-    for i in range (minA, maxA):
+    for i in range (minA, maxA+1):
         kmeans = KMeans(n_clusters = i, init = 'k-means++', n_init = 10, max_iter = 300, random_state = 0)
         kmeans.fit(X)
         distorsions.append(kmeans.inertia_)
+        #print(str(len(distorsions)))
     
-    plt.plot(range(minA,maxA), distorsions, marker = 'x')
-    plt.grid()
+    derivative = np.zeros(len(distorsions))
+    for i in range(0,len(distorsions)-1):
+        derivative[i] = (distorsions[i+1] - distorsions[i]) / (i+2 - (i+2-1))
+
+    for i in range(0,len(distorsions)-1):
+        #print('For k = ' + str(i+3) + ': ' + str(derivative[i] - derivative[i+1]))
+        print('For k = ' + str(i+2) + ': ' + str(derivative[i]))
+
     
-    pickle.dump(fig,open(figPath,'wb'))
+    #plt.plot(range(minA,maxA), distorsions, marker = 'x')
+    #plt.grid()
+    
+    #pickle.dump(fig,open(figPath,'wb'))
     #plt.show()
-    plt.savefig(figPath, dpi = 100)
-    plt.clf() # Otherwise all figures are written on one another
+    #plt.savefig(figPath, dpi = 100)
+    #plt.clf() # Otherwise all figures are written on one another
     
     
 def clustering(nbCluster = 5, file ='', figPath = ''):
