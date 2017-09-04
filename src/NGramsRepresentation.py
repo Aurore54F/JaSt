@@ -22,6 +22,7 @@ import DicoNGramsToIntEsprimaAstSimplified
 import ConfFileProduction
 
 
+
 def mappingNGramsInt(nGramsSet, parser):
 	'''
 		Construction of dictionaries mapping integers and n-grams.

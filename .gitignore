@@ -10,11 +10,7 @@ __pycache__/
 node_modules-3
 node_modules
 .csvesprimaAst,
-ClassifierCurve.py
-TemporalEvolution.py
-Throughput.py
-xmeans.py
-
+Aurore/
 
 # C extensions
 *.so

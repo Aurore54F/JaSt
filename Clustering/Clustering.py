@@ -11,46 +11,38 @@ from sklearn.decomposition import PCA as sklearnPCA
 from sklearn.cluster import KMeans
 
 #from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-#from sklearn.datasets.samples_generator import make_blobs
+from sklearn.datasets.samples_generator import make_blobs
 
 #from pandas.tools.plotting import parallel_coordinates
 
 
-def nbClusters(file, figPath, minA = 1, maxA = 20):
-
+def nbClusters(file, figPath = '', minA = 1, maxA = 5, epsilon = 1):
+    
     data = pd.read_csv(file)
     fig = plt.figure()
-    
+        
     #y = data['Label']      # Split off classifications
     X = data.ix[:, '0':]  # Split off features
     
-    
+    #X, y = make_blobs(n_samples = 150, n_features = 30, centers = 3, cluster_std = 0.5, shuffle = True, random_state = 0)
     distorsions = []
     for i in range (minA, maxA+1):
         kmeans = KMeans(n_clusters = i, init = 'k-means++', n_init = 10, max_iter = 300, random_state = 0)
         kmeans.fit(X)
         distorsions.append(kmeans.inertia_)
-        #print(str(len(distorsions)))
     
-    derivative = np.zeros(len(distorsions))
-    for i in range(0,len(distorsions)-1):
-        derivative[i] = (distorsions[i+1] - distorsions[i]) / (i+2 - (i+2-1))
-
-    for i in range(0,len(distorsions)-1):
-        #print('For k = ' + str(i+3) + ': ' + str(derivative[i] - derivative[i+1]))
-        print('For k = ' + str(i+2) + ': ' + str(derivative[i]))
-
-    
-    #plt.plot(range(minA,maxA), distorsions, marker = 'x')
-    #plt.grid()
-    
+    plt.plot(range(minA,maxA+1), distorsions, marker = 'x')
+    plt.grid()
+    plt.xlabel('Number of clusters')
+    plt.ylabel('Total squared distance inside clusters')
     #pickle.dump(fig,open(figPath,'wb'))
     #plt.show()
-    #plt.savefig(figPath, dpi = 100)
-    #plt.clf() # Otherwise all figures are written on one another
+    plt.savefig(figPath, dpi = 100)
+    plt.clf() # Otherwise all figures are written on one another
+
     
     
-def clustering(nbCluster = 5, file ='', figPath = ''):
+def clustering(nbCluster = 4, file ='', figPath = ''):
     
     fig = plt.figure()
     data = pd.read_csv(file)
@@ -88,40 +80,8 @@ def clustering(nbCluster = 5, file ='', figPath = ''):
     
     plt.legend()
     plt.grid()
-    pickle.dump(fig,open(figPath,'wb'))
+    #pickle.dump(fig,open(figPath,'wb'))
     #plt.show()
     plt.savefig(figPath, dpi = 100)
     plt.clf() # Otherwise all figures are written on one another
-    
-
-def prettyPrintClusters(file, figPath = '/home/aurore/Documents/Code/JS-samples2-malicious/esprima.png', nbClusters = 4, annotate = False):
-
-    data = pd.read_csv(file)
-    fig = plt.figure()
-    
-    y = data['Label']  # Split off classifications
-    X = data.ix[:, '0':]  # Split off features
-    
-    pca = sklearnPCA(n_components=2) #2-dimensional PCA
-    #X_norm = (X - X.min())/(X.max() - X.min())
-    transformed = pd.DataFrame(pca.fit_transform(X))
-    
-    #colors = ['red', 'blue', 'lightgreen', 'green', 'purple']
-    colors = ['red', 'blue', 'green', 'purple']
-    
-    if nbClusters > 0:
-        for i in range (nbClusters):
-            plt.scatter(transformed[y==i+1][0], transformed[y==i+1][1], label='Class ' + str(i+1), c = colors[i])
-    else:
-        plt.scatter(transformed[:][0], transformed[:][1])
-   
-    if annotate == True:
-        for i in range(len(data)):
-            plt.annotate(str(i+1), (transformed[0][i],transformed[1][i]))
-    
-    plt.legend()
-    plt.grid()
-    #plt.show()
-    pickle.dump(fig,open(figPath,'wb'))
-    plt.savefig(figPath, dpi = 100)
-    plt.clf() # Otherwise all figures are written on one another
+ 
