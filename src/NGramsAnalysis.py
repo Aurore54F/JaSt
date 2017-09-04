@@ -70,15 +70,16 @@ def histoFromDico(orderedDico, figPath = 'histo.png', title = '4-grams frequency
 	fig = plt.figure()
 	plt.bar(range(len(orderedDico)), orderedDico.values(), align = 'center')
 	plt.xticks(range(len(orderedDico)),(orderedDico.keys()),rotation = 90) # n-gram labels are vertical
-	plt.title("\n".join(wrap(title, 60))) # Title written in several line if necessary
+	#plt.title("\n".join(wrap(title, 60))) # Title written in several line if necessary
+	plt.title(title[-44:])
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
 	plt.tight_layout() # Otherwise the xlabel does not fit in the figure
 	#plt.show() # To display the histogram
 	
 	# Manage the histogram size
-	#fig = plt.gcf() # uncomment for slimit and esprimaAst
-	#fig.set_size_inches(25, 10) # uncomment for slimit and esprimaAst
+	fig = plt.gcf() # uncomment for slimit and esprimaAst
+	fig.set_size_inches(25, 10) # uncomment for slimit and esprimaAst
 	
 	plt.savefig(figPath, dpi = 100)
 	pickle.dump(fig,open(figPath,'wb'))

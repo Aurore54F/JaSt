@@ -2,11 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.project
+.pydevproject
+.metadata/
+
+#Additional tools
 node_modules-3
 node_modules
 .csvesprimaAst,
-.project
-.pydevproject
+ClassifierCurve.py
+TemporalEvolution.py
+Throughput.py
+xmeans.py
 
 
 # C extensions
