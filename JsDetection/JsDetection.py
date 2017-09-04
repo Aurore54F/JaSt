@@ -1,18 +1,19 @@
 #!/usr/bin/python
 
 '''
-	Indicate whether given files are either valid JavaScript files, malformed JavaScript files or if they are no JavaScript files.
+	Indicate whether given files are either valid JavaScript files, 
+	malformed JavaScript files or if they are no JavaScript files.
 '''
 
 import subprocess # to call Shell commands
 import os # for OS dependent functionality
 import argparse # to deal with command line arguments
 
-globVar2 = 1
+OUTPUT_TEXTS = ['valid JavaScript', 'not JavaScript', 'malformed JavaScript']
 
 def isJsFile(givenFile):
 	'''
-		Given a file path, indicate whether the file is either valid JavaScript, malformed JavaScript or no JavaScript.
+		Given a file path, indicate whether the file is either valid JavaScript, malformed JavaScript or no JavaScript. On a system error -1 is returned.
 				
 		-------
 		Parameter:
@@ -24,32 +25,32 @@ def isJsFile(givenFile):
 		- Integer
 			Indicates whether the file is either valid JavaScript (0), malformed JavaScript (2) or no JavaScript (1).
 	'''
-	
-	global globVar2
+
 	try:
 		subprocess.check_output('nodejs ../src/JsEsprima/parser.js ' + givenFile + ' 2> /dev/null', shell = True)
-		print(givenFile + ': valid JavaScript')
-		print('Correct file number ' + str(globVar2))
-		globVar2 += 1
+		# TODO The code does not handle errors by esprima well. Popen should be used.
 		return 0
 	
 	except subprocess.CalledProcessError as e:
 		if  e.returncode == 1:
 			if str(e.output) == "b''": # The file could not be parsed: not a JS sample
-				print(givenFile + ': not JavaScript')
 				return 1
 			else: # The file could partially be parsed: malformed JS
-				print(givenFile + ': malformed JavaScript')
 				return 2
+			#print("\n".join(i for i in e.output if i.startwith("Error")))
+		elif e.returncode != 0:
+			#Something else went wrong, we do not handle this here
+			raise
 			
 	except OSError: # System-related error
 		print("System-related error")
-		return
+		return -1
 
 
 def main():
 	'''
-		A list of files, or of repositories, can be given as command line arguments, for this program to indicate whether the files are either valid, malformed or no JavaScript.
+		A list of files, or of repositories, can be given as command line arguments, for this program to indicate whether the files are either valid, 
+		malformed or no JavaScript.
 				
 		-------
 		Returns:
@@ -68,16 +69,20 @@ def main():
 	args = vars(parser.parse_args())
 	
 	
-	if args['d'] != None:
-		for el in args['d']:
-			for givenFile in sorted(os.listdir(el)):
-				isJsFile(el + '/' + givenFile)
-	
 	if args['f'] != None:
-		for givenFile in args['f']:
-			isJsFile(givenFile)
+		files2do = args['f']
+	else:
+		files2do = []
+	if args['d'] != None:
+		for cdir in args['d']:
+			files2do.extend(cdir + '/' + cfile for cfile in os.listdir(cdir))
+	results = [isJsFile(cfile) for cfile in files2do]
+	for cfile, res in zip(files2do, results):
+		print("%s: %s" % (cfile, OUTPUT_TEXTS[res]))
+	print('\tNumber of correct files: %d' % len([i for i in results if i == 0]))
+	
 
-		
 if __name__ == "__main__": # Executed only if run as a script
 	main()
+	
 	
