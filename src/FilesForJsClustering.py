@@ -6,8 +6,8 @@
 import os # To create repositories
 import importlib
 import sys
-sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
-sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+#sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
+#sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
 
 import PreprocessingJsData
 import NGramsAnalysis

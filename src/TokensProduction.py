@@ -5,17 +5,22 @@
 
 from slimit.lexer import Lexer
 import sys
-sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
-sys.path.insert(0, '.././JsDetection') # To add a directory to import modules from
+import os
+import subprocess # to call Shell commands
+
+#currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+#print(currentPath)
+#sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int') # To add a directory to import modules from
+#sys.path.insert(0, currentPath+'/JsDetection') # To add a directory to import modules from
+#sys.path.insert(0,'MalwareClustering')
 
 import DicoOfTokensSlimit
 import DicoOfTokensEsprima
 import DicoOfAstEsprima
 import DicoOfAstEsprimaSimplified
-
 import JsDetection
 
-import subprocess # to call Shell commands
+
 
 globVar1 = 1
 

@@ -8,8 +8,15 @@
 import importlib # To reload updated modules
 import argparse # To parse command line arguments
 import sys
-sys.path.insert(0, './Dico_MapTokens-Int') # To add a directory to import modules from
-sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+import os
+
+currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+print(currentPath)
+sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int') # To add a directory to import modules from
+sys.path.insert(0, currentPath+'/JsDetection') # To add a directory to import modules from
+sys.path.insert(0, currentPath+'/src/Dico_MapNGrams-Int') # To add a directory to import modules from
+sys.path.insert(0, currentPath+'/src/DicoProduction') # To add a directory to import modules from
+
 
 import DicoIntToNGramsSlimit
 import DicoNGramsToIntSlimit

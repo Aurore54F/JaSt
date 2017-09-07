@@ -6,8 +6,8 @@
 sudo apt-get install python3 # (3.5.2)
 sudo apt install python3-pip # (8.1.1) minimum version pip 7 
 pip3 install slimit # (0.8.1)
-#sudo apt-get install python3-matplotlib # (2.0.0)
-pip3 install matplotlib # (2.0.2)
+sudo apt-get install python3-matplotlib # (2.0.0)
+#pip3 install matplotlib # (2.0.2)
 pip3 install plotly # (2.0.7)
 pip3 install numpy # (1.13.0)
 

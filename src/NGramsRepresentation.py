@@ -7,8 +7,8 @@ import os # To create repositories
 import collections # To order a dictionary
 import importlib # To reload updated modules
 import sys
-sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
-sys.path.insert(0, './DicoProduction') # To add a directory to import modules from
+#sys.path.insert(0, './Dico_MapNGrams-Int') # To add a directory to import modules from
+#sys.path.insert(0, './DicoProduction') # To add a directory to import modules from
 
 import DicoIntToNGramsSlimit
 import DicoNGramsToIntSlimit
