@@ -12,18 +12,18 @@ Our implementation is divided into three packages with distinct functionalities:
   - *MachineLearning* for the clustering or classification of JavaScript documents.
 
 #### JavaScript Detection Tool
-Detection of JavaScript samples respecting the grammar defined by ECMA-International <http://www.ecma-international.org/ecma-262/8.0/>, detection of broken JavaScript, and files not written in JavaScript.
+Detection of JavaScript samples respecting the grammar defined by ECMA-International <http://www.ecma-international.org/ecma-262/8.0/>, detection of broken JavaScript, and files not written in JavaScript.   
 To use this tool: *python3 <path-of-JsDetection/JsDetection.py>* -help.
 
 #### Static Analysis of JavaScript Executables
-Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.
+Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.   
 To use this tool: *python3 <path-of-src/Main.py>* -help.
 
 #### Classification and Clustering of JavaScript Executables
-- Detection of malicious JavaScript documents
+- Detection of malicious JavaScript documents.   
 To use this tool: *python3 <path-of-MachineLearning/Classification.py>* -help.
 
-- Clustering of JavaScript samples into *k* (configurable) families.
+- Clustering of JavaScript samples into *k* (configurable) families.   
 To use this tool: *python3 <path-of-MachineLearning/Clustering.py>* -help.
 
 
@@ -43,7 +43,7 @@ To use this tool: *python3 <path-of-MachineLearning/Clustering.py>* -help.
 
 
 ### External tools
-Esprima, created and maintained by Ariya Hidayat <http://esprima.org/> has been used to perform both lexical and syntactical analysis of JavaScript files.
+[Esprima](http://esprima.org/), created and maintained by Ariya Hidayat has been used to perform both lexical and syntactical analysis of JavaScript files.
   
 "Copyright JS Foundation and other contributors, https://js.foundation/
 
