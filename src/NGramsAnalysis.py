@@ -4,7 +4,6 @@
 '''
 
 import pickle # to save figure to disk
-#from textwrap import wrap
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA as sklearnPCA

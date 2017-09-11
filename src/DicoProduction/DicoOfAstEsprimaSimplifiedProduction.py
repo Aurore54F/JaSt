@@ -13,12 +13,12 @@ currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 def simplifyEsprimaSyntacticalTokens():
     '''
-        Construction of the list of Esprima syntactical tokens after simplification.
+        Construction of the list of Esprima syntactical units after simplification.
 
         -------
         Returns:
         - List
-            Contains lists representing families/groupings of Esprima syntactical tokens.
+            Contains lists representing families/groupings of Esprima syntactical units.
     '''
 
     # Esprima syntactical tokens:
@@ -84,7 +84,7 @@ def buildAstSimplifiedDicoEsprima():
         -------
         Returns:
         - Ordered dictionary
-            Key: Esprima syntactical tokens;
+            Key: Esprima syntactical units;
             Value: A unique integer.
         - Configuration file
             Stores the previous dictionary (see DicoOfAstEsprimaSimplified.py).

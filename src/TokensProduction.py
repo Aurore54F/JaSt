@@ -9,8 +9,6 @@ from slimit.lexer import Lexer
 
 from __init__ import *
 
-globVar1 = 1
-
 def astUsedEsprima(inputFile):
     '''
         Given an input JavaScript file, create a list containing the esprima syntactical
@@ -21,7 +19,8 @@ def astUsedEsprima(inputFile):
         -------
         Parameter:
         - inputFile: File
-            Should it be malformed or no JS file, then an exception will be raised.
+            Should it be malformed or no JS file, then an exception will be raised
+            (see JsDetection.isJsFile).
 
         -------
         Returns:
@@ -30,30 +29,7 @@ def astUsedEsprima(inputFile):
         - or None if the file either is no JS or malformed.
     '''
 
-    global globVar1
-    try:
-        result = subprocess.check_output('nodejs '+currentPath+'/src/JsEsprima/parser.js ' +
-                                         inputFile + ' 2> /dev/null', shell=True)
-        # result is a string containing the syntactical units (as found by esprima) of
-        #the given JS script, separated by '\n'.
-        # Structure of a token: "b'Literal\n'"
-        syntaxPart = str(result).split("b'")[1].split('\\n') # Keyword as used in JS
-        del syntaxPart[len(syntaxPart) - 1] # As last one = ''
-        print(inputFile + ': valid JavaScript')
-        print('Correct file number ' + str(globVar1))
-        globVar1 += 1
-        return syntaxPart # The order of the units returned resembles a tree traversal
-       #using the depth-first algorithm post-order.
-
-    except subprocess.CalledProcessError as e:
-        if  e.returncode == 1:
-            if str(e.output) == "b''": # The file could not be parsed: not a JS sample
-                print('File ' + inputFile + ': not JavaScript')
-            else: # The file could partially be parsed: malformed JS
-                print('File ' + inputFile + ': malformed JavaScript')
-
-    except OSError: # System-related error, e.g. if file cannot be opened
-        print("System-related error")
+    return JsDetection.isJsFile(inputFile, syntacticalUnits=True)
 
 
 def tokensUsedEsprima(inputFile):
@@ -118,7 +94,7 @@ def tokensUsedSlimit(inputFile):
             try:
                 for line in inF:
                     s += str(line) # Store the content of the JS file in a string, because
-                    #far more quicker than using SlimIt minifier.
+                    #far more faster than using SlimIt minifier.
             except UnicodeDecodeError:
                 print('Exception handling')
 
@@ -140,7 +116,8 @@ def tokensUsedSlimit(inputFile):
 
 def tokensUsed(parser, jsFile):
     '''
-        Return the list of tokens (for a given parser) present in a given JavaScript document.
+        Return the list of (lexical/syntactical) units (for a given parser) present in
+        a given JavaScript document.
 
         -------
         Parameter:
@@ -172,7 +149,8 @@ def tokensUsed(parser, jsFile):
 
 def dicoUsed(parser):
     '''
-        Return the Dictionary corresponding to the parser given in input.
+        Return the (lexical/syntactical) units dictionary corresponding to the parser
+        given in input.
 
         -------
         Parameter:
@@ -204,8 +182,8 @@ def dicoUsed(parser):
 
 def tokensToNumbers(tokensDico, tokensList):
     '''
-        Convert a list of tokens in their corresponding numbers (as indicated in the corresponding
-        tokens dictionary).
+        Convert a list of (lexical/syntactical) units in their corresponding numbers
+        (as indicated in the corresponding units dictionary).
 
         -------
         Parameters:

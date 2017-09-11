@@ -6,7 +6,6 @@ import sys
 import os
 
 currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-print(currentPath)
 sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int') #To add a directory to import modules from
 sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int/DicoOfTokensSlimit')
 sys.path.insert(0, currentPath+'/JsDetection')

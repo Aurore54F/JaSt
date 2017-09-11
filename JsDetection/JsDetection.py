@@ -11,7 +11,7 @@ import argparse # to deal with command line arguments
 
 OUTPUT_TEXTS = ['valid JavaScript', 'not JavaScript', 'malformed JavaScript']
 
-def isJsFile(givenFile):
+def isJsFile(givenFile, syntacticalUnits=False):
     '''
         Given a file path, indicate whether the file is either valid JavaScript,
         malformed JavaScript or no JavaScript. On a system error -1 is returned.
@@ -20,20 +20,32 @@ def isJsFile(givenFile):
         Parameter:
         - givenFile: string
             Path of the file to be analysed.
+        - syntacticalUnits: boolean
+            Instead of returning the error code 0, the list of syntactical units
+            obtained can be returned. Default value is False.
 
         -------
         Returns:
         - Integer
             Indicates whether the file is either valid JavaScript (0), malformed
             JavaScript (2) or no JavaScript (1).
+        - or List of syntactical units
+            If givenFile is valid and syntacticalUnits true.
     '''
 
     current_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
-    try:
-        subprocess.check_output('nodejs '+current_path+'/src/JsEsprima/parser.js ' + givenFile + \
-							' 2> /dev/null', shell=True)
-        # TODO The code does not handle errors by esprima well. Popen should be used.
+    try: # TODO The code does not handle errors by esprima well. Popen should be used.
+        result = subprocess.check_output('nodejs ' + current_path + '/src/JsEsprima/parser.js '\
+                                          + givenFile + ' 2> /dev/null', shell=True)
+        # result is a string containing the syntactical units (as found by esprima) of
+        #the given JS script, separated by '\n'.
+        # Structure of a token: "b'Literal\n'"
+        if syntacticalUnits:
+            syntaxPart = str(result).split("b'")[1].split('\\n') # Keyword as used in JS
+            del syntaxPart[len(syntaxPart) - 1] # As last one = ''
+            return syntaxPart # The order of the units returned resembles a tree traversal
+            #using the depth-first algorithm post-order.
         return 0
 
     except subprocess.CalledProcessError as e:
@@ -64,8 +76,11 @@ def main():
             * For no JS files: <fileName>: not JavaScript
     '''
 
-    parser = argparse.ArgumentParser(description='Given a list of repositories, or of files paths,\
-    indicate whether the files are either valid, malformed or if they are no JavaScript.')
+    parser = argparse.ArgumentParser(description='Given a list of repositories, or of file paths,\
+    indicate whether the files are either\n\
+    valid (\'<fileName>: valid JavaScript\'),\n\
+    malformed (\'<fileName>: malformed JavaScript\'),\n\
+    or no JavaScript (\'<fileName>: not JavaScript\').')
     # Creating an ArgumentParser object which holds all the information necessary to parse
     #the command line into Python data types.
 

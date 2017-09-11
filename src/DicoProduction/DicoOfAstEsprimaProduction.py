@@ -17,13 +17,13 @@ Syntax = "     AssignmentExpression: 'AssignmentExpression',     AssignmentPatte
 
 def buildAstDicoEsprima():
     '''
-        Construction of a dictionary containing every Esprima syntactical token mapped to an int.
+        Construction of a dictionary containing every Esprima syntactical unit mapped to an int.
         The dictionary is also stored in a configuration file (see DicoOfAstEsprima.py).
 
         -------
         Returns:
         - Ordered dictionary
-            Key: Esprima syntactical tokens;
+            Key: Esprima syntactical units;
             Value: A unique integer.
         - Configuration file
             Stores the previous dictionary (see DicoOfAstEsprima.py).
@@ -33,11 +33,11 @@ def buildAstDicoEsprima():
     dico = {}
 
 
-    # Creation of a dictionary mapping Esprima syntactical tokens to unique integers.
+    # Creation of a dictionary mapping Esprima syntactical units to unique integers.
 
     m = re.findall("\'[A-z]+\'", Syntax)
     astList = [m[i].split("'")[1] for i in range(len(m))]
-    # List containing the Esprima syntactical tokens indicated in the string "Syntax" above.
+    # List containing the Esprima syntactical units indicated in the string "Syntax" above.
 
     for el in sorted(astList):
         dico[el] = i
