@@ -18,4 +18,4 @@ Static analysis (lexical or syntactical) of JavaScript samples to detect malicio
   - Implementation of k-fold cross-validation and possibility to plot ROC curves;
   - Manual clustering with histograms representing the frequency of all 4-grams present in a JavaScript document;
   - Graphical method to get an approximation of the number of clusters present in the data;
-  - PCA implementation to graphically represent JavaScript executables onto a two-dimensional surface. With supervised learning, different colours can be attributed to each class or clusters.
+  - PCA implementation to graphically represent JavaScript executables onto a two-dimensional surface. With supervised learning, different colours can be attributed to each class or cluster.

@@ -6,10 +6,9 @@
 '''
 
 import subprocess # to call Shell commands
-import os # for OS dependent functionality
+import os # for OS dependant functionality
 import argparse # to deal with command line arguments
 
-currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 OUTPUT_TEXTS = ['valid JavaScript', 'not JavaScript', 'malformed JavaScript']
 
 def isJsFile(givenFile):
@@ -29,8 +28,10 @@ def isJsFile(givenFile):
             JavaScript (2) or no JavaScript (1).
     '''
 
+    current_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
     try:
-        subprocess.check_output('nodejs '+currentPath+'/src/JsEsprima/parser.js ' + givenFile + \
+        subprocess.check_output('nodejs '+current_path+'/src/JsEsprima/parser.js ' + givenFile + \
 							' 2> /dev/null', shell=True)
         # TODO The code does not handle errors by esprima well. Popen should be used.
         return 0
@@ -80,7 +81,7 @@ def main():
         files2do = []
     if args['d'] != None:
         for cdir in args['d']:
-            files2do.extend(cdir + '/' + cfile for cfile in os.listdir(cdir))
+            files2do.extend(os.path.join(cdir, cfile) for cfile in os.listdir(cdir))
     results = [isJsFile(cfile) for cfile in files2do]
     for cfile, res in zip(files2do, results):
         print("%s: %s" % (cfile, OUTPUT_TEXTS[res]))

@@ -71,7 +71,7 @@ def histoFromDico(orderedDico, figPath='histo.png', title='4-grams frequency in 
             Displays the histogram.
     '''
 
-    fig = plt.figure()
+    #fig = plt.figure()
     plt.bar(range(len(orderedDico)), orderedDico.values(), align='center')
     plt.xticks(range(len(orderedDico)), (orderedDico.keys()), rotation=90)
     # n-gram labels are vertical
