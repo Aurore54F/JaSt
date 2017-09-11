@@ -12,19 +12,19 @@ Our implementation is divided into three packages with distinct functionalities:
   - *MachineLearning* for the clustering or classification of JavaScript documents.
 
 #### JavaScript Detection Tool
-Detection of JavaScript samples respecting the grammar defined by ECMA-International <http://www.ecma-international.org/ecma-262/8.0/>, detection of broken JavaScript, and files not written in JavaScript.   
-To use this tool: *python3 <path-of-JsDetection/JsDetection.py>* -help.
+Detection of JavaScript samples respecting the grammar defined by [ECMA-International](http://www.ecma-international.org/ecma-262/8.0/), detection of broken JavaScript, and files not written in JavaScript.   
+To use this tool: *python3 <path-of-JsDetection/JsDetection.py> -help*.
 
 #### Static Analysis of JavaScript Executables
 Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.   
-To use this tool: *python3 <path-of-src/Main.py>* -help.
+To use this tool: *python3 <path-of-src/Main.py> -help*.
 
 #### Classification and Clustering of JavaScript Executables
 - Detection of malicious JavaScript documents.   
-To use this tool: *python3 <path-of-MachineLearning/Classification.py>* -help.
+To use this tool: *python3 <path-of-MachineLearning/Classification.py> -help*.
 
 - Clustering of JavaScript samples into *k* (configurable) families.   
-To use this tool: *python3 <path-of-MachineLearning/Clustering.py>* -help.
+To use this tool: *python3 <path-of-MachineLearning/Clustering.py> -help*.
 
 
 ### Additional implementations
@@ -39,7 +39,7 @@ To use this tool: *python3 <path-of-MachineLearning/Clustering.py>* -help.
 ### How to use it?
   - The system requirements are given in *install.sh*;
   - To launch the main function of a package, see the previous Section *Features*;
-  - The complete documentation can consulted using Python's build-in function *help(<name-of-the-module>)*, or can be generated in HTML format with pydoc: *python3 <path-of-pydoc> -w <name-of-the-module>*.
+  - The complete documentation can consulted using Python's build-in function *help(\<name-of-the-module>)*, or can be generated in HTML format with pydoc: *python3 \<path-of-pydoc> -w \<name-of-the-module>*.
 
 
 ### External tools
