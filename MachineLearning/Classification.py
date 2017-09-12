@@ -156,7 +156,7 @@ def crossValidation(trainingFile, n_splits = 10):
     data = pd.read_csv(trainingFile)
     
     labels = data['Label'] # Vector containing all the labels (i.e. 'benign', 'malicious', or '?') of the samples considered
-    X = data.ix[:, '0':] # # 2D vector containing all the attributes of the samples considered
+    X = data.ix[:, '0':] # 2D vector containing all the attributes of the samples considered
     X = np.asarray(X)
 
 

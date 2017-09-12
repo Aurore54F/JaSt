@@ -56,11 +56,12 @@ def parsingCommands():
 					help='parser\'s name')
     parser.add_argument('--e', metavar='BOOL', type=bool, nargs=1, default=[True],\
                     help='produce a csv/txt file for machine learning schemes')
-    parser.add_argument('--s', metavar='SEPARATOR', type=str, nargs=1, choices=['comma','tab'],\
+    parser.add_argument('--s', metavar='SEPARATOR', type=str, nargs=1, choices=['comma', 'tab'],\
                         default=['comma'], help='separator\'s format for machine learning schemes')
     parser.add_argument('--ep', metavar='FILE-PATH', type=str, nargs=1,\
                     default=[currentPath+'/MatrixFiles/'],\
-                    help='path of the directory to store the csv/txt file for machine learning schemes')
+                    help='path of the directory to store the csv/txt file for machine\
+                    learning schemes')
     parser.add_argument('--h', metavar='BOOL', type=bool, nargs=1, default=[False],\
                     help='produce histograms from the JS corpus')
     parser.add_argument('--hp', metavar='FILE-PATH', type=str, nargs=1,\
@@ -101,7 +102,7 @@ def handleDirs(allNGrams, directory, labels, parser, n):
         - n: Integer
             Stands for the size of the sliding-window which goes through the previous list.
             Default value is 4.
-        
+
         -------
         Returns:
         - List of lists
@@ -124,7 +125,7 @@ def handleDirs(allNGrams, directory, labels, parser, n):
     for jsDir in directory:
         preprocess1Dir = PreprocessingJsData.dicoOfAllNGrams(parser, jsDir, newLabels[i], n)
         # args = parser, JsDirectory, label, n
-        
+
         allNGrams[0] += preprocess1Dir[0] # Contains one dictionary per JS file:
         #key = tuple representing an n-gram and value = probability of occurrences of a
         #given tuple of n-gram.
@@ -152,7 +153,7 @@ def handleFiles(allNGrams, jsFiles, labels, parser, n):
         - n: Integer
             Stands for the size of the sliding-window which goes through the previous list.
             Default value is 4.
-        
+
         -------
         Returns:
         - List of lists
@@ -185,12 +186,12 @@ def handleFiles(allNGrams, jsFiles, labels, parser, n):
     return allNGrams
 
 
-args = parsingCommands()
+argObj = parsingCommands()
 
-def main(jsDirs=args['d'], jsFiles=args['f'], labels=args['l'], parser=args['p'][0],\
-         n=args['n'][0], sep=args['s'][0], updateDico=args['u'][0], histo=args['h'][0],\
-         fileProd=args['e'][0], pcaProd=args['g'][0], pathHisto=args['hp'][0],\
-         pathFile=args['ep'][0], pathPca=args['gp'][0]):
+def main(jsDirs=argObj['d'], jsFiles=argObj['f'], labels=argObj['l'], parser=argObj['p'][0],\
+         n=argObj['n'][0], sep=argObj['s'][0], updateDico=argObj['u'][0], histo=argObj['h'][0],\
+         fileProd=argObj['e'][0], pcaProd=argObj['g'][0], pathHisto=argObj['hp'][0],\
+         pathFile=argObj['ep'][0], pathPca=argObj['gp'][0]):
     '''
         Main function, performs a static analysis (lexical or syntactical)
         of JavaScript files given in input.
@@ -228,7 +229,7 @@ def main(jsDirs=args['d'], jsFiles=args['f'], labels=args['l'], parser=args['p']
             Path of the directory to store the PCA graph.
         Default values are the ones given in the command lines or in the
         ArgumentParser object (function parsingCommands()).
-        
+
         -------
         Returns:
         The results of the static analysis of the files given as input.
