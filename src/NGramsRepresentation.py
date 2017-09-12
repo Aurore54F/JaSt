@@ -1,6 +1,6 @@
 
 '''
-    Simplifing the n-grams list and mapping the resulting n-grams to integers.
+    Simplifying the n-grams list and mapping the resulting n-grams to integers.
 '''
 
 import collections # To order a dictionary
@@ -8,19 +8,23 @@ import importlib # To reload updated modules
 
 from __init__ import *
 
-global currentPath
+currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 
 
 def mappingNGramsInt(nGramsSet, parser):
     '''
         Construction of dictionaries mapping integers and n-grams.
-        They are stored in a configuration file (see DicoNGramsToInt.py and DicoIntToNGrams.py).
+        They are stored in a configuration file (see DicoNGramsToInt<parser>.py
+        and DicoIntToNGrams<parser>.py).
 
         -------
         Parameter:
         - nGramsSet: set
             Set of n-grams to be mapped to unique integers.
+        -parser: string
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
+            Useful to get the actual mapping between n-grams and integers.
 
         -------
         Returns:
@@ -39,11 +43,6 @@ def mappingNGramsInt(nGramsSet, parser):
     dicoNGramsToIntOld = dicoNGramsToIntUsed(parser)
     dicoIntToNGramsOld = dicoIntToNGramsUsed(parser)
     i = len(dicoNGramsToIntOld)
-    #dicoNGramsToIntOld = {}
-    #dicoIntToNGramsOld = {}
-    #i = 0
-
-    print('Size ' + str(i))
 
     for el in s:
         if str(el) not in dicoNGramsToIntOld:
@@ -79,7 +78,7 @@ def nGramToInt(dico, nGram):
         - dico: Dictionary
             Key: N-gram;
             Value: Unique integer.
-            Why is DicoNGramsToInt.dicoNGramsToInt no more hard-coded? Because I needed
+            Dico is no more hard-coded, as we needed to be able
             to reload it, after it being modified by the program.
         - nGram: Tuple
             Represents the n-gram to be converted into an int.
@@ -88,15 +87,14 @@ def nGramToInt(dico, nGram):
         Returns:
         - Integer
             Note that the operation that transforms an n-gram to an int is a bijection.
+        - or None if nGram is not in dico.
     '''
 
-    # return DicoNGramsToInt.dicoNGramsToInt[str(nGram)]
     try:
         i = dico[str(nGram)]
         return i
     except KeyError as e:
         print('The key ' + str(e) + ' is not in the dictionary.')
-        #pass
 
 
 def intToNGram(dico, i):
@@ -108,8 +106,8 @@ def intToNGram(dico, i):
         - dico: Dictionary
             Key: Integer;
             Value: Unique n-gram.
-            Why is DicoNGramsToInt.dicoNGramsToInt no more hard-coded? Because I needed to
-            reload it, after it being modified by the program.
+            Dico is no more hard-coded, as we needed to be able
+            to reload it, after it being modified by the program.
         - i: Integer
             Represents the int to be converted into an n-gram.
 
@@ -118,15 +116,14 @@ def intToNGram(dico, i):
         - Tuple
             Corresponds to an n-gram.
             Note that the operation that transforms an int to an n-gram is a bijection.
+        - or None if i is not in dico.
     '''
 
-    # return DicoIntToNGrams.dicoIntToNGrams[str(i)]
     try:
         ngram = dico[str(i)]
         return ngram
     except KeyError as e:
         print('The key ' + str(e) + ' is not in the dictionary.')
-        #pass
 
 
 def dicoNGramsToIntUsed(parser):
@@ -136,7 +133,7 @@ def dicoNGramsToIntUsed(parser):
         -------
         Parameter:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
 
         -------
         Returns:
@@ -160,7 +157,8 @@ def dicoNGramsToIntUsed(parser):
         importlib.reload(DicoNGramsToIntEsprimaAstSimplified)
         dico = DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt
     else:
-        print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.")
+        print("Error on the parser's name. Indicate 'slimIt', 'esprima', 'esprimaAst',\
+        or 'esprimaAstSimp'.")
         return
     return dico
 
@@ -172,7 +170,7 @@ def dicoIntToNGramsUsed(parser):
         -------
         Parameter:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
 
         -------
         Returns:
@@ -196,7 +194,8 @@ def dicoIntToNGramsUsed(parser):
         importlib.reload(DicoNGramsToIntEsprimaAstSimplified)
         dico = DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams
     else:
-        print("Error on the parser's name. Indicate 'slimIt', 'esprima' or 'esprimaAst'.")
+        print("Error on the parser's name. Indicate 'slimIt', 'esprima', 'esprimaAst',\
+        or 'esprimaAstSimp'.")
         return
     return dico
 
@@ -214,21 +213,18 @@ def dicoNGramsIntNames(parser):
         Returns:
         - List
             Contains as:
-            * name1: either DicoNGramsToIntSlimit.dicoNGramsToInt,
+            * name1: String
+             Name of the dictionary storing the mapping of an n-gram to a unique integer.
+             Either DicoNGramsToIntSlimit.dicoNGramsToInt,
              DicoNGramsToIntEsprima.dicoNGramsToInt,
              DicoNGramsToIntEsprimaAst.dicoNGramsToInt,
              or DicoNGramsToIntEsprimaAstSimplified.dicoNGramsToInt.
-            *name2: either DicoIntToNGramsSlimit.dicoIntToNGrams,
+            * name2: String
+             Name of the dictionary storing the mapping of an integer to a unique n-gram.
+             Either DicoIntToNGramsSlimit.dicoIntToNGrams,
              DicoIntToNGramsEsprima.dicoIntToNGrams,
              DicoIntToNGramsEsprimaAst.dicoIntToNGrams,
              or DicoIntToNGramsEsprimaAstSimplified.dicoIntToNGrams.
-    '''
-
-    '''
-	    - name1: string
-	        Name of the dictionary storing the mapping of an n-gram to a unique integer.
-	    - name2: string
-	        Name of the dictionary storing the mapping of an integer to a unique n-gram.
     '''
 
     if parser.lower() == 'slimit':

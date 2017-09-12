@@ -1,10 +1,11 @@
 
 '''
-    Preprocesses JS data.
+    Preprocesses JS data, by analysing each input file and storing (for each file)
+    the frequency of all the n-grams considered.
 '''
 
 
-import os # for OS dependent functionality
+import os # for OS dependant functionality
 import collections # to order a dictionary
 import numpy as np
 
@@ -18,14 +19,14 @@ import NGramsRepresentation
 def jsToProbaOfNGrams(parser, jsFile, n=4):
     '''
         Production of a dictionary containing the number of occurrences (probability) of
-        each n-gram (default: 4-gram) from a given JS file.
+        each n-gram (default: 4-gram) for a given JS file.
 
         -------
         Parameters:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - jsFile: String
-            Path of the JavaScript file to be analysed. Default: TODO only for Aurore.
+            Path of the JavaScript file to be analysed.
         - n: Integer
             Stands for the size of the sliding-window which goes through the previous list.
             Default value is 4.
@@ -40,22 +41,22 @@ def jsToProbaOfNGrams(parser, jsFile, n=4):
     '''
 
     dico = TokensProduction.dicoUsed(parser)
-    # Dictionary used, according to the parser selected
+    # (Lexical/Syntactical) units dictionary used, according to the parser selected
+
     tokensList = TokensProduction.tokensUsed(parser, jsFile)
-    # List of tokens present in the JS file
+    # List of units present in the JS file considered
 
     numbersList = TokensProduction.tokensToNumbers(dico, tokensList)
-    # Tokens converted in numbers
-    #if numbersList == []:
-        #print('Empty')
+    # Units converted into numbers
+
     matrixNGrams = NGramsProduction.nGramsList(numbersList, n)
     # JS file represented through a list of n-grams
+
     dicoOfOccurrences = NGramsAnalysis.countSetsOfNGrams(matrixNGrams)
     # Contains the probability of occurrences of the previous n-grams
 
     if dicoOfOccurrences is not None:
         orderedDico = collections.OrderedDict(sorted(dicoOfOccurrences.items()))
-        #Histogram.histoFromDico(orderedDico, './Histo.png', title = jsFile)
 
         return orderedDico
 
@@ -69,10 +70,9 @@ def dicoOfAllNGrams(parser, jsDir, label=None, n=4):
         -------
         Parameter:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - jsDir: String
             Path of the directory containing the JS files to be analysed.
-            Default: TODO only for Aurore.
         - label: String
             Indicates the label's name of the current data (if any), useful for supervised
             classification. Default value is None.
@@ -95,12 +95,9 @@ def dicoOfAllNGrams(parser, jsDir, label=None, n=4):
     '''
 
     allProba = []
-    #l = glob.glob(jsDir + '/*.js') + glob.glob(jsDir + '/*.bin') # Extension in .bin or .js
-    # TODO recursive: directories in a directory
     filesStudied = []
     lab = []
 
-    #for javaScriptFile in sorted(l):
     for javaScriptFile in sorted(os.listdir(jsDir)):
         dicoForHisto = jsToProbaOfNGrams(parser, jsDir + '/' + javaScriptFile, n)
         # Histogram containing for each n-gram (key) the probability of occurrences (value).
@@ -164,9 +161,6 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint):
         - dicoNgramIint: Dictionary
             Key: N-gram;
             Value: Unique integer.
-        - label: String
-            Indicates the label's name of the current data (if any), useful for supervised
-            classification. Default value is None.
 
         -------
         Returns:
@@ -176,12 +170,10 @@ def jsToProbaOfNGramsComplete(dicoJS, simplifiedListNGrams, dicoNgramIint):
     '''
 
     i = 0
-    #if label != None and label != []:
-        #i = 1 # To have a vector with one extra space for the label
     vectNGramsProba = np.zeros(len(dicoNgramIint) + i)
     for key in dicoJS: # Key = n-gram
         if key in simplifiedListNGrams:
-        	# Simplification so as not to consider n-grams that never appear
+            # Simplification so as not to consider n-grams that never appear
             if NGramsRepresentation.nGramToInt(dicoNgramIint, key) is not None:
                 vectNGramsProba[NGramsRepresentation.nGramToInt(dicoNgramIint, key)] = dicoJS[key]
                 # We use the mapping int/n-gram to store the proba of an

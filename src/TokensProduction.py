@@ -29,7 +29,10 @@ def astUsedEsprima(inputFile):
         - or None if the file either is no JS or malformed.
     '''
 
-    return JsDetection.isJsFile(inputFile, syntacticalUnits=True)
+    units = JsDetection.isJsFile(inputFile, syntacticalUnits=True)
+    if type(units) is list: # otherwise an error code could be returned
+        #instead of a list of syntactical units
+        return units
 
 
 def tokensUsedEsprima(inputFile):
@@ -202,7 +205,6 @@ def tokensToNumbers(tokensDico, tokensList):
 
     if tokensList is not None and tokensList != []:
         numbers = []
-
         for token in tokensList:
             numbers = numbers + [tokensDico[token]]
 

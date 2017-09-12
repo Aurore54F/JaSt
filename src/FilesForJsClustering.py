@@ -1,26 +1,25 @@
 
 '''
-    Dealing with files.
+    Files production after analysis: histograms, PCA and n-grams frequency.
 '''
 
 import os # To create repositories
 
 import PreprocessingJsData
 import NGramsAnalysis
-import NGramsRepresentation
 
 import __init__
 
+currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
-
-def classifierFormat(classifier='Weka'):
+def classifierFormat(separatorData='comma'):
     '''
-        Format of the soon to be exported file, according to the classifier it will be given to.
+        Formatting the data stored in the soon to be exported file.
 
         -------
         Parameter:
-        - classifier: String
-            Either 'Weka' or 'xcluster'. Default value is 'Weka'.
+        - separatorData: String
+            Either 'comma' or 'tab'. Default value is 'comma'.
 
         -------
         Returns:
@@ -29,14 +28,15 @@ def classifierFormat(classifier='Weka'):
             Element 2 = extension: file extension (either '.csv' or '.txt').
     '''
 
-    if classifier.lower() == 'weka':
+    if separatorData.lower() == 'comma':
         formatt = ','
         extension = '.csv'
-    elif classifier.lower() == 'xcluster':
+    elif separatorData.lower() == 'tab':
         formatt = '\t'
         extension = '.txt'
     else:
-        print("Error on the classifier name. Please indicate either 'Weka' or 'Xcluster'.")
+        print("Error on the separators' format name. Please indicate either\
+        'comma' or 'tab'.")
         return
     l = [formatt] + [extension]
     return l
@@ -44,7 +44,7 @@ def classifierFormat(classifier='Weka'):
 
 
 def saveProbaOfNGramsHisto(parser, allProba, filesStudied,
-                           histoDir='/home/aurore/Documents/Code/Histograms/'):
+                           histoDir=currentPath+'/Histograms/'):
     '''
         From a list containing dictionaries, each containing n-grams (abscissa)
         with their associated probability (ordinate), saves the corresponding histograms.
@@ -52,15 +52,15 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied,
         -------
         Parameters:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - allProba: List of Dictionaries.
             Key: tuple representing an n-gram
             Value: probability of occurrences of a given tuple of n-gram.
             One dictionary corresponds to the analysis of one JS file.
         - filesStudied: List of Strings
-            Contains the name of the well-formed JS files.
+            Contains the name of the well-formed JS files considered.
         - histoDir: String
-            Path of the directory to store the histograms. Default: TODO only for Aurore.
+            Path of the directory to store the histograms.
 
         -------
         Returns:
@@ -75,28 +75,28 @@ def saveProbaOfNGramsHisto(parser, allProba, filesStudied,
 
     i = 1
     histoFilePart1 = 'Histo' + parser
-    #histoFilePart3 = '.png'
 
     for dico in allProba: # Data for the histogram (i.e. n-gram with occurrence)
         figPath = histoDir + histoFilePart1 + str(i)
         NGramsAnalysis.histoFromDico(dico, figPath, title=filesStudied[i-1])
         # Saving an histogram in png format.
         i += 1
+    print('The histogram(s) have been successfully stored in ' + histoDir)
 
-def savePcaPlotting(parser, file, plotDir='/home/aurore/Documents/Code/PcaPlot/', label=None):
+def savePcaPlotting(parser, fileAnalysis, plotDir=currentPath+'/PcaPlot/', label=None):
     '''
-        From a list containing dictionaries, each containing n-grams (abscissa) with their
-        associated probability (ordinate), saves the corresponding histograms.
+        Production of a graph representing each file features (i.e. list of n-grams with
+        their associated probability) in 2D (using a PCA 2-dimensional transformation).
 
         -------
         Parameters:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
-        - file: File
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
+        - fileAnalysis: File
             Contains for each JS file studied (row) the probability of occurrences of all
             the n-gram (column) encountered in the JS corpus considered.
         - plotDir: String
-            Path of the directory to store the graph. Default: TODO only for Aurore.
+            Path of the directory to store the PCA representation.
         - label: String
             Indicates the label's name of the current data (if any), useful for supervised
             classification. Default value is None.
@@ -110,19 +110,20 @@ def savePcaPlotting(parser, file, plotDir='/home/aurore/Documents/Code/PcaPlot/'
     # Directory to store the histograms files
     if not os.path.exists(plotDir):
         os.makedirs(plotDir)
-    NGramsAnalysis.pcaPlotting(file, plotDir + parser + 'PcaPlotting', label=label)
+    NGramsAnalysis.pcaPlotting(fileAnalysis, plotDir + parser + 'PcaPlotting', label=label)
+    print('The PCA\'s results have been successfully stored in ' + plotDir)
 
 
 def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgramIint, formatt,
                                 extension,
-                                fileDir='/home/aurore/Documents/Code/MatrixFiles/', label=None):
+                                fileDir=currentPath+'/MatrixFiles/', label=None):
     '''
-        Writes the header (i.e. columns labeling) of the file for Weka/xcluster.
+        Writes the header (i.e. columns labeling) of the file containing the analysis.
 
         -------
         Parameters:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - allProba: List of Dictionaries.
             Key: tuple representing an n-gram
             Value: probability of occurrences of a given tuple of n-gram.
@@ -137,8 +138,7 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
         - extension: String
             File extension (either '.csv' or '.txt').
         - fileDir: String
-            Path of the directory to store the csv/txt files for Weka/xcluster.
-            Default: TODO only for Aurore.
+            Path of the directory to store the csv/txt files containing the analysis.
         - label: String
             Indicates the label's name of the current data (if any), useful for supervised
             classification. Default value is None.
@@ -146,35 +146,34 @@ def saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNgra
         -------
         Returns:
         - File
-            Contains the header for Weka/xcluster (i.e. labels/numbers the columns).
+            Contains the header for the analysis file (i.e. labels/numbers the columns).
     '''
 
     # Directory to store the matrix files
     if not os.path.exists(fileDir):
+        print('Here')
         os.makedirs(fileDir)
 
-    expFile = open(fileDir + parser + extension, 'w')
-    expFile.write('Outlook')
-    if label is not None and label != []:
-        expFile.write(formatt + 'Label')
+    with open(fileDir + parser + extension, 'w') as expFile:
+        expFile.write('Outlook')
+        if label is not None and label != []:
+            expFile.write(formatt + 'Label')
 
-    if allProba is not None and allProba != []:
-        vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0],\
-                           simplifiedListNGrams, dicoNgramIint)
-        # allProba[0] being a dictionary representing
-        #the analysis of one JS file (i.e. n-gram with associated probability).
-        # vectNGramsProba contains at position i the probability of encountering the n-gram mapped
-        #to the integer i (see the complete mapping in DicoNGramsToInt.py).
-        for j, k in enumerate(vectNGramsProba):
-            expFile.write(formatt + str(j)) # Columns labeling
-        expFile.write('\n')
-
-        #expFile.close()
+        if allProba is not None and allProba != []:
+            vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(allProba[0],\
+                               simplifiedListNGrams, dicoNgramIint)
+            # allProba[0] being a dictionary representing
+            #the analysis of one JS file (i.e. n-gram with associated probability).
+            # vectNGramsProba contains at position i the probability of encountering the n-gram
+            #mapped to the integer i (see the complete mapping in DicoNGramsToInt.py).
+            for j, k in enumerate(vectNGramsProba):
+                expFile.write(formatt + str(j)) # Columns labeling
+            expFile.write('\n')
 
 
 def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgramIint,
                                  filesStudied, formatt, extension,
-                                 fileDir='/home/aurore/Documents/Code/MatrixFiles/', label=None):
+                                 fileDir=currentPath+'/MatrixFiles/', label=None):
     '''
         Writes in a file, for each JS file studied (row), the probability of occurrences
         of all the n-gram (column) encountered in the JS corpus considered.
@@ -182,7 +181,7 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
         -------
         Parameters:
         - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - allProba: List of Dictionaries.
             Key: tuple representing an n-gram
             Value: probability of occurrences of a given tuple of n-gram.
@@ -200,7 +199,6 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
             File extension (either '.csv' or '.txt').
         - fileDir: String
             Path of the directory to store the csv/txt files for Weka/xcluster.
-            Default: TODO only for Aurore.
         - label: String
             Indicates the label's name of the current data (if any), useful for supervised
             classification. Default value is None.
@@ -218,110 +216,24 @@ def saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNgr
     if not os.path.exists(fileDir):
         print('File does not exist.')
 
-    expFile = open(fileDir + parser + extension, 'a')
-    print(label)
-    print('Label save ' + str(len(label)))
-    #for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-    for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
-        vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS,\
-                           simplifiedListNGrams, dicoNgramIint)
-        # Contains at position i the probability of encountering the n-gram mapped to the integer i
-        #(see the complete mapping in DicoNGramsToInt.py).
-        expFile.write(filesStudied[i-1] + formatt) # Name of the current file
-        if label is not None and label != []:
-            #print(label[i - 1])
-            expFile.write(label[i - 1] + formatt) # i - 1 as initially i value is 1
-        for el in range(len(vectNGramsProba)-1):
-            expFile.write(str(vectNGramsProba[el]) + formatt)
-        expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1]))
-        # Last one could not be in the previous
-        #loop, otherwise the last character would have been a separator.
+    with open(fileDir + parser + extension, 'a') as expFile:
+        for dicoJS in allProba: # Dico for one JS file, key = n-gram and value = proba
+            vectNGramsProba = PreprocessingJsData.jsToProbaOfNGramsComplete(dicoJS,\
+                               simplifiedListNGrams, dicoNgramIint)
+            # Contains at position i the probability of encountering the n-gram mapped to the
+            #integer i (see the complete mapping in DicoNGramsToInt.py).
+            expFile.write(filesStudied[i-1] + formatt) # Name of the current file
+            if label is not None and label != []:
+                expFile.write(label[i - 1] + formatt) # i - 1 as initially i value is 1
+            for el in range(len(vectNGramsProba)-1):
+                expFile.write(str(vectNGramsProba[el]) + formatt)
+            expFile.write(str(vectNGramsProba[len(vectNGramsProba)-1]))
+            # Last one could not be in the previous
+            #loop, otherwise the last character would have been a separator.
+            expFile.write('\n')
+            i += 1
 
-        print('End line' + str(i))
-        expFile.write('\n')
-
-        i += 1
-    print('Len ' + str(i))
-
-    expFile.close()
-    print('end')
+    print('The results of the analysis (n-grams frequency) have been successfully stored in '\
+          + fileDir)
 
     return fileDir + parser + extension
-
-
-
-# Depreciated. See the main in Main.py (to launch from the command line).
-def main(parser, jsDir='/home/aurore/Documents/Code/JS-samples1/JS-Samples', exportedFile=True,
-         classifier='Weka', fileDir='/home/aurore/Documents/Code/MatrixFiles/', histo=True,
-         histoDir='/home/aurore/Documents/Code/Histograms/', updateDico=False, n=4):
-    '''
-        Main program, entry point.
-
-        -------
-        Parameters:
-        - parser: String
-            Either 'slimIt', 'esprima', or 'esprimaAst'.
-        - jsDir: String
-            Path of the directory containing the JS files to be analysed.
-            Default: TODO only for Aurore.
-            TODO: glob.glob(allJsDir).
-        - exportedFile: Boolean
-            True to call function 'saveFile' and therefore produce a csv/txt file for Weka/xcluster.
-            Default value is True.
-        - classifier: String
-            Either 'Weka' or 'xcluster'. Default value is 'Weka'.
-        - fileDir: String
-            Path of the directory to store the csv/txt files for Weka/xcluster.
-            Default: TODO only for Aurore.
-        - histo: Boolean
-            True to call function 'saveHisto' and therefore produce histograms from the JS corpus.
-            Default value is True.
-        - histoDir: String
-            Path of the directory to store the histograms. Default: TODO only for Aurore.
-        - updateDico: Boolean
-            Indicates whether the dictionary mapping n-grams and integers has to be updated.
-            Default value is False.
-        - n: Integer
-            Stands for the size of the sliding-window which goes through the previous list.
-            Default value is 4.
-
-        -------
-        Returns:
-        - Histogram files (if enabled)
-            The number of .png files returned (i.e. of histograms) corresponds to the number of
-            valid JS files in the corpus.
-        - File
-            Contains for each JS file studied the probability of occurrences of all the n-gram
-            encountered in the JS corpus considered.
-    '''
-
-    allNGrams = PreprocessingJsData.dicoOfAllNGrams(parser, jsDir, n)
-    dicoNGramsToInt = NGramsRepresentation.dicoNGramsToIntUsed(parser)
-
-    if allNGrams != [[]]:
-        allProba = allNGrams[0] # Contains one dictionary per JS file: key = tuple representing
-        #an n-gram and value = probability of occurrences of a given tuple of n-gram.
-        filesStudied = allNGrams[1] # Contains the name of the well-formed JS files.
-
-        formatt = classifierFormat(classifier)[0] # Separator between the value: either ',' or '\t'.
-        extension = classifierFormat(classifier)[1] # File extension: either '.csv' or '.txt'.
-
-        simplifiedListNGrams = PreprocessingJsData.simplifiedDicoOfAllNGrams(allProba)
-        # Set containing the name of the n-grams present in our JS corpus.
-
-        if updateDico:
-            NGramsRepresentation.mappingNGramsInt(simplifiedListNGrams)
-            # Update the dictionaries DicoNGramsToInt and DicoIntToNgrams to map int/ngrams.
-
-        #importlib.reload(DicoNGramsToInt)
-
-        if histo:
-            saveProbaOfNGramsHisto(parser, allProba, filesStudied, histoDir=histoDir)
-            # Production of the histograms.
-
-        if exportedFile:
-            saveProbaOfNGramsFileHeader(parser, allProba, simplifiedListNGrams, dicoNGramsToInt,
-                                        formatt, extension, fileDir)
-            saveProbaOfNGramsFileContent(parser, allProba, simplifiedListNGrams, dicoNGramsToInt,
-                                         filesStudied, formatt, extension, fileDir, label=None)
-    

@@ -4,8 +4,11 @@
     to extract subsequence of length n.
 '''
 
+import os
 from itertools import product # for the cartesian product
 import __init__
+
+currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 def nGramsList(numbersList, n=4):
     '''
@@ -52,7 +55,7 @@ def nGramsList(numbersList, n=4):
             return matrixAllNGrams
 
 
-def nGramsCsv(numbersList, n=4, filePath='nGram.csv'):
+def nGramsCsv(numbersList, n=4, filePath=currentPath+'/nGram.csv'):
     '''
         Given a list of numbers, produce every possible n-gram (n configurable) and store
         them in a CSV file.
@@ -66,7 +69,8 @@ def nGramsCsv(numbersList, n=4, filePath='nGram.csv'):
             Stands for the size of the sliding-window which goes through the previous list.
             Default value is 4.
         - filePath: String
-            To choose the location of the CSV file which will be produced. Default: "nGram.csv".
+            To choose the location of the CSV file which will be produced. Default: "nGram.csv"
+            in the MalwareClustering folder.
 
         -------
         Returns:
@@ -84,7 +88,7 @@ def nGramsCsv(numbersList, n=4, filePath='nGram.csv'):
                     csvFile.write(str(numbersList[j]))
                     for i in range(n - 1):
                         csvFile.write(',' + str(numbersList[j + i + 1]))
-                        csvFile.write('\n')
+                    csvFile.write('\n')
 
 
 def allPossibleNGrams(dico, n=4):
