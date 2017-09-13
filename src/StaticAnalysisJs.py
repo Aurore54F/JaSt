@@ -39,7 +39,7 @@ def parsingCommands():
           * pathFile=args['ep'][0],
           * pathPca=args['gp'][0]
           A more thorough description can be obtained:
-            >$ python3 <path-of-src/StaticAnalysis.py> -help
+            >$ python3 <path-of-src/MainStaticAnalysis.py> -help
     '''
 
     parser = argparse.ArgumentParser(description='Given a list of repositories or files paths,\
@@ -209,7 +209,6 @@ def mainS(jsDirs='', jsFiles='', labels='', parser='esprimaAstSimp',\
             Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
         - n: Integer
             Stands for the size of the sliding-window which goes through the previous list.
-            Default value is 4.
         - sep: string
             Separator's format for machine learning schemes.
         - updateDico: boolean

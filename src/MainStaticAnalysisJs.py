@@ -1,4 +1,8 @@
 
+'''
+    Main module to launch the analysis of JS files.
+'''
+
 import StaticAnalysisJs
 
 if __name__ == "__main__": # Executed only if run as a script

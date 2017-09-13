@@ -203,23 +203,16 @@ def parsingCommandsClustering():
         - ArgumentParser such as:
           * jsDirs=args['d'],
           * jsFiles=args['f'],
-          * labels=args['l'],
           * parser=args['p'][0],
           * n=args['n'][0],
-          * separator=args['s'][0],
-          * updateDico=args['u'][0],
-          * histo=args['h'][0],
-          * fileProd=args['e'][0],
-          * pcaProd=args['g'][0],
-          * pathHisto=args['hp'][0],
-          * pathFile=args['ep'][0],
-          * pathPca=args['gp'][0]
+          * nbCluster=args['c'][0],
+          * displayFig=args['g'][0],
           A more thorough description can be obtained:
-            >$ python3 <path-of-src/StaticAnalysis.py> -help
+            >$ python3 <path-of-MachineLearning/Clustering.py> -help
     '''
 
-    parser = argparse.ArgumentParser(description='GGGiven a list of repositories or files paths,\
-    analyse whether the JS files are either benign or malicious.')
+    parser = argparse.ArgumentParser(description='Given a list of repositories or files paths,\
+    cluster the JS files into several families.')
 
     parser.add_argument('--f', metavar='FILE', type=str, nargs='+', help='files to be analysed')
     parser.add_argument('--d', metavar='DIR', type=str, nargs='+', help='directories containing\
@@ -243,20 +236,49 @@ argObjC = parsingCommandsClustering()
 
 
 def mainC(jsDirs=argObjC['d'], jsFiles=argObjC['f'], parser=argObjC['p'][0], n=argObjC['n'][0],
-         nbCluster=argObjC['c'][0], displayFig=argObjC['g'][0]):
-    
+         nbCluster=argObjC['c'], displayFig=argObjC['g'][0]):
+    '''
+        Main function, performs a static analysis (lexical or syntactical)
+        of JavaScript files given in input.
+
+        -------
+        Parameters:
+        - jsDirs: list of strings
+            Directories containing the JS files to be analysed.
+        - jsFiles: list of strings
+            Files to be analysed.
+        - parser: String
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
+        - n: Integer
+            Stands for the size of the sliding-window which goes through the previous list.
+        - nbCluster: int
+            Number of clusters whished.
+        - displayFig: boolean
+            Production of a graphical 2D representation of the files from the JS corpus.
+        Default values are the ones given in the command lines or in the
+        ArgumentParser object (function parsingCommands()).
+
+        -------
+        Returns:
+        The results of the static analysis of the files given as input.
+        These are stored in the MalwareClustering directory.
+    '''
+
     if jsDirs is None and jsFiles is None:
         print('Please, indicate a directory or a JS file to be studied')
+
+    elif nbCluster is None:
+        print('Please, indicate a number of clusters')
 
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles,\
                                         parser=parser, n=n)
         print(csvFile)
-        
-        clustering(csvFile, nbCluster=nbCluster, displayFig=displayFig)
+
+        clustering(csvFile, nbCluster=nbCluster[0], displayFig=displayFig)
 
 
 if __name__ == "__main__": # Executed only if run as a script
     mainC()
-    
+
  
