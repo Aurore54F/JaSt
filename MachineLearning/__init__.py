@@ -12,7 +12,7 @@ sys.path.insert(0, currentPath+'/JsDetection')
 sys.path.insert(0, currentPath+'/src/Dico_MapNGrams-Int')
 sys.path.insert(0, currentPath+'/src/DicoProduction')
 
-from StaticAnalysisJs import mainS
+import StaticAnalysisJs
 import ConfFileProduction
 import TokensProduction
 import NGramsProduction

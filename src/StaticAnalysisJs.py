@@ -186,12 +186,12 @@ def handleFiles(allNGrams, jsFiles, labels, parser, n):
     return allNGrams
 
 
-argObj = parsingCommands()
 
-def mainS(jsDirs=argObj['d'], jsFiles=argObj['f'], labels=argObj['l'], parser=argObj['p'][0],\
-         n=argObj['n'][0], sep=argObj['s'][0], updateDico=argObj['u'][0], histo=argObj['h'][0],\
-         fileProd=argObj['e'][0], pcaProd=argObj['g'][0], pathHisto=argObj['hp'][0],\
-         pathFile=argObj['ep'][0], pathPca=argObj['gp'][0]):
+
+def mainS(jsDirs='', jsFiles='', labels='', parser='esprimaAstSimp',\
+         n=[4], sep='comma', updateDico=False, histo=False,\
+         fileProd=True, pcaProd=False, pathHisto=currentPath+'/Histograms/',\
+         pathFile=currentPath+'/MatrixFiles/', pathPca=currentPath+'/PcaPlot/'):
     '''
         Main function, performs a static analysis (lexical or syntactical)
         of JavaScript files given in input.
@@ -284,7 +284,3 @@ def mainS(jsDirs=argObj['d'], jsFiles=argObj['f'], labels=argObj['l'], parser=ar
 
             if fileProd:
                 return file;
-
-
-if __name__ == "__main__": # Executed only if run as a script
-    mainS()

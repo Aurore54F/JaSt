@@ -32,6 +32,7 @@ import NGramsAnalysis
 import NGramsRepresentation
 import PreprocessingJsData
 import FilesForJsClustering
+import StaticAnalysisJs
 
 import DicoIntToNGramsSlimit
 import DicoNGramsToIntSlimit
@@ -223,9 +224,6 @@ def parsingCommandsClustering():
     parser.add_argument('--f', metavar='FILE', type=str, nargs='+', help='files to be analysed')
     parser.add_argument('--d', metavar='DIR', type=str, nargs='+', help='directories containing\
     the JS files to be analysed')
-    #parser.add_argument('--c', metavar='FILE', type=str, nargs=1, help='CSV files respecting\
-    #the structure defined in our module src/ and containing a static analysis of JavaScript\
-    #executables')
     parser.add_argument('--p', metavar='PARSER', type=str, nargs=1, choices=['esprimaAst',\
                         'esprimaAstSimp', 'esprima', 'slimIt'], default=['esprimaAstSimp'],\
                     help='parser\'s name')
@@ -233,6 +231,8 @@ def parsingCommandsClustering():
                     help='stands for the size of the sliding-window which goes through\
                     the previous list')
     parser.add_argument('--c', metavar='INTEGER', type=int, nargs=1, help='number of clusters')
+    parser.add_argument('--g', metavar='BOOL', type=bool, nargs=1, default=[False],\
+                    help='produce a graphical 2D representation of the files from the JS corpus')
 
     args = vars(parser.parse_args())
 
@@ -240,27 +240,23 @@ def parsingCommandsClustering():
 
 
 argObjC = parsingCommandsClustering()
-    
+
+
 def mainC(jsDirs=argObjC['d'], jsFiles=argObjC['f'], parser=argObjC['p'][0], n=argObjC['n'][0],
-         nbCluster=argObjC['c']):
+         nbCluster=argObjC['c'][0], displayFig=argObjC['g'][0]):
     
     if jsDirs is None and jsFiles is None:
         print('Please, indicate a directory or a JS file to be studied')
 
     else:
-        print('test')
-        #csvFile = StaticAnalysisJs.main(jsDirs=jsDirs, jsFiles=jsFiles,\
-                                        #parser=parser, n=n)
+        csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles,\
+                                        parser=parser, n=n)
+        print(csvFile)
         
-        #clustering(csvFile, nbCluster=nbCluster, figDir=currentPath+'/Clustering/',\
-               #figName='ClusteringPca.png', displayFig=False, annotate=False,\
-               #title='Projection of the 4-grams frequency of JavaScript files')
+        clustering(csvFile, nbCluster=nbCluster, displayFig=displayFig)
 
 
 if __name__ == "__main__": # Executed only if run as a script
-    print('*'*10)
-
-
     mainC()
     
  
