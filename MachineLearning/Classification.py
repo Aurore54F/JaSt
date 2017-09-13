@@ -3,25 +3,27 @@
     Classifying files. Can deal with training, validation and test sets.
 '''
 
+import os
+import argparse # To parse command line arguments
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.naive_bayes import BernoulliNB
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from sklearn.metrics import roc_curve, auc
+import pickle
 
-from scipy import interp  
-#from sklearn.cross_validation import StratifiedKFold
-from sklearn import svm, datasets
-
+from scipy import interp
 from sklearn.model_selection import StratifiedKFold
 
+currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+from __init__ import *
 
-def classify(trainingFile, printScore=False, printRes=False):
+
+def classify(trainingFile, modelDir=currentPath+'/Classification/',\
+             modelName='/model', printScore=False, printRes=False):
     '''
         Training of a Naive Bayes Multinomial classifier.
       
@@ -29,6 +31,14 @@ def classify(trainingFile, printScore=False, printRes=False):
         Parameter:
         - trainingFile: String
             Path of the CSV file to be used to build a model for.
+        - modelDir
+        
+        - modelName
+        
+        - printScore
+        
+        - printRes
+        
 
         -------
         Returns:
@@ -36,6 +46,10 @@ def classify(trainingFile, printScore=False, printRes=False):
             Beware: the model was implemented as a global variable in sklearn TODO.
         - Print the detection rate and the TP, FP, FN and TN rates of trainingFile tested with the model built from this file, in stdout.
     '''
+
+    # Directory to store the classification related files
+    if not os.path.exists(modelDir):
+        os.makedirs(modelDir)
 
     data = pd.read_csv(trainingFile)
 
@@ -63,10 +77,13 @@ def classify(trainingFile, printScore=False, printRes=False):
             print(str(names[i]) + ': ' + str(labelsPredicted[i]) + ' (' + str(labels[i]) + ')')
         print('> Name: labelPredicted (trueLabel)')
     
+    pickle.dump(trained, open(modelDir + modelName, 'wb'))
+    
     return trained;
 
 
-def validate(validationFile, model):
+def validate(validationFile, model, modelDir=currentPath+'/Classification/',\
+             modelName='/model'):
     '''
         Extension of a Naive Bayes Multinomial classification model with a new CSV file of the same format.
 
@@ -84,6 +101,9 @@ def validate(validationFile, model):
             Beware: the model was implemented as a global variable in sklearn TODO.
     '''
 
+    if type(model) is str:
+        model = pickle.load(open(model, 'rb'))
+
     validationSet = pd.read_csv(validationFile)
 
     labelsValidation = validationSet['Label'] # Split off classifications
@@ -92,6 +112,7 @@ def validate(validationFile, model):
 
     validated = model.partial_fit(XValidation, labelsValidation, ['malicious', 'benign']) # Incremental fit on a batch of samples
 
+    pickle.dump(validated, open(modelDir + modelName, 'wb'))
     return validated
 
 
@@ -114,6 +135,9 @@ def testModel(testFile, model, printRes=True):
         - Print the detection rate and the TP, FP, FN and TN rates of testFile tested with model, in stdout.
     '''
 
+    if type(model) is str:
+        model = pickle.load(open(model, 'rb'))
+
     testSet = pd.read_csv(testFile)
 
     names = testSet['Outlook'] # Vector containing all the names of the samples considered
@@ -135,7 +159,6 @@ def testModel(testFile, model, printRes=True):
             print(str(names[i]) + ': ' + str(labelsPredictedTest[i]) + ' (' + str(labelsTest[i]) + ')')
         print('> Name: labelPredicted (trueLabel)')
 
-
     '''
     fpr, tpr, thresholds = roc_curve(labelsTest, labelsPredictedProbaTest[:,0],pos_label = 'benign')
     print('Threshold: ' + str(thresholds))
@@ -156,6 +179,81 @@ def testModel(testFile, model, printRes=True):
     plt.grid()
     plt.show()
     '''
+
+def parsingCommandsClustering():
+    '''
+        Creation of an ArgumentParser object, holding all the information necessary to parse
+        the command line into Python data types.
+
+        -------
+        Returns:
+        - ArgumentParser such as:
+          * jsDirs=args['d'],
+          * jsFiles=args['f'],
+          * parser=args['p'][0],
+          * n=args['n'][0],
+          * nbCluster=args['c'][0],
+          * displayFig=args['g'][0],
+          A more thorough description can be obtained:
+            >$ python3 <path-of-MachineLearning/Clustering.py> -help
+    '''
+
+    parser = argparse.ArgumentParser(description='Given a list of repositories or files paths,\
+    cluster the JS files into several families.')
+
+    parser.add_argument('--f', metavar='FILE', type=str, nargs='+', help='files to be analysed')
+    parser.add_argument('--d', metavar='DIR', type=str, nargs='+', help='directories containing\
+    the JS files to be analysed')
+    parser.add_argument('--m', metavar='MODEL', type=str, nargs='+', help='model used to classify the new files')
+
+
+    args = vars(parser.parse_args())
+
+    return args
+
+
+argObjC = parsingCommandsClustering()
+
+
+def mainClassification(jsDirs=argObjC['d'], jsFiles=argObjC['f'], model=argObjC['m']):
+    '''
+        Main function, performs a static analysis (lexical or syntactical)
+        of JavaScript files given in input.
+
+        -------
+        Parameters:
+        - jsDirs: list of strings
+            Directories containing the JS files to be analysed.
+        - jsFiles: list of strings
+            Files to be analysed.
+        - parser: String
+            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
+        - n: Integer
+            Stands for the size of the sliding-window which goes through the previous list.
+        - nbCluster: int
+            Number of clusters whished.
+        - displayFig: boolean
+            Production of a graphical 2D representation of the files from the JS corpus.
+        Default values are the ones given in the command lines or in the
+        ArgumentParser object (function parsingCommands()).
+
+        -------
+        Returns:
+        The results of the static analysis of the files given as input.
+        These are stored in the MalwareClustering directory.
+    '''
+
+    if jsDirs is None and jsFiles is None:
+        print('Please, indicate a directory or a JS file to be studied')
+
+    else:
+        csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles)
+        testModel(csvFile, model[0])
+
+
+if __name__ == "__main__": # Executed only if run as a script
+    mainClassification()
+
 
 
 def crossValidation(trainingFile, n_splits = 10):

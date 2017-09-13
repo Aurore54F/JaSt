@@ -189,7 +189,7 @@ def handleFiles(allNGrams, jsFiles, labels, parser, n):
 
 
 def mainS(jsDirs='', jsFiles='', labels='', parser='esprimaAstSimp',\
-         n=[4], sep='comma', updateDico=False, histo=False,\
+         n=4, sep='comma', updateDico=False, histo=False,\
          fileProd=True, pcaProd=False, pathHisto=currentPath+'/Histograms/',\
          pathFile=currentPath+'/MatrixFiles/', pathPca=currentPath+'/PcaPlot/'):
     '''
