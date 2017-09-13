@@ -5,6 +5,7 @@
 
 import os
 #import pickle # to save figure to disk
+from textwrap import wrap
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA as sklearnPCA
@@ -74,8 +75,8 @@ def histoFromDico(orderedDico, figPath=currentPath+'/histo.png', title='4-grams 
     plt.bar(range(len(orderedDico)), orderedDico.values(), align='center')
     plt.xticks(range(len(orderedDico)), (orderedDico.keys()), rotation=90)
     # n-gram labels are vertical
-    #plt.title("\n".join(wrap(title, 60))) # Title written in several line if necessary
-    plt.title(title[-44:])
+    plt.title("\n".join(wrap(title, 60))) # Title written in several line if necessary
+    #plt.title(title[-44:]) # Title tailored to display only the SHA-1 sum
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.tight_layout() # Otherwise the xlabel does not fit in the figure
