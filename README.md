@@ -17,7 +17,7 @@ To use this tool: *python3 <path-of-JsDetection/JsDetection.py> -help*.
 
 #### Static Analysis of JavaScript Executables
 Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.   
-To use this tool: *python3 <path-of-src/StaticAnalysis.py> -help*.
+To use this tool: *python3 <path-of-src/MainStaticAnalysisJs.py> -help*.
 
 #### Classification and Clustering of JavaScript Executables
 - Detection of malicious JavaScript documents.   

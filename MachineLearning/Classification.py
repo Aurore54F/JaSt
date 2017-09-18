@@ -25,26 +25,36 @@ from __init__ import *
 def classify(trainingFile, modelDir=currentPath+'/Classification/',\
              modelName='/model', printScore=False, printRes=False):
     '''
-        Training of a Naive Bayes Multinomial classifier.
+        Training a Naive Bayes Multinomial classifier.
       
         -------
         Parameter:
         - trainingFile: String
-            Path of the CSV file to be used to build a model for.
-        - modelDir
-        
-        - modelName
-        
-        - printScore
-        
-        - printRes
-        
+            Path of the CSV file to be used to build a model from.
+        - modelDir: String
+            Path to store the model that will be produced.
+            Default value being the folder MalwareClustering/Classification/.
+        - modelName: String
+            Name of the model that will be produced.
+            Default value being model.
+        - printScore: Boolean
+            Indicates whether to print or not the classifier's performance.
+        - printRes: Boolean
+            Indicates whether to print or not the classifier's predictions.
 
         -------
         Returns:
         - Naive Bayes Multinomial model
-            Beware: the model was implemented as a global variable in sklearn TODO.
-        - Print the detection rate and the TP, FP, FN and TN rates of trainingFile tested with the model built from this file, in stdout.
+            Beware: the model was implemented as a global variable in sklearn.
+        - If specified, can also:
+            * Print the detection rate and the TP, FP, FN and TN rates of
+            trainingFile tested with the model built from this file, in stdout.
+            It will only work for these two classes: 'benign' and 'malicious'.
+            * Print the classifier's predictions.
+            Beware, the predictions made using the same file to build and test
+            the model will give hopelessly optimistic results.
+            See >$ python3 <path-of-MachineLearning/ClassifyWithModel.py> -help
+            to test a model on new files.
     '''
 
     # Directory to store the classification related files
@@ -78,6 +88,7 @@ def classify(trainingFile, modelDir=currentPath+'/Classification/',\
         print('> Name: labelPredicted (trueLabel)')
     
     pickle.dump(trained, open(modelDir + modelName, 'wb'))
+    print('The model has been successfully stored in ' + modelDir + modelName)
     
     return trained;
 
@@ -113,6 +124,8 @@ def validate(validationFile, model, modelDir=currentPath+'/Classification/',\
     validated = model.partial_fit(XValidation, labelsValidation, ['malicious', 'benign']) # Incremental fit on a batch of samples
 
     pickle.dump(validated, open(modelDir + modelName, 'wb'))
+    print('The model has been successfully stored in ' + modelDir + modelName)
+    
     return validated
 
 
@@ -179,80 +192,6 @@ def testModel(testFile, model, printRes=True):
     plt.grid()
     plt.show()
     '''
-
-def parsingCommandsClustering():
-    '''
-        Creation of an ArgumentParser object, holding all the information necessary to parse
-        the command line into Python data types.
-
-        -------
-        Returns:
-        - ArgumentParser such as:
-          * jsDirs=args['d'],
-          * jsFiles=args['f'],
-          * parser=args['p'][0],
-          * n=args['n'][0],
-          * nbCluster=args['c'][0],
-          * displayFig=args['g'][0],
-          A more thorough description can be obtained:
-            >$ python3 <path-of-MachineLearning/Clustering.py> -help
-    '''
-
-    parser = argparse.ArgumentParser(description='Given a list of repositories or files paths,\
-    cluster the JS files into several families.')
-
-    parser.add_argument('--f', metavar='FILE', type=str, nargs='+', help='files to be analysed')
-    parser.add_argument('--d', metavar='DIR', type=str, nargs='+', help='directories containing\
-    the JS files to be analysed')
-    parser.add_argument('--m', metavar='MODEL', type=str, nargs='+', help='model used to classify the new files')
-
-
-    args = vars(parser.parse_args())
-
-    return args
-
-
-argObjC = parsingCommandsClustering()
-
-
-def mainClassification(jsDirs=argObjC['d'], jsFiles=argObjC['f'], model=argObjC['m']):
-    '''
-        Main function, performs a static analysis (lexical or syntactical)
-        of JavaScript files given in input.
-
-        -------
-        Parameters:
-        - jsDirs: list of strings
-            Directories containing the JS files to be analysed.
-        - jsFiles: list of strings
-            Files to be analysed.
-        - parser: String
-            Either 'slimIt', 'esprima', 'esprimaAst', or 'esprimaAstSimp'.
-        - n: Integer
-            Stands for the size of the sliding-window which goes through the previous list.
-        - nbCluster: int
-            Number of clusters whished.
-        - displayFig: boolean
-            Production of a graphical 2D representation of the files from the JS corpus.
-        Default values are the ones given in the command lines or in the
-        ArgumentParser object (function parsingCommands()).
-
-        -------
-        Returns:
-        The results of the static analysis of the files given as input.
-        These are stored in the MalwareClustering directory.
-    '''
-
-    if jsDirs is None and jsFiles is None:
-        print('Please, indicate a directory or a JS file to be studied')
-
-    else:
-        csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles)
-        testModel(csvFile, model[0])
-
-
-if __name__ == "__main__": # Executed only if run as a script
-    mainClassification()
 
 
 
