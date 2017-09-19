@@ -13,18 +13,18 @@ Our implementation is divided into three packages with distinct functionalities:
 
 #### JavaScript Detection Tool
 Detection of JavaScript samples respecting the grammar defined by [ECMA-International](http://www.ecma-international.org/ecma-262/8.0/), detection of broken JavaScript, and files not written in JavaScript.   
-To use this tool: *python3 <path-of-JsDetection/JsDetection.py> -help*.
+To use this tool: *python3 <path-of-JsDetection/JsDetection.py> --help*.
 
 #### Static Analysis of JavaScript Executables
 Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.   
-To use this tool: *python3 <path-of-src/MainStaticAnalysisJs.py> -help*.
+To use this tool: *python3 <path-of-src/MainStaticAnalysisJs.py> --help*.
 
 #### Classification and Clustering of JavaScript Executables
 - Detection of malicious JavaScript documents.   
 To use this tool: *python3 <path-of-MachineLearning/Classification.py> -help*.
 
 - Clustering of JavaScript samples into *k* (configurable) families.   
-To use this tool: *python3 <path-of-MachineLearning/Clustering.py> -help*.
+To use this tool: *python3 <path-of-MachineLearning/Clustering.py> --help*.
 
 
 ### Additional implementations

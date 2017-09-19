@@ -1,0 +1,77 @@
+
+This file aims at giving application examples of our module.
+
+We will consider here the following samples:
+ - the benign files benign1, benign2 and benign3;
+ - the following malicious files malicious1, malicious2 and malicious3;
+ - the benign folders Dir-Benign1, Dir-Benigns2, Dir-Benign3;
+ - the malicious folders Dir-Malicious1, Dir-Malicious2 and Dir-Malicious3,
+ - the unknown files unknown1, unknown2;
+ - and the unknown folders Dir-Unknown1 and Dir-Unknown2.
+Each name representing an hypothetical path to the files/folders you which to analyse.
+
+
+
+* JavaScript Detection Tool examples
+Help
+> python3 <path-of-JsDetection/JsDetection.py> --help
+Mandatory attributes are --f <list-of-files> or --d --f <list-of-repositories>. The two options can be combined.
+
+To analyse files
+> python3 <path-of-JsDetection/JsDetection.py> --f benign1 malicious1
+To analyse directories
+> python3 <path-of-JsDetection/JsDetection.py> --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2
+To analyse files and directories
+> python3 <path-of-JsDetection/JsDetection.py> --f benign1 malicious1 --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2
+
+
+* Static Analysis of JavaScript Executables
+Help
+> python3 <path-of-src/MainStaticAnalysisJs.py> --help
+Mandatory attributes are --f <list-of-files> or --d --f <list-of-repositories>. The two options can be combined.
+
+To create a CSV files containing 4-grams probability for directories and files
+> python3 <path-of-src/MainStaticAnalysisJs.py> --f benign1 malicious1 --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2
+To add a label in the CSV file (default value being '?' for unknown): the first label stands for the first file/directory, the second for the second ones etc.
+> python3 <path-of-src/MainStaticAnalysisJs.py> --f benign1 malicious1 --l 'benign' 'malicious'
+To add a label in the CSV file (default value being '?' for unknown)
+> python3 <path-of-src/MainStaticAnalysisJs.py> --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2 --l 'malicious'
+To store the CSV file in the directory Test/
+> python3 <path-of-src/MainStaticAnalysisJs.py> --f benign1 malicious1 --l 'benign' 'malicious' --ep 'Test/'
+To produce histograms (--h, the path can be chosen with the --hp option) and/or PCA (--g , the path can be chosen with the --gp option)
+> python3 <path-of-src/MainStaticAnalysisJs.py> --f benign1 malicious1 --l 'benign' 'malicious' --h True --g True
+
+
+* Clustering of JavaScript Executables
+Help
+> python3 <path-of-MachineLearning/Clustering.py> --help
+Mandatory attributes are --f <list-of-files> (or --d --f <list-of-repositories>, the two options can be combined) and --c <number-of-clusters>
+
+Clustering of the given files in 5 clusters with k-means++ algorithm
+> python3 <path-of-MachineLearning/Clustering.py> --f benign1 malicious1 --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2 --c 5
+Clustering of the given files in 5 clusters with k-means++ algorithm, and graphical representation of the clusters
+> python3 <path-of-MachineLearning/Clustering.py> --f benign1 malicious1 --d Dir-Malicious1 Dir-Unknown1 Dir-Unknown2 --c 5 --g True
+
+
+* Classification of JavaScript Executables
+Help to create a model
+> python3 <path-of-MachineLearning/LearnModel.py> --help
+Mandatory attributes are --f <list-of-files> (or --d --f <list-of-repositories>, the two options can be combined) and --l <list-of-labels>.
+As previously, the first label stands for the first file/directory, the second for the second ones etc.
+
+To create a model using a directory containing benign files, and another one with malicious files
+> python3 <path-of-MachineLearning/LearnModel.py> --d Dir-Malicious1 Dir-Benign1 --l 'malicious' 'benign'
+To specify a model path (--md) and/or a model name (--mn)
+> python3 <path-of-MachineLearning/LearnModel.py> --d Dir-Malicious1 Dir-Benign1 --l 'malicious' 'benign' --md 'Test/' --mn 'model1'
+To test the files used to build the model on the model and print the score
+> python3 <path-of-MachineLearning/LearnModel.py> --d Dir-Malicious1 Dir-Benign1 --l 'malicious' 'benign' --ps True
+To test the files used to build the model on the model and print the predictions
+> python3 <path-of-MachineLearning/LearnModel.py> --d Dir-Malicious1 Dir-Benign1 --l 'malicious' 'benign' --pr True
+
+Help to update a model
+> python3 <path-of-MachineLearning/UpdateModel.py> --help
+Mandatory attributes are --f <list-of-files> (or --d --f <list-of-repositories>, the two options can be combined), --l <list-of-labels>, --m <old-model-path> (see the previous point to create a model).
+> python3 <path-of-MachineLearning/UpdateModel.py>
+
+Help
+> python3 <path-of-MachineLearning/Clustering.py> --help

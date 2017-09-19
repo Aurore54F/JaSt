@@ -44,7 +44,7 @@ def parsingCommands():
                     default=[currentPath+'/Classification/'],\
                     help='path to store the model that will be produced')
     parser.add_argument('--mn', metavar='MODEL-NAME', type=str, nargs=1,\
-                    default=[currentPath+'/model'],\
+                    default=['model'],\
                     help='name of the model that will be produced')
     parser.add_argument('--ps', metavar='BOOL', type=bool, nargs=1, default=[False],\
                     help='indicates whether to print or not the classifier\'s performance')
@@ -93,8 +93,11 @@ def mainLearn(jsDirs=argObjC['d'], jsFiles=argObjC['f'], labels=argObjC['l'],\
     '''
 
     if jsDirs is None and jsFiles is None:
-        print('Please, indicate a directory or a JS file to be used\
-              to build a model from')
+        print('Please, indicate a directory or a JS file to be used' +
+              ' to build a model from')
+    elif labels is None:
+        print('Please, indicate the labels (either benign or malicious) of the files' +
+        ' used to build the model')
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles, labels=labels)
         Classification.classify(csvFile, modelDir[0], modelName[0],\
