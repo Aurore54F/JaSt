@@ -282,4 +282,4 @@ def mainS(jsDirs='', jsFiles='', labels='', parser='esprimaAstSimp',\
                                                     plotDir=pathPca, label=labels)
 
             if fileProd:
-                return file;
+                return file

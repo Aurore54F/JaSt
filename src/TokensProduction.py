@@ -5,15 +5,15 @@
 '''
 
 import subprocess # to call Shell commands
-from slimit.lexer import Lexer
 import sys
 import os
+from slimit.lexer import Lexer
 
 currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 from __init__ import *
 
-sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int') # To add a directory to import modules from
+sys.path.insert(0, currentPath+'/src/Dico_MapTokens-Int')
 sys.path.insert(0, currentPath+'/JsDetection') # To add a directory to import modules from
 
 import DicoOfTokensSlimit

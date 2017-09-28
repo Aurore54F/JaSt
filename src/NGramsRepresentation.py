@@ -5,13 +5,13 @@
 
 import collections # To order a dictionary
 import importlib # To reload updated modules
-import sys 
+import sys
 import os
 from __init__ import *
 
 currentPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
-sys.path.insert(0, currentPath+'/src/Dico_MapNGrams-Int') # To add a directory to import modules from
+sys.path.insert(0, currentPath+'/src/Dico_MapNGrams-Int')
 sys.path.insert(0, currentPath+'/src/DicoProduction') # To add a directory to import modules from
 
 import DicoIntToNGramsSlimit
