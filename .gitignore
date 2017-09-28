@@ -8,7 +8,7 @@ __pycache__/
 
 #Additional tools
 node_modules-3
-node_modules
+#node_modules
 .csvesprimaAst,
 Aurore/
 
