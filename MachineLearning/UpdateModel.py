@@ -45,7 +45,7 @@ def parsingCommands():
                     default=[currentPath+'/Classification/'],\
                     help='path to store the model that will be produced')
     parser.add_argument('--mn', metavar='MODEL-NAME', type=str, nargs=1,\
-                    default=[currentPath+'/model'],\
+                    default=['model'],\
                     help='name of the model that will be produced')
 
     args = vars(parser.parse_args())
@@ -91,7 +91,9 @@ def mainUpdate(jsDirs=argObjC['d'], jsFiles=argObjC['f'], labels=argObjC['l'],\
               to update the old model with')
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles, labels=labels)
-        Classification.validate(csvFile, oldModel, modelDir, modelName)
+        print("file " + csvFile)
+        print("model " + str(oldModel))
+        Classification.validate(csvFile, oldModel[0], modelDir[0], modelName[0])
 
 
 if __name__ == "__main__": # Executed only if run as a script
