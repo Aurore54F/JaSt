@@ -181,7 +181,7 @@ def handleFiles(allNGrams, jsFiles, labels, parser, n):
             # Contains one dictionary per JS file: key = tuple representing
             #an n-gram and value = probability of occurrences of a given tuple of n-gram.
             allNGrams[1] += [jsFile] # Contains the name of the well-formed JS files.
-            allNGrams[2] += newLabels[i] # Contains the label of the well-formed JS files.
+            allNGrams[2].append(newLabels[i]) # Contains the label of the well-formed JS files.
             i += 1
     return allNGrams
 

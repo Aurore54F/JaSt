@@ -91,8 +91,6 @@ def mainUpdate(jsDirs=argObjC['d'], jsFiles=argObjC['f'], labels=argObjC['l'],\
               to update the old model with')
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles, labels=labels)
-        print("file " + csvFile)
-        print("model " + str(oldModel))
         Classification.validate(csvFile, oldModel[0], modelDir[0], modelName[0])
 
 
