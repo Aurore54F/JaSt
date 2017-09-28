@@ -97,7 +97,7 @@ def mainLearn(jsDirs=argObjC['d'], jsFiles=argObjC['f'], labels=argObjC['l'],\
               ' to build a model from')
     elif labels is None:
         print('Please, indicate the labels (either benign or malicious) of the files' +
-        ' used to build the model')
+              ' used to build the model')
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles, labels=labels)
         Classification.classify(csvFile, modelDir[0], modelName[0],\

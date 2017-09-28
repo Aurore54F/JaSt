@@ -148,7 +148,7 @@ def clustering(dataFile, nbCluster, figDir=currentPath+'/Clustering/',\
         if annotate:
             for i in range(len(data)):
                 plt.annotate(str(i+1), (X[0][i], X[1][i]))
-    
+
         plt.legend()
         plt.grid()
         plt.title(title)
@@ -204,7 +204,7 @@ argObjC = parsingCommandsClustering()
 
 
 def mainC(jsDirs=argObjC['d'], jsFiles=argObjC['f'], parser=argObjC['p'][0], n=argObjC['n'][0],
-         nbCluster=argObjC['c'], displayFig=argObjC['g'][0]):
+          nbCluster=argObjC['c'], displayFig=argObjC['g'][0]):
     '''
         Main function, performs a static analysis (lexical or syntactical)
         of JavaScript files given in input.
@@ -247,5 +247,3 @@ def mainC(jsDirs=argObjC['d'], jsFiles=argObjC['f'], parser=argObjC['p'][0], n=a
 
 if __name__ == "__main__": # Executed only if run as a script
     mainC()
-
- 
