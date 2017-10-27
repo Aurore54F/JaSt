@@ -5,6 +5,7 @@ __pycache__/
 .project
 .pydevproject
 .metadata/
+.DS_Store
 
 #Additional tools
 node_modules-3
