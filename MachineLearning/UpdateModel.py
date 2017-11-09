@@ -89,6 +89,13 @@ def mainUpdate(jsDirs=argObjC['d'], jsFiles=argObjC['f'], labels=argObjC['l'],\
     if jsDirs is None and jsFiles is None:
         print('Please, indicate a directory or a JS file to be used\
               to update the old model with')
+    elif labels is None:
+        print('Please, indicate the labels (either benign or malicious) of the files' +
+              ' used to update the model')
+    elif oldModel is None:
+        print('Please, indicate the path of the old model you would like to update.\n'
+              + '(see >$ python3 <path-of-MachineLearning/LearnModel.py> -help)'
+              + ' to build a model)')
     else:
         csvFile = StaticAnalysisJs.mainS(jsDirs=jsDirs, jsFiles=jsFiles, labels=labels)
         Classification.validate(csvFile, oldModel[0], modelDir[0], modelName[0])

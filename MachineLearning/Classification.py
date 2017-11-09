@@ -129,7 +129,7 @@ def validate(validationFile, model, modelDir=currentPath+'/Classification/',\
     # Incremental fit on a batch of samples
 
     pickle.dump(validated, open(modelDir + modelName, 'wb'))
-    print('The model has been successfully stored in ' + modelDir + modelName)
+    print('The model has been successfully updated in ' + modelDir + modelName)
 
     return validated
 

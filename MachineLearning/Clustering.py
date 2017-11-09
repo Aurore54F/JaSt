@@ -156,6 +156,7 @@ def clustering(dataFile, nbCluster, figDir=currentPath+'/Clustering/',\
         #plt.show()
         plt.savefig(figDir+figName, dpi=100)
         plt.clf() # Otherwise all figures are written on one another
+        print('The graphical representation of the clusters has been successfully stored in ' + figDir + figName)
 
     for i in range(0, len(names)):
         print(str(names[i]) + ': ' + str(labelsPredicted[i]))

@@ -104,7 +104,8 @@ def dicoOfAllNGrams(parser, jsDir, label=None, n=4):
         if dicoForHisto is not None:
             allProba.append(dicoForHisto) # Store all the dictionaries in a list (this way,
             #we go only once through the JS files).
-            filesStudied += [jsDir + '/' + javaScriptFile] # Store the name of the valid JS files.
+            filesStudied += [os.path.join(jsDir, javaScriptFile)] # Store the name of the valid JS files.
+
             if label is not None and label != []:
                 lab += [label] # Store the label of the valid JS files. It is duplicated so
                 #that the information from allProba[i], filesStudied[i] and lab[i]

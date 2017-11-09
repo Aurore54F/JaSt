@@ -34,8 +34,7 @@ def nGramsList(numbersList, n=4):
 
     if numbersList is not None:
         if n < 1 or n > (len(numbersList)):
-            print('Error: to display a list of n-grams, n > 0 and n < len(list-of-numbers)')
-            print('\nIt means that the file has less tokens than the length n of an n-gram.')
+            print('Warning: the file has less tokens than the length n of an n-gram.')
             # Possible that n > (len(numbersList)), e.g. the JS file only contains
             #comments: 1 token < n if n > 1.
 
