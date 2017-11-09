@@ -39,7 +39,8 @@ To use this tool: *python3 <path-of-MachineLearning/Clustering.py> --help*.
 ### How to use it?
   - The system requirements are given in *install.sh*;
   - To launch the main function of a package, see the previous Section *Features*;
-  - The complete documentation can consulted using Python's build-in function *help(\<name-of-the-module>)*, or can be generated in HTML format with pydoc: *python3 \<path-of-pydoc> -w \<name-of-the-module>*.
+  - Application examples of our modules are given in *Examples.pdf*;
+  - The complete documentation can be consulted using Python's build-in function *help(\<name-of-the-module>)*, or can be generated in HTML format with pydoc: *python3 \<path-of-pydoc> -w \<name-of-the-module>*.
 
 
 ### External tools
