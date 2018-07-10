@@ -1,50 +1,73 @@
-# MalwareClustering
+# JaSt - JS AST-Based Analysis
+
+This repository contains the code for the [DIMVA'18 paper: "JaSt: Fully Syntactic Detection of Malicious (Obfuscated) JavaScript"](https://swag.cispa.saarland/papers/fass2018jast.pdf).  
+Please note that in its current state, the code is a Poc and not a fully-fledged production-ready API.
 
 
-### Objective
-Static analysis (lexical or syntactical) of JavaScript samples to detect malicious executables. This implementation also enables a classification of JavaScript documents into several families.
+## Features
+Our implementation, which aims at detecting malicious JavaScript samples, is divided into several packages with distinct functionalities:
+  - *js* for the detection of valid JavaScript code;
+  - *features* for the extraction of specific features from JavaScript inputs;
+  - *clustering* for the classification and clustering of JavaScript documents.
 
-
-### Features
-Our implementation is divided into three packages with distinct functionalities:
-  - *JsDetection* for the detection of JavaScript code;
-  - *src* for a static analysis of JavaScript code;
-  - *MachineLearning* for the clustering or classification of JavaScript documents.
-
-#### JavaScript Detection Tool
+### JavaScript Detection Tool
 Detection of JavaScript samples respecting the grammar defined by [ECMA-International](http://www.ecma-international.org/ecma-262/8.0/), detection of broken JavaScript, and files not written in JavaScript.   
-To use this tool: *python3 <path-of-JsDetection/JsDetection.py> --help*.
+To use this tool: *python3 \<path-of-js/is_js.py\> --help*.
 
-#### Static Analysis of JavaScript Executables
-Both lexical and syntactical analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the 4-grams present in the considered files.   
-To use this tool: *python3 <path-of-src/MainStaticAnalysisJs.py> --help*.
+### Classification and Clustering of JavaScript Inputs
+An AST-based analysis of JavaScript samples can be performed. This study is based on a frequency analysis of the n-grams present in the considered files.
 
-#### Classification and Clustering of JavaScript Executables
 - Detection of malicious JavaScript documents.   
-To use this tool: *python3 <path-of-MachineLearning/Classification.py> -help*.
+To use this tool:  
+1) *python3 \<path-of-clustering/learner.py\> --help*;  
+2) *python3 \<path-of-clustering/updater.py\> --help*;  
+3) *python3 \<path-of-clustering/classifier.py\> --help*.
 
 - Clustering of JavaScript samples into *k* (configurable) families.   
-To use this tool: *python3 <path-of-MachineLearning/Clustering.py> --help*.
+To use this tool: *python3 \<path-of-clustering/cluster.py\> --help*.
 
 
-### Additional implementations
-  - 4 choices of tools to perform a static analysis: the tokenizers Esprima or SlimIt, and the parsers Esprima or our simplified version (with fewer syntactical units);
-  - Possibility to train naive Bayes multinomial classifier on a data set, to add a validation and a test sets;
-  - Implementation of k-fold cross-validation and possibility to plot ROC curves;
-  - Manual clustering with histograms representing the frequency of all 4-grams present in a JavaScript document;
-  - Graphical method to get an approximation of the number of clusters present in the data;
-  - PCA implementation to graphically represent JavaScript executables onto a two-dimensional surface. With supervised learning, different colours can be attributed to each class or cluster.
-
-
-### How to use it?
+## How to use it?
   - The system requirements are given in *install.sh*;
   - To launch the main function of a package, see the previous Section *Features*;
-  - Application examples of our modules are given in *Examples.pdf*;
-  - The complete documentation can be consulted using Python's build-in function *help(\<name-of-the-module>)*, or can be generated in HTML format with pydoc: *python3 \<path-of-pydoc> -w \<name-of-the-module>*.
+  - Application examples of our modules are given in *examples.pdf*;
+  - The complete documentation can be consulted using Python's build-in function *help(\<name-of-the-module\>)*, or can be generated in HTML format with pydoc: *python3 \<path-of-pydoc\> -w \<name-of-the-module\>*.
 
 
-### External tools
-[Esprima](http://esprima.org/), created and maintained by Ariya Hidayat has been used to perform both lexical and syntactical analysis of JavaScript files.
+## Cite this work
+If you use JaSt for academic research, you are highly encouraged to cite the following [paper](https://swag.cispa.saarland/papers/fass2018jast.pdf):
+```
+@inproceedings{fass2018jast,
+    author="Fass, Aurore and Krawczyk, Robert P. and Backes, Michael and Stock, Ben",
+    title="{\textsc{JaSt}: Fully Syntactic Detection of Malicious (Obfuscated) JavaScript}",
+    booktitle="Proceedings of the International Conference on Detection of Intrusions and Malware, and Vulnerability Assessment~(DIMVA)",
+    year="2018"
+}
+```
+
+### Abstract:
+
+JavaScript is a browser scripting language initially created to enhance the interactivity of web sites and to improve their user-friendliness. However, as it offloads the work to the user's browser, it can be used to engage in malicious activities such as Crypto Mining, Drive-by Download attacks, or redirections to web sites hosting malicious software. Given the prevalence of such nefarious scripts, the anti-virus industry has increased the focus on their detection. The attackers, in turn, make increasing use of obfuscation techniques, so as to hinder analysis and the creation of corresponding signatures. Yet these malicious samples share syntactic similarities at an abstract level, which enables to bypass obfuscation and detect even unknown malware variants.
+
+In this paper, we present JaSt, a low-overhead solution that combines the extraction of features from the abstract syntax tree with a random forest classifier to detect malicious JavaScript instances. It is based on a frequency analysis of specific patterns, which are either predictive of benign or of malicious samples. Even though the analysis is entirely static, it yields a high detection accuracy of almost 99.5% and has a low false-negative rate of 0.54%.
+
+
+## Disclaimer
+
+Die von dem Benutzer auf GitHub bereitgestellten Inhalte spiegeln nicht die 
+Meinung des BSI wider.  
+Die Verwendung der bereitgestellten Inhalte geschieht auf eigene Gefahr des 
+Anwenders. Eine Haftung für die Richtigkeit, Vollständigkeit und Aktualität 
+dieser Inhalte kann seitens des BSI nicht übernommen werden.  
+Das BSI ist nicht verantwortlich und übernimmt keinerlei Haftung für Schäden, 
+unter anderem für direkte, indirekte, zufällige, vorab konkret zu bestimmende 
+oder Folgeschäden, die angeblich durch die Verwendung der Inhalte aufgetreten 
+sind.
+
+
+
+## External tools
+[Esprima](http://esprima.org/), created and maintained by Ariya Hidayat has been used to perform both lexical and syntactic analysis of JavaScript files.
   
 "Copyright JS Foundation and other contributors, https://js.foundation/
 

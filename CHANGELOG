@@ -1,0 +1,23 @@
+2018-07-10: Version 2.0
+
+    * Discontinuity with the version 1.0, please do not use 1.0 anymore but clone 2.0;
+    * Possibility to use different n-grams and not only 4-grams anymore;
+    * New classifier: Random Forest with configurable threshold for malicious JS detection;
+    * Possibility to activate Esprima's tolerant mode to accept a few cases of syntax errors;
+    * No more CSV file to store the results, but pickle objects (to uncomment in the source code);
+    * Hyperparameters optimization;
+    * Performance optimization: 8-10 times faster than version 1.0;
+    * Possibility to choose how to do the mapping between n-grams and integers: dictionary or hashes;
+    * Possibility to classify JS extracted from HTML samples;
+    * Code refactoring into a more "Pythonic" way;
+    * Added the Esprima 4.0.0 module;
+    * Added a parameter to control the verbosity of the output.
+
+
+2017-11-09: Version 1.0
+
+    Initial release:
+        * Module JavaScript detection to spot well-formed JS files;
+        * Module JavaScript static analysis to study the frequency of the 4-grams present in the considered files;
+        * Module JavaScript clustering to cluster JS files into several families;
+        * Module JavaScript classification to detect malicious JS files.

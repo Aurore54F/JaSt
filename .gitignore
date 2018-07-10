@@ -1,3 +1,11 @@
+# Latex config files
+*.aux
+*.log
+*.gz
+*.blg
+*.out
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -5,13 +13,10 @@ __pycache__/
 .project
 .pydevproject
 .metadata/
-.DS_Store
 
-#Additional tools
-node_modules-3
-#node_modules
-.csvesprimaAst,
-Aurore/
+# Additional tools
+*.bin/
+
 
 # C extensions
 *.so
@@ -97,3 +102,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# PyCharm project settings
+*.idea/
+
+# MacOS files
+*.DS_Store
