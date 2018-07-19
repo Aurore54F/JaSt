@@ -137,9 +137,13 @@ def clustering(names, attributes, nb_cluster, fig_dir=os.path.join(src_path, 'Cl
 
         # PCA does not support sparse input. See TruncatedSVD for a possible alternative.
         if display_fig:
-            if true_labels is not None and true_labels and all(isinstance(elt, int)
-                                                               for elt in true_labels):
+            pca = PCA(n_components=2)  # 2-dimensional PCA
+            attributes = pd.DataFrame(pca.fit_transform(attributes))
+            attributes = np.asarray(attributes)
+
+            if true_labels is not None and true_labels and '?' not in true_labels:
                 labels_predicted = true_labels
+                labels_predicted = np.asarray(labels_predicted)
 
             colors = ['orange', 'lightblue', 'red', 'lightgreen', 'lightpink', 'darkgoldenrod',
                       'deepskyblue', 'seagreen', 'darkslateblue', 'gainsboro', 'khaki', 'slategray',
@@ -180,13 +184,18 @@ def clustering(names, attributes, nb_cluster, fig_dir=os.path.join(src_path, 'Cl
                        '8',
                        'h', '.', 'H', '+', 'x', 'D', '|', '_']
             # Different markers and colours for legibility reasons
-            for i in range(nb_cluster):
-                pca = PCA(n_components=2)  # 2-dimensional PCA
-                attributes = pd.DataFrame(pca.fit_transform(attributes))
-                attributes = np.asarray(attributes)
-                plt.scatter(attributes[labels_predicted == i, 0],
-                            attributes[labels_predicted == i, 1],
-                            c=colors[i], marker=markers[i], label='Cluster ' + str(i))
+
+            i = 0
+            unique_label = []
+            for label in labels_predicted:
+                if label not in unique_label:
+                    unique_label.append(label)  # List of our data labels
+
+            for label in unique_label:
+                plt.scatter(attributes[labels_predicted == label, 0],
+                            attributes[labels_predicted == label, 1],
+                            c=colors[i], marker=markers[i], label='Cluster ' + str(label))
+                i += 1
 
             if annotate:
                 for i in range(len(names)):
@@ -219,7 +228,9 @@ def parsing_commands_clustering():
           * tolerance=args['t'][0],
           * n=args['n'][0],
           * nb_cluster=args['c'][0],
-          * display_fig=args['g'][0].
+          * display_fig=args['g'][0],
+          * labels_d=arg_obj['l'],
+          * labels_f=arg_obj['lf'].
           A more thorough description can be obtained:
             >$ python3 <path-of-clustering/cluster.py> -help
     """
@@ -233,6 +244,10 @@ def parsing_commands_clustering():
     parser.add_argument('--c', metavar='INTEGER', type=int, nargs=1, help='number of clusters')
     parser.add_argument('--g', metavar='BOOL', type=bool, nargs=1, default=[False],
                         help='produces a 2D representation of the files from the JS corpus')
+    parser.add_argument('--l', metavar='LABEL', type=str, nargs='+', default=None,
+                        help='true labels of the JS directories (used only for display)')
+    parser.add_argument('--lf', metavar='LABEL', type=str, nargs='+', default=None,
+                        help='true labels of the JS files (used only for display)')
     utility.parsing_commands(parser)
 
     return vars(parser.parse_args())
@@ -244,7 +259,7 @@ utility.control_logger(arg_obj['v'][0])
 
 def main_clustering(js_dirs=arg_obj['d'], js_files=arg_obj['f'], tolerance=arg_obj['t'][0],
                     nb_cluster=arg_obj['c'], n=arg_obj['n'][0], display_fig=arg_obj['g'][0],
-                    dict_not_hash=arg_obj['dnh'][0]):
+                    dict_not_hash=arg_obj['dnh'][0], labels_d=arg_obj['l'], labels_f=arg_obj['lf']):
     """
         Main function, uses a static analysis (lexical or syntactical)
         of JavaScript files given in input to cluster them into k (configurable) families.
@@ -268,6 +283,10 @@ def main_clustering(js_dirs=arg_obj['d'], js_files=arg_obj['f'], tolerance=arg_o
             Production of a 2D representation of the files from the JS corpus.
         - dict_not_hash: Boolean
             True if a dictionary is used to map n-grams to int, False if hashes are used.
+        - labels_f: list of strings
+            Indicates the label's name of the files considered.
+        - labels_d: list of strings
+            Indicates the label's name of the directories considered.
         Default values are the ones given in the command lines or in the
         ArgumentParser object (function parsing_commands()).
     """
@@ -278,9 +297,17 @@ def main_clustering(js_dirs=arg_obj['d'], js_files=arg_obj['f'], tolerance=arg_o
     elif nb_cluster is None:
         logging.error('Please, indicate a number of clusters')
 
+    elif js_dirs is not None and labels_d is not None and len(js_dirs) != len(labels_d):
+        logging.error('Please, indicate as many directory labels as the number '
+                      + str(len(js_dirs)) + ' of directories to analyze')
+
+    elif js_files is not None and labels_f is not None and len(js_files) != len(labels_f):
+        logging.error('Please, indicate as many file labels as the number '
+                      + str(len(js_files)) + ' of files to analyze')
+
     else:
         names, attributes, labels = static_analysis.main_analysis \
-            (js_dirs=js_dirs, labels_dirs=None, js_files=js_files, labels_files=None,
+            (js_dirs=js_dirs, labels_dirs=labels_d, js_files=js_files, labels_files=labels_f,
              tolerance=tolerance, n=n, dict_not_hash=dict_not_hash)
 
         if names:
