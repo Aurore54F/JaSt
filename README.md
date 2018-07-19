@@ -54,15 +54,11 @@ In this paper, we present JaSt, a low-overhead solution that combines the extrac
 
 ## Disclaimer
 
-Die von dem Benutzer auf GitHub bereitgestellten Inhalte spiegeln nicht die 
-Meinung des BSI wider.  
-Die Verwendung der bereitgestellten Inhalte geschieht auf eigene Gefahr des 
-Anwenders. Eine Haftung für die Richtigkeit, Vollständigkeit und Aktualität 
-dieser Inhalte kann seitens des BSI nicht übernommen werden.  
-Das BSI ist nicht verantwortlich und übernimmt keinerlei Haftung für Schäden, 
-unter anderem für direkte, indirekte, zufällige, vorab konkret zu bestimmende 
-oder Folgeschäden, die angeblich durch die Verwendung der Inhalte aufgetreten 
-sind.
+This is a research work and its intend is to publish the results, to make the results verifiable, and to promote information security. It does not necessarily reflect the official policy or position of the Bundesamt für Sicherheit in der Informationstechnik (BSI). Although the author has made every effort to ensure that the information in this publication was correct, the author does not assume and hereby disclaims any liability to any party for any loss, damage, or disruption caused by errors or omissions, whether such errors or omissions result from negligence, accident, or any other cause.
+
+Die von dem Benutzer auf GitHub bereitgestellten Inhalte spiegeln nicht die Meinung des BSI wider.  
+Die Verwendung der bereitgestellten Inhalte geschieht auf eigene Gefahr des Anwenders. Eine Haftung für die Richtigkeit, Vollständigkeit und Aktualität dieser Inhalte kann seitens des BSI nicht übernommen werden.  
+Das BSI ist nicht verantwortlich und übernimmt keinerlei Haftung für Schäden, unter anderem für direkte, indirekte, zufällige, vorab konkret zu bestimmende oder Folgeschäden, die angeblich durch die Verwendung der Inhalte aufgetreten sind.
 
 
 
