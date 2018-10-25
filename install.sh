@@ -10,7 +10,8 @@ pip3 install plotly # (tested with 2.0.7 and 2.2.1)
 pip3 install numpy # (tested with 1.13.0 and 1.13.3)
 
 pip3 install scipy # (tested with 0.19.1 and 1.0.0)
-pip3 install sklearn # (tested with 0.18.2 and 0.19.1)
+# pip3 install sklearn # (tested with 0.18.2 and 0.19.1) Depreciated
+pip3 install scikit-learn # (tested with 0.20.0)
 pip3 install pandas # (tested with 0.20.3 and 0.21.0
 
 
