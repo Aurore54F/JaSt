@@ -53,8 +53,8 @@ def predict_labels_using_threshold(names_length, labels_predicted_proba, thresho
     labels_predicted_test = ['benign' for _ in range(names_length)]
     for i, _ in enumerate(labels_predicted_test):
         if labels_predicted_proba[i, 1] >= threshold:  # If the proba of the sample being malicious
-            # is over the threshold…
-            labels_predicted_test[i] = 'malicious'  # … we classify the sample as malicious.
+            # is over the threshold...
+            labels_predicted_test[i] = 'malicious'  # ... we classify the sample as malicious.
 
     return labels_predicted_test
 
@@ -127,8 +127,8 @@ def get_score(labels, labels_predicted):
     """
 
     if '?' in labels:
-        logging.warning("No ground truth given: unable to evaluate the accuracy of the "
-                        + "classifier's predictions")
+        logging.info("No ground truth given: unable to evaluate the accuracy of the "
+                     + "classifier's predictions")
     else:
         try:
             tn, fp, fn, tp = confusion_matrix(labels, labels_predicted,

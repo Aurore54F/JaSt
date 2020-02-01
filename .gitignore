@@ -16,7 +16,7 @@ __pycache__/
 
 # Additional tools
 *.bin/
-
+Classification
 
 # C extensions
 *.so
